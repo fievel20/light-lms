@@ -57,7 +57,7 @@
     </header>
 
     {#if framework}
-        <section class="grid gap-3 rounded-xl border p-4">
+        <section class="grid gap-3 surface p-4">
             <ProgressBar
                 percent={summary.percent}
                 label={`${summary.acquired} compétence${summary.acquired > 1 ? 's' : ''} acquise${summary.acquired > 1 ? 's' : ''} sur ${summary.total}`}
@@ -82,13 +82,13 @@
     {/if}
 
     {#if !framework}
-        <p class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground">
+        <p class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground">
             Aucun référentiel n'est affecté à cette promotion.
         </p>
     {:else}
         <ol class="grid gap-4">
             {#each competencies as competency (competency.id)}
-                <li class="flex min-w-0 flex-col gap-4 rounded-xl border p-4">
+                <li class="flex min-w-0 flex-col gap-4 surface p-4">
                     <div class="flex items-start gap-3">
                         <Badge variant="outline" class="shrink-0 font-mono"
                             >{competency.code}</Badge

@@ -37,7 +37,7 @@
             <div class="flex flex-wrap gap-2">
                 {#each competencyOptions(competency) as option (option.value)}
                     <label
-                        class="flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-lg border px-3 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-foreground sm:min-h-9 sm:flex-none"
+                        class="flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-xl border px-3 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-foreground sm:min-h-9 sm:flex-none"
                     >
                         <input
                             type="radio"

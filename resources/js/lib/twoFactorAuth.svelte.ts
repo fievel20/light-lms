@@ -42,7 +42,10 @@ export function twoFactorAuthState(): TwoFactorAuthStateApi {
 
             state.qrCodeSvg = svg;
         } catch {
-            state.errors = [...state.errors, 'Failed to fetch QR code'];
+            state.errors = [
+                ...state.errors,
+                'Impossible de charger le QR code',
+            ];
             state.qrCodeSvg = null;
         }
     };
@@ -55,7 +58,10 @@ export function twoFactorAuthState(): TwoFactorAuthStateApi {
 
             state.manualSetupKey = key;
         } catch {
-            state.errors = [...state.errors, 'Failed to fetch a setup key'];
+            state.errors = [
+                ...state.errors,
+                'Impossible de charger la clé de configuration',
+            ];
             state.manualSetupKey = null;
         }
     };
@@ -83,7 +89,10 @@ export function twoFactorAuthState(): TwoFactorAuthStateApi {
                 recoveryCodes(),
             )) as string[];
         } catch {
-            state.errors = [...state.errors, 'Failed to fetch recovery codes'];
+            state.errors = [
+                ...state.errors,
+                'Impossible de charger les codes de secours',
+            ];
             state.recoveryCodesList = [];
         }
     };

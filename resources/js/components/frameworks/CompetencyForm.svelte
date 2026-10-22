@@ -123,7 +123,7 @@
     {#if assessed}
         <p class="rounded-lg border p-3 text-sm text-muted-foreground">
             Cette compétence a déjà été évaluée : son type et les valeurs de ses
-            niveaux sont verrouillés. Vous pouvez encore modifier les libellés et
+            niveaux sont verrouillés. Tu peux encore modifier les libellés et
             le seuil.
         </p>
     {/if}
@@ -151,7 +151,7 @@
     </fieldset>
 
     {#if form.type === 'scale'}
-        <fieldset class="grid gap-3 rounded-xl border p-4">
+        <fieldset class="grid gap-3 surface p-4">
             <legend class="px-1 text-sm font-medium">Niveaux de l'échelle</legend>
 
             <ol class="grid gap-3">

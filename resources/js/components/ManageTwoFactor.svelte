@@ -31,22 +31,20 @@
     <div class="space-y-6">
         <Heading
             variant="small"
-            title="Two-factor authentication"
-            description="Manage your two-factor authentication settings"
+            title="Double authentification"
+            description="Ajoute une protection supplémentaire à ton compte."
         />
 
         {#if !twoFactorEnabled}
             <div class="flex flex-col items-start justify-start space-y-4">
                 <p class="text-muted-foreground text-sm">
-                    When you enable two-factor authentication, you will be
-                    prompted for a secure pin during login. This pin can be
-                    retrieved from a TOTP-supported application on your phone.
+                    Une fois activée, un code à 6 chiffres te sera demandé à chaque connexion. Tu le trouveras dans une application d’authentification (TOTP) sur ton téléphone.
                 </p>
 
                 <div>
                     {#if twoFactorAuth.hasSetupData()}
                         <Button onclick={() => (showSetupModal = true)}>
-                            <ShieldCheck class="size-4" />Continue setup
+                            <ShieldCheck class="size-4" />Reprendre la configuration
                         </Button>
                     {:else}
                         <Form
@@ -55,7 +53,7 @@
                         >
                             {#snippet children({ processing })}
                                 <Button type="submit" disabled={processing}>
-                                    Enable 2FA
+                                    Activer
                                 </Button>
                             {/snippet}
                         </Form>
@@ -65,9 +63,7 @@
         {:else}
             <div class="flex flex-col items-start justify-start space-y-4">
                 <p class="text-muted-foreground text-sm">
-                    You will be prompted for a secure, random pin during login,
-                    which you can retrieve from the TOTP-supported application
-                    on your phone.
+                    Un code à 6 chiffres t’est demandé à chaque connexion, depuis ton application d’authentification.
                 </p>
 
                 <div class="relative inline">
@@ -78,7 +74,7 @@
                                 type="submit"
                                 disabled={processing}
                             >
-                                Disable 2FA
+                                Désactiver
                             </Button>
                         {/snippet}
                     </Form>

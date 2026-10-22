@@ -98,21 +98,21 @@
 
     {#if !framework || learners.length === 0}
         <p
-            class="mx-auto w-full max-w-4xl rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground"
+            class="mx-auto w-full max-w-4xl rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
             {!framework
-                ? 'Affectez un référentiel à cette promotion pour suivre la progression.'
+                ? 'Affecte un référentiel à cette promotion pour suivre la progression.'
                 : 'Aucun apprenant dans cette promotion.'}
         </p>
     {:else}
         <section class="mx-auto grid w-full max-w-4xl gap-3 sm:grid-cols-2">
-            <div class="rounded-xl border p-4">
+            <div class="surface p-4">
                 <ProgressBar
                     percent={summary.average_percent}
                     label="Progression moyenne"
                 />
             </div>
-            <div class="flex items-center justify-between rounded-xl border p-4 text-sm">
+            <div class="flex items-center justify-between surface p-4 text-sm">
                 <span class="text-muted-foreground">Autoévaluations à examiner</span>
                 <span class="text-xl font-semibold tabular-nums">{summary.to_review}</span>
             </div>
@@ -124,7 +124,7 @@
                 <li class="min-w-0">
                     <Link
                         href={toUrl(learnerPage([promotion.id, learner.id]))}
-                        class="flex flex-col gap-3 rounded-xl border p-4 transition-colors hover:bg-muted/50"
+                        class="flex flex-col gap-3 surface p-4 transition-colors hover:bg-muted/50"
                     >
                         <div class="flex items-center justify-between gap-2">
                             <span class="truncate font-medium">{learner.name}</span>

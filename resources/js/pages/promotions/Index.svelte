@@ -41,7 +41,7 @@
     <div class="flex flex-wrap items-start justify-between gap-4">
         <Heading
             title="Promotions"
-            description="Gérez vos promotions d'apprenants."
+            description="Gère tes promotions d'apprenants."
         />
 
         <Button asChild class="w-full sm:w-auto">
@@ -76,17 +76,17 @@
 
     {#if promotions.length === 0}
         <p
-            class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground"
+            class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
             {archived
                 ? 'Aucune promotion archivée.'
-                : 'Aucune promotion en cours. Créez la première !'}
+                : 'Aucune promotion en cours. Crée la première !'}
         </p>
     {:else}
         <ul class="grid gap-3">
             {#each promotions as promotion (promotion.id)}
                 <li
-                    class="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between"
+                    class="flex flex-col gap-3 surface p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                     <div class="min-w-0">
                         <Link

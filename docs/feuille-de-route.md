@@ -28,9 +28,9 @@
 
 ## Finitions identifiées
 
-- [ ] Traduire les écrans du kit encore en anglais : connexion, mot de passe oublié, profil, sécurité (2FA, passkeys), apparence, menu utilisateur.
+- [x] Traduire les écrans du kit encore en anglais : connexion, mot de passe oublié, profil, sécurité (2FA, passkeys), apparence, menu utilisateur.
 - [ ] Retirer la suppression de compte du profil (au moins pour le formateur, qui est unique).
-- [ ] Remplacer le logo et le nom du kit (`AppLogo`), le favicon.
+- [x] Remplacer le logo du kit (`AppLogo`). Reste : le favicon.
 - [ ] La disposition alternative `AppHeader` du kit (non utilisée) contient encore les liens d'origine.
 
 ## Idées pour la suite (hors MVP)

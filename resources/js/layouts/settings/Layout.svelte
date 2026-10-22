@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { Link } from '@inertiajs/svelte';
+    import { Link, router } from '@inertiajs/svelte';
+    import LogOut from '@lucide/svelte/icons/log-out';
     import type { Snippet } from 'svelte';
     import Heading from '@/components/Heading.svelte';
     import { Button } from '@/components/ui/button';
     import { Separator } from '@/components/ui/separator';
     import { currentUrlState } from '@/lib/currentUrl.svelte';
     import { toUrl } from '@/lib/utils';
+    import { logout } from '@/routes';
     import { edit as editAppearance } from '@/routes/appearance';
     import { edit as editProfile } from '@/routes/profile';
     import { edit as editSecurity } from '@/routes/security';
@@ -19,15 +21,15 @@
 
     const sidebarNavItems: NavItem[] = [
         {
-            title: 'Profile',
+            title: 'Profil',
             href: editProfile(),
         },
         {
-            title: 'Security',
+            title: 'Sécurité',
             href: editSecurity(),
         },
         {
-            title: 'Appearance',
+            title: 'Apparence',
             href: editAppearance(),
         },
     ];
@@ -37,15 +39,15 @@
 
 <div class="px-4 py-6">
     <Heading
-        title="Settings"
-        description="Manage your profile and account settings"
+        title="Paramètres"
+        description="Ton profil et la sécurité de ton compte."
     />
 
     <div class="flex flex-col lg:flex-row lg:space-x-12">
         <aside class="w-full max-w-xl lg:w-48">
             <nav
                 class="flex flex-col space-y-1 space-x-0"
-                aria-label="Settings"
+                aria-label="Paramètres"
             >
                 {#each sidebarNavItems as item (toUrl(item.href))}
                     <Button
@@ -54,7 +56,7 @@
                             item.href,
                             url.currentUrl,
                         )
-                            ? 'bg-muted'
+                            ? 'bg-primary-soft text-primary'
                             : ''}"
                         asChild
                     >
@@ -65,6 +67,26 @@
                         {/snippet}
                     </Button>
                 {/each}
+
+                <!-- On phones the sidebar (and its user menu) is hidden. -->
+                <Button
+                    variant="ghost"
+                    class="w-full justify-start text-destructive hover:text-destructive md:hidden"
+                    asChild
+                >
+                    {#snippet children(props)}
+                        <Link
+                            href={logout()}
+                            as="button"
+                            class={props.class}
+                            onclick={() => router.flushAll()}
+                            data-test="mobile-logout-button"
+                        >
+                            <LogOut class="size-4" />
+                            Se déconnecter
+                        </Link>
+                    {/snippet}
+                </Button>
             </nav>
         </aside>
 

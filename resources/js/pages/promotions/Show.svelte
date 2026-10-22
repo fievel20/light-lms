@@ -95,7 +95,7 @@
     </header>
 
     <section
-        class="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4"
+        class="flex flex-wrap items-center justify-between gap-3 surface p-4"
         aria-label="Référentiel"
     >
         <div class="flex min-w-0 items-center gap-3">
@@ -134,7 +134,7 @@
 
     {#if !promotion.archived_at}
         <section class="grid gap-3 sm:grid-cols-2">
-            <details class="group rounded-xl border p-4 open:sm:col-span-2">
+            <details class="group surface p-4 open:sm:col-span-2">
                 <summary
                     class="flex min-h-11 cursor-pointer list-none items-center gap-2 font-medium"
                 >
@@ -146,7 +146,7 @@
                 </div>
             </details>
 
-            <details class="group rounded-xl border p-4 open:sm:col-span-2">
+            <details class="group surface p-4 open:sm:col-span-2">
                 <summary
                     class="flex min-h-11 cursor-pointer list-none items-center gap-2 font-medium"
                 >
@@ -162,7 +162,7 @@
 
     {#if report}
         <section
-            class="rounded-xl border p-4 text-sm"
+            class="surface p-4 text-sm"
             aria-live="polite"
             aria-label="Résultat de l'import"
         >
@@ -194,7 +194,7 @@
 
     {#if learners.length === 0}
         <p
-            class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground"
+            class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
             Aucun apprenant dans cette promotion pour l'instant.
         </p>
@@ -202,7 +202,7 @@
         <ul class="grid gap-3">
             {#each learners as learner (learner.id)}
                 <li
-                    class="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between"
+                    class="flex flex-col gap-3 surface p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                     <div class="min-w-0">
                         <p class="flex flex-wrap items-center gap-2 font-medium">

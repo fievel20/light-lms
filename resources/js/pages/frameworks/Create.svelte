@@ -25,7 +25,7 @@
 <div class="mx-auto w-full max-w-xl p-4">
     <Heading
         title="Nouveau référentiel"
-        description="Vous ajouterez ses compétences à l'étape suivante."
+        description="Tu ajouteras ses compétences à l'étape suivante."
     />
 
     <Form {...FrameworkController.store.form()} class="space-y-6">

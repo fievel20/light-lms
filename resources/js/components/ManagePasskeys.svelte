@@ -30,8 +30,8 @@
     <div class="space-y-6">
         <Heading
             variant="small"
-            title="Passkeys"
-            description="Manage your passkeys for passwordless sign-in"
+            title="Clés d’accès"
+            description="Connecte-toi sans mot de passe grâce à une clé d’accès."
         />
 
         <div class="overflow-hidden rounded-lg border border-border">
@@ -48,7 +48,7 @@
                     </div>
                     <p class="font-medium">No passkeys yet</p>
                     <p class="mt-1 text-sm text-muted-foreground">
-                        Add a passkey to sign in without a password
+                        Ajoute une clé d’accès pour te connecter sans mot de passe.
                     </p>
                 </div>
             {/if}

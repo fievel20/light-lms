@@ -39,19 +39,19 @@
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-6 p-4">
     <Heading
         title={`Bonjour ${firstName} !`}
-        description="Voici où vous en êtes dans vos compétences."
+        description="Voici où tu en es dans tes compétences."
     />
 
     {#if promotions.length === 0}
         <p
-            class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground"
+            class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
-            Vous n'êtes inscrit(e) dans aucune promotion pour l'instant.
+            Tu n'es inscrit(e) dans aucune promotion pour l'instant.
         </p>
     {:else}
         <ul class="grid gap-4">
             {#each promotions as promotion (promotion.id)}
-                <li class="flex min-w-0 flex-col gap-4 rounded-xl border p-4">
+                <li class="flex min-w-0 flex-col gap-4 surface p-4">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <div class="min-w-0">
                             <p class="font-medium">{promotion.name}</p>

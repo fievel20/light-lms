@@ -1,7 +1,7 @@
 <script module lang="ts">
     export const layout = {
-        title: 'Activer votre compte',
-        description: 'Choisissez votre mot de passe pour accéder à vos compétences.',
+        title: 'Activer ton compte',
+        description: 'Choisis ton mot de passe pour accéder à tes compétences.',
     };
 </script>
 
@@ -28,7 +28,7 @@
     } = $props();
 </script>
 
-<AppHead title="Activer votre compte" />
+<AppHead title="Activer ton compte" />
 
 <p class="mb-6 text-center text-sm">Bienvenue {firstName} !</p>
 

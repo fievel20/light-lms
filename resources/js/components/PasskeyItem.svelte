@@ -50,10 +50,10 @@
                 {/if}
             </div>
             <p class="text-sm text-muted-foreground">
-                Added {passkey.created_at_diff}
+                Ajoutée {passkey.created_at_diff}
                 {#if passkey.last_used_at_diff}
                     <span class="mx-1 text-muted-foreground/50">/</span>
-                    Last used {passkey.last_used_at_diff}
+                    Utilisée {passkey.last_used_at_diff}
                 {/if}
             </p>
         </div>
@@ -75,17 +75,14 @@
         </DialogTrigger>
 
         <DialogContent>
-            <DialogTitle>Remove passkey</DialogTitle>
+            <DialogTitle>Supprimer la clé</DialogTitle>
             <DialogDescription>
-                Are you sure you want to remove the "{passkey.name}" passkey?
-                You will no longer be able to use it to sign in.
+                Supprimer la clé « {passkey.name} » ? Tu ne pourras plus l’utiliser pour te connecter.
             </DialogDescription>
             <DialogFooter>
                 <DialogClose asChild>
                     {#snippet children(props)}
-                        <Button variant="secondary" onclick={props.onClick}>
-                            Cancel
-                        </Button>
+                        <Button variant="secondary" onclick={props.onClick}>Annuler</Button>
                     {/snippet}
                 </DialogClose>
                 <Button
@@ -93,7 +90,7 @@
                     disabled={isDeleting}
                     onclick={handleDelete}
                 >
-                    {isDeleting ? 'Removing...' : 'Remove passkey'}
+                    {isDeleting ? 'Suppression…' : 'Supprimer la clé'}
                 </Button>
             </DialogFooter>
         </DialogContent>

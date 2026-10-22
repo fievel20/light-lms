@@ -59,7 +59,7 @@
         title="Mes compétences"
         description={framework
             ? `${promotion?.name} · ${framework.name}`
-            : 'Positionnez-vous sur chaque compétence de votre formation.'}
+            : 'Positionne-toi sur chaque compétence de ta formation.'}
     />
 
     {#if promotions.length > 1}
@@ -85,18 +85,18 @@
     {/if}
 
     {#if !promotion}
-        <p class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground">
-            Vous n'êtes inscrit(e) dans aucune promotion pour l'instant.
+        <p class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground">
+            Tu n'es inscrit(e) dans aucune promotion pour l'instant.
         </p>
     {:else if !framework}
-        <p class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground">
-            Votre formateur n'a pas encore associé de référentiel à cette
+        <p class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground">
+            Ton formateur n'a pas encore associé de référentiel à cette
             promotion.
         </p>
     {:else}
         {#if promotion.archived_at}
-            <p class="rounded-xl border p-4 text-sm text-muted-foreground">
-                Cette promotion est archivée : vos évaluations restent
+            <p class="surface p-4 text-sm text-muted-foreground">
+                Cette promotion est archivée : tes évaluations restent
                 consultables mais ne peuvent plus être modifiées.
             </p>
         {/if}
@@ -109,7 +109,7 @@
 
         <ol class="grid gap-4">
             {#each competencies as competency (competency.id)}
-                <li class="flex min-w-0 flex-col gap-4 rounded-xl border p-4">
+                <li class="flex min-w-0 flex-col gap-4 surface p-4">
                     <div class="flex items-start gap-3">
                         <Badge variant="outline" class="shrink-0 font-mono"
                             >{competency.code}</Badge

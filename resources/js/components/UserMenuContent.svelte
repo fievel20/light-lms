@@ -43,9 +43,7 @@
                 prefetch
                 onclick={props.onClick}
             >
-                <Settings class="mr-2 h-4 w-4" />
-                Settings
-            </Link>
+                <Settings class="mr-2 h-4 w-4" />Paramètres</Link>
         {/snippet}
     </DropdownMenuItem>
 </DropdownMenuGroup>
@@ -60,7 +58,7 @@
             data-test="logout-button"
         >
             <LogOut class="mr-2 h-4 w-4" />
-            Log out
+            Se déconnecter
         </Link>
     {/snippet}
 </DropdownMenuItem>

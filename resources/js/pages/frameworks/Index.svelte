@@ -54,7 +54,7 @@
     <div class="flex flex-wrap items-start justify-between gap-4">
         <Heading
             title="Référentiels"
-            description="Listes de compétences à affecter à vos promotions."
+            description="Listes de compétences à affecter à tes promotions."
         />
 
         <Button asChild class="h-11 w-full sm:h-9 sm:w-auto">
@@ -67,7 +67,7 @@
         </Button>
     </div>
 
-    <details class="rounded-xl border p-4" open={importErrors.length > 0}>
+    <details class="surface p-4" open={importErrors.length > 0}>
         <summary
             class="flex min-h-11 cursor-pointer list-none items-center gap-2 font-medium"
         >
@@ -125,9 +125,9 @@
 
     {#if frameworks.length === 0}
         <p
-            class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground"
+            class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
-            Aucun référentiel. Créez-en un ou importez un fichier JSON.
+            Aucun référentiel. Crée-en un ou importe un fichier JSON.
         </p>
     {:else}
         <ul class="grid gap-3 sm:grid-cols-2">
@@ -135,7 +135,7 @@
                 <li>
                     <Link
                         href={toUrl(show(framework.id))}
-                        class="flex h-full flex-col gap-1 rounded-xl border p-4 transition-colors hover:bg-muted/50"
+                        class="flex h-full flex-col gap-1 surface p-4 transition-colors hover:bg-muted/50"
                     >
                         <span class="font-medium">{framework.name}</span>
                         <span class="text-sm text-muted-foreground">

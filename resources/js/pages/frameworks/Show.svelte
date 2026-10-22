@@ -92,14 +92,14 @@
 
     {#if competencies.length === 0}
         <p
-            class="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground"
+            class="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
             Aucune compétence pour l'instant.
         </p>
     {:else}
         <ol class="grid gap-3">
             {#each competencies as competency (competency.id)}
-                <li class="flex flex-col gap-3 rounded-xl border p-4">
+                <li class="flex flex-col gap-3 surface p-4">
                     <div class="flex items-start gap-3">
                         <Badge variant="outline" class="shrink-0 font-mono"
                             >{competency.code}</Badge

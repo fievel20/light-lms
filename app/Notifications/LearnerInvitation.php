@@ -40,11 +40,11 @@ class LearnerInvitation extends Notification implements ShouldQueue
         );
 
         return (new MailMessage)
-            ->subject('Votre accès à '.config('app.name'))
+            ->subject('Ton accès à '.config('app.name'))
             ->greeting("Bonjour {$notifiable->first_name},")
-            ->line('Votre formateur vous a inscrit(e) sur '.config('app.name').' pour suivre et valider vos compétences.')
-            ->line('Pour activer votre compte, choisissez votre mot de passe :')
+            ->line("Ton formateur t'a inscrit(e) sur ".config('app.name').' pour suivre et valider tes compétences.')
+            ->line('Pour activer ton compte, choisis ton mot de passe :')
             ->action('Activer mon compte', $url)
-            ->line('Ce lien est valable '.self::VALID_FOR_DAYS.' jours. S\'il a expiré, demandez à votre formateur de vous renvoyer une invitation.');
+            ->line('Ce lien est valable '.self::VALID_FOR_DAYS." jours. S'il a expiré, demande à ton formateur de te renvoyer une invitation.");
     }
 }

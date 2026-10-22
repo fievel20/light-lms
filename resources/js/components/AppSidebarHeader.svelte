@@ -1,6 +1,13 @@
 <script lang="ts">
+    import { Link, page } from '@inertiajs/svelte';
+    import AppLogo from '@/components/AppLogo.svelte';
     import Breadcrumbs from '@/components/Breadcrumbs.svelte';
+    import { Avatar, AvatarFallback } from '@/components/ui/avatar';
     import { SidebarTrigger } from '@/components/ui/sidebar';
+    import { getInitials } from '@/lib/initials';
+    import { toUrl } from '@/lib/utils';
+    import { dashboard } from '@/routes';
+    import { edit as profile } from '@/routes/profile';
     import type { BreadcrumbItem } from '@/types';
 
     let {
@@ -8,15 +15,34 @@
     }: {
         breadcrumbs?: BreadcrumbItem[];
     } = $props();
+
+    const user = $derived(page.props.auth.user);
 </script>
 
+<!-- Phones: logo and avatar only, navigation lives in the bottom tab bar. -->
 <header
-    class="flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/70 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4"
+    class="sticky top-0 z-30 flex h-14 items-center justify-between bg-background/85 px-4 backdrop-blur-lg md:hidden"
 >
-    <div class="flex items-center gap-2">
-        <SidebarTrigger class="-ml-1" />
-        {#if breadcrumbs && breadcrumbs.length > 0}
-            <Breadcrumbs {breadcrumbs} />
-        {/if}
-    </div>
+    <Link href={toUrl(dashboard())} class="flex items-center gap-1">
+        <AppLogo />
+    </Link>
+    {#if user}
+        <Link href={toUrl(profile())} aria-label="Mon profil">
+            <Avatar class="size-9">
+                <AvatarFallback class="bg-primary-soft text-sm font-bold text-primary">
+                    {getInitials(user.name)}
+                </AvatarFallback>
+            </Avatar>
+        </Link>
+    {/if}
+</header>
+
+<!-- Tablets and desktops: sidebar toggle and breadcrumbs. -->
+<header
+    class="hidden h-14 shrink-0 items-center gap-2 px-6 transition-[width,height] ease-linear md:flex md:px-4"
+>
+    <SidebarTrigger class="-ml-1" />
+    {#if breadcrumbs && breadcrumbs.length > 0}
+        <Breadcrumbs {breadcrumbs} />
+    {/if}
 </header>

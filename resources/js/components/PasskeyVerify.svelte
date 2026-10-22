@@ -54,7 +54,7 @@
             {/if}
             {passkeyVerify.isLoading
                 ? (props.loadingLabel ?? 'Authenticating...')
-                : (props.label ?? 'Sign in with a passkey')}
+                : (props.label ?? 'Se connecter avec une clé d’accès')}
         </Button>
 
         {#if passkeyVerify.error}
@@ -70,7 +70,7 @@
         </div>
         <div class="relative flex justify-center text-xs uppercase">
             <span class="bg-background px-2 text-muted-foreground">
-                {props.separator ?? 'Or continue with email'}
+                {props.separator ?? 'ou avec ton email'}
             </span>
         </div>
     </div>

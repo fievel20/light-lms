@@ -49,13 +49,13 @@ class InvitationController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Bienvenue ! Votre compte est activé.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Bienvenue ! Ton compte est activé.']);
 
         return to_route('dashboard');
     }
 
     private function alreadyActivated(): RedirectResponse
     {
-        return to_route('login')->with('status', 'Votre compte est déjà activé, vous pouvez vous connecter.');
+        return to_route('login')->with('status', 'Ton compte est déjà activé, tu peux te connecter.');
     }
 }

@@ -23,9 +23,10 @@ describe('email d\'invitation', function () {
         $learner = invitedLearner();
         $mail = (new LearnerInvitation)->toMail($learner);
 
-        expect($mail->subject)->toBe('Votre accès à Light LMS')
+        expect($mail->subject)->toBe('Ton accès à Light LMS')
             ->and($mail->greeting)->toBe('Bonjour Marie,')
             ->and($mail->actionText)->toBe('Activer mon compte')
+            ->and(implode(' ', $mail->introLines))->toContain("Ton formateur t'a inscrit")
             ->and(implode(' ', $mail->outroLines))->toContain('7 jours')
             ->and(URL::hasValidSignature(Request::create($mail->actionUrl)))->toBeTrue()
             ->and($mail->actionUrl)->toStartWith(route('invitation.show', $learner));
@@ -72,7 +73,7 @@ describe('page d\'activation', function () {
 
         $this->get(invitationUrl($learner))
             ->assertRedirect(route('login'))
-            ->assertSessionHas('status', 'Votre compte est déjà activé, vous pouvez vous connecter.');
+            ->assertSessionHas('status', 'Ton compte est déjà activé, tu peux te connecter.');
     });
 });
 

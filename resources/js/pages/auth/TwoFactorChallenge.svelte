@@ -18,18 +18,18 @@
     const authConfigContent: TwoFactorConfigContent = $derived.by(() => {
         if (showRecoveryInput) {
             return {
-                title: 'Recovery code',
+                title: 'Code de secours',
                 description:
-                    'Please confirm access to your account by entering one of your emergency recovery codes.',
-                buttonText: 'login using an authentication code',
+                    'Confirme l’accès à ton compte avec l’un de tes codes de secours.',
+                buttonText: 'utiliser un code d’authentification',
             };
         }
 
         return {
-            title: 'Authentication code',
+            title: 'Code d’authentification',
             description:
-                'Enter the authentication code provided by your authenticator application.',
-            buttonText: 'login using a recovery code',
+                'Saisis le code affiché par ton application d’authentification.',
+            buttonText: 'utiliser un code de secours',
         };
     });
 
@@ -47,7 +47,7 @@
     }
 </script>
 
-<AppHead title="Two-factor authentication" />
+<AppHead title="Double authentification" />
 
 <div class="space-y-6">
     {#if !showRecoveryInput}
@@ -80,10 +80,10 @@
                     <InputError message={errors.code} />
                 </div>
                 <Button type="submit" class="w-full" disabled={processing}
-                    >Continue</Button
+                    >Continuer</Button
                 >
                 <div class="text-center text-sm text-muted-foreground">
-                    <span>or you can </span>
+                    <span>ou </span>
                     <button
                         type="button"
                         class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
@@ -100,16 +100,16 @@
                 <Input
                     name="recovery_code"
                     type="text"
-                    placeholder="Enter recovery code"
+                    placeholder="Code de secours"
                     required
                 />
                 <InputError message={errors.recovery_code} />
                 <Button type="submit" class="w-full" disabled={processing}
-                    >Continue</Button
+                    >Continuer</Button
                 >
 
                 <div class="text-center text-sm text-muted-foreground">
-                    <span>or you can </span>
+                    <span>ou </span>
                     <button
                         type="button"
                         class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"

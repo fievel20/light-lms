@@ -28,7 +28,7 @@
 <div class="mx-auto w-full max-w-xl p-4">
     <Heading
         title="Nouvelle promotion"
-        description="Créez une promotion pour y affecter des apprenants."
+        description="Crée une promotion pour y inscrire des apprenants."
     />
 
     <Form {...PromotionController.store.form()} class="space-y-6">

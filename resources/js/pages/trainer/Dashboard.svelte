@@ -9,6 +9,10 @@
 <script lang="ts">
     import { Link } from '@inertiajs/svelte';
     import ChartColumn from '@lucide/svelte/icons/chart-column';
+    import Inbox from '@lucide/svelte/icons/inbox';
+    import Mail from '@lucide/svelte/icons/mail';
+    import Users from '@lucide/svelte/icons/users';
+    import StatTile from '@/components/design/StatTile.svelte';
     import Plus from '@lucide/svelte/icons/plus';
     import AppHead from '@/components/AppHead.svelte';
     import Heading from '@/components/Heading.svelte';
@@ -47,26 +51,22 @@
 <AppHead title="Tableau de bord" />
 
 <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
-    <Heading title="Tableau de bord" description="Vos promotions en cours." />
+    <Heading title="Tableau de bord" description="Tes promotions en cours." />
 
-    <dl class="grid grid-cols-3 gap-2 text-sm">
-        <div class="rounded-xl border p-3">
-            <dt class="text-xs text-muted-foreground">Promotions</dt>
-            <dd class="text-xl font-semibold tabular-nums">{promotions.length}</dd>
-        </div>
-        <div class="rounded-xl border p-3">
-            <dt class="text-xs text-muted-foreground">À examiner</dt>
-            <dd class="text-xl font-semibold tabular-nums">{toReview}</dd>
-        </div>
-        <div class="rounded-xl border p-3">
-            <dt class="text-xs text-muted-foreground">Invitations en attente</dt>
-            <dd class="text-xl font-semibold tabular-nums">{pendingInvitations}</dd>
-        </div>
-    </dl>
+    <div class="grid grid-cols-3 gap-3">
+        <StatTile label="Promotions" value={promotions.length} icon={Users} tone="primary" />
+        <StatTile
+            label="À examiner"
+            value={toReview}
+            icon={Inbox}
+            tone={toReview > 0 ? 'warning' : 'success'}
+        />
+        <StatTile label="Invitations" value={pendingInvitations} icon={Mail} />
+    </div>
 
     {#if promotions.length === 0}
         <div
-            class="flex flex-col items-center gap-4 rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground"
+            class="flex flex-col items-center gap-4 rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
             Aucune promotion en cours.
             <Button asChild class="h-11 sm:h-9">
@@ -81,7 +81,7 @@
     {:else}
         <ul class="grid gap-4 md:grid-cols-2">
             {#each promotions as promotion (promotion.id)}
-                <li class="flex min-w-0 flex-col gap-4 rounded-xl border p-4">
+                <li class="flex min-w-0 flex-col gap-4 surface p-4">
                     <div class="flex items-start justify-between gap-2">
                         <div class="min-w-0">
                             <Link

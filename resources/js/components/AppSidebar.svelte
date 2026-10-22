@@ -1,12 +1,7 @@
 <script lang="ts">
     import { Link, page } from '@inertiajs/svelte';
-    import BookCheck from '@lucide/svelte/icons/book-check';
-    import FolderGit2 from '@lucide/svelte/icons/folder-git-2';
-    import LayoutGrid from '@lucide/svelte/icons/layout-grid';
-    import Users from '@lucide/svelte/icons/users';
     import type { Snippet } from 'svelte';
     import AppLogo from '@/components/AppLogo.svelte';
-    import NavFooter from '@/components/NavFooter.svelte';
     import NavMain from '@/components/NavMain.svelte';
     import NavUser from '@/components/NavUser.svelte';
     import {
@@ -18,12 +13,9 @@
         SidebarMenuButton,
         SidebarMenuItem,
     } from '@/components/ui/sidebar';
+    import { mainNavItems } from '@/lib/navigation';
     import { toUrl } from '@/lib/utils';
     import { dashboard } from '@/routes';
-    import * as frameworks from '@/routes/frameworks';
-    import * as myCompetencies from '@/routes/my-competencies';
-    import * as promotions from '@/routes/promotions';
-    import type { NavItem } from '@/types';
 
     let {
         children,
@@ -31,43 +23,7 @@
         children?: Snippet;
     } = $props();
 
-    const isTrainer = $derived(page.props.auth.user?.role === 'trainer');
-
-    const mainNavItems: NavItem[] = $derived([
-        {
-            title: 'Tableau de bord',
-            href: dashboard(),
-            icon: LayoutGrid,
-        },
-        ...(isTrainer
-            ? [
-                  {
-                      title: 'Promotions',
-                      href: promotions.index(),
-                      icon: Users,
-                  },
-                  {
-                      title: 'Référentiels',
-                      href: frameworks.index(),
-                      icon: BookCheck,
-                  },
-              ]
-            : [
-                  {
-                      title: 'Mes compétences',
-                      href: myCompetencies.index(),
-                      icon: BookCheck,
-                  },
-              ]),
-    ]);
-
-    const footerNavItems: NavItem[] = [
-        {
-            title: 'Code source',
-            href: 'https://github.com/fievel20/light-lms',
-            icon: FolderGit2,
-        },
-    ];
+    const items = $derived(mainNavItems(page.props.auth.user));
 </script>
 
 <Sidebar collapsible="icon" variant="inset">
@@ -90,11 +46,10 @@
     </SidebarHeader>
 
     <SidebarContent>
-        <NavMain items={mainNavItems} />
+        <NavMain {items} />
     </SidebarContent>
 
     <SidebarFooter>
-        <NavFooter items={footerNavItems} />
         <NavUser />
     </SidebarFooter>
 </Sidebar>
