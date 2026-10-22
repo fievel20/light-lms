@@ -8,6 +8,7 @@
 
 <script lang="ts">
     import { Form, Link, page } from '@inertiajs/svelte';
+    import BookCheck from '@lucide/svelte/icons/book-check';
     import FileUp from '@lucide/svelte/icons/file-up';
     import Mail from '@lucide/svelte/icons/mail';
     import Pencil from '@lucide/svelte/icons/pencil';
@@ -22,15 +23,22 @@
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
     import { toUrl } from '@/lib/utils';
+    import * as frameworks from '@/routes/frameworks';
     import { edit } from '@/routes/promotions';
     import type { ImportReport, Learner } from '@/types/learner';
     import type { Promotion } from '@/types/promotion';
 
     let {
         promotion,
+        framework,
         learners,
     }: {
         promotion: Promotion;
+        framework: {
+            id: number;
+            name: string;
+            competencies_count: number;
+        } | null;
         learners: Learner[];
     } = $props();
 
@@ -71,6 +79,44 @@
             {/snippet}
         </Button>
     </header>
+
+    <section
+        class="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4"
+        aria-label="Référentiel"
+    >
+        <div class="flex min-w-0 items-center gap-3">
+            <BookCheck class="size-5 shrink-0 text-muted-foreground" />
+            {#if framework}
+                <div class="min-w-0">
+                    <Link
+                        href={toUrl(frameworks.show(framework.id))}
+                        class="block truncate font-medium underline-offset-4 hover:underline"
+                    >
+                        {framework.name}
+                    </Link>
+                    <p class="text-sm text-muted-foreground">
+                        {framework.competencies_count} compétence{framework.competencies_count >
+                        1
+                            ? 's'
+                            : ''}
+                    </p>
+                </div>
+            {:else}
+                <p class="text-sm text-muted-foreground">
+                    Aucun référentiel affecté à cette promotion.
+                </p>
+            {/if}
+        </div>
+        {#if !framework}
+            <Button variant="outline" size="sm" asChild class="h-11 sm:h-9">
+                {#snippet children(props)}
+                    <Link {...props} href={toUrl(edit(promotion.id))}>
+                        Choisir un référentiel
+                    </Link>
+                {/snippet}
+            </Button>
+        {/if}
+    </section>
 
     {#if !promotion.archived_at}
         <section class="grid gap-3 sm:grid-cols-2">

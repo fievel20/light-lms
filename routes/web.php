@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CompetencyController;
+use App\Http\Controllers\FrameworkController;
+use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LearnerInvitationController;
 use App\Http\Controllers\PromotionController;
@@ -23,6 +26,12 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::delete('promotions/{promotion}/learners/{learner}', [PromotionLearnerController::class, 'destroy'])->name('promotions.learners.destroy');
 
     Route::post('learners/{learner}/invitation', [LearnerInvitationController::class, 'store'])->name('learners.invitation.resend');
+
+    Route::post('frameworks/import', [FrameworkImportController::class, 'store'])->name('frameworks.import');
+    Route::resource('frameworks', FrameworkController::class);
+    Route::resource('frameworks.competencies', CompetencyController::class)
+        ->except(['index', 'show'])
+        ->scoped();
 });
 
 Route::middleware(['guest', 'signed'])->group(function () {

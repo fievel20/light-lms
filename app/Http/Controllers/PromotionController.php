@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PromotionRequest;
+use App\Models\Framework;
 use App\Models\Promotion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,13 +26,16 @@ class PromotionController extends Controller
                 ->archived($archived)
                 ->orderByDesc('starts_on')
                 ->orderBy('name')
-                ->get(['id', 'name', 'starts_on', 'ends_on', 'archived_at']),
+                ->with('framework:id,name')
+                ->get(['id', 'name', 'framework_id', 'starts_on', 'ends_on', 'archived_at']),
         ]);
     }
 
     public function create(): Response
     {
-        return Inertia::render('promotions/Create');
+        return Inertia::render('promotions/Create', [
+            'frameworks' => $this->frameworkOptions(),
+        ]);
     }
 
     public function store(PromotionRequest $request): RedirectResponse
@@ -46,6 +51,10 @@ class PromotionController extends Controller
     {
         return Inertia::render('promotions/Show', [
             'promotion' => $promotion->only(['id', 'name', 'starts_on', 'ends_on', 'archived_at']),
+            'framework' => $promotion->framework()
+                ->withCount('competencies')
+                ->first(['id', 'name'])
+                ?->only(['id', 'name', 'competencies_count']),
             'learners' => $promotion->learners()
                 ->orderByName()
                 ->get(['users.id', 'first_name', 'last_name', 'email', 'invited_at', 'activated_at'])
@@ -56,8 +65,20 @@ class PromotionController extends Controller
     public function edit(Promotion $promotion): Response
     {
         return Inertia::render('promotions/Edit', [
-            'promotion' => $promotion->only(['id', 'name', 'starts_on', 'ends_on', 'archived_at']),
+            'promotion' => $promotion->only(['id', 'name', 'framework_id', 'starts_on', 'ends_on', 'archived_at']),
+            'frameworks' => $this->frameworkOptions(),
         ]);
+    }
+
+    /**
+     * @return Collection<int, array{id: int, name: string}>
+     */
+    private function frameworkOptions(): Collection
+    {
+        return Framework::query()
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->map(fn (Framework $framework) => ['id' => $framework->id, 'name' => $framework->name]);
     }
 
     public function update(PromotionRequest $request, Promotion $promotion): RedirectResponse

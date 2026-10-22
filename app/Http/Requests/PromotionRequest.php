@@ -25,6 +25,7 @@ class PromotionRequest extends FormRequest
             ],
             'starts_on' => ['required', 'date_format:Y-m-d'],
             'ends_on' => ['required', 'date_format:Y-m-d', 'after_or_equal:starts_on'],
+            'framework_id' => ['nullable', 'integer', 'exists:frameworks,id'],
         ];
     }
 
@@ -47,6 +48,7 @@ class PromotionRequest extends FormRequest
             'name' => 'nom',
             'starts_on' => 'date de début',
             'ends_on' => 'date de fin',
+            'framework_id' => 'référentiel',
         ];
     }
 }

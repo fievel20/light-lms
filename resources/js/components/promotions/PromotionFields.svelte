@@ -2,13 +2,17 @@
     import InputError from '@/components/InputError.svelte';
     import { Input } from '@/components/ui/input';
     import { Label } from '@/components/ui/label';
+    import { nativeFieldClass } from '@/lib/form';
+    import type { FrameworkOption } from '@/types/framework';
     import type { Promotion } from '@/types/promotion';
 
     let {
         errors,
+        frameworks,
         promotion,
     }: {
         errors: Record<string, string | undefined>;
+        frameworks: FrameworkOption[];
         promotion?: Promotion;
     } = $props();
 </script>
@@ -51,4 +55,20 @@
         />
         <InputError message={errors.ends_on} />
     </div>
+</div>
+
+<div class="grid gap-2">
+    <Label for="framework_id">Référentiel de compétences</Label>
+    <select
+        id="framework_id"
+        name="framework_id"
+        class={nativeFieldClass}
+        value={promotion?.framework_id ?? ''}
+    >
+        <option value="">Aucun pour l'instant</option>
+        {#each frameworks as framework (framework.id)}
+            <option value={framework.id}>{framework.name}</option>
+        {/each}
+    </select>
+    <InputError message={errors.framework_id} />
 </div>

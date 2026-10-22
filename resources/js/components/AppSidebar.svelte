@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Link, page } from '@inertiajs/svelte';
+    import BookCheck from '@lucide/svelte/icons/book-check';
     import FolderGit2 from '@lucide/svelte/icons/folder-git-2';
     import LayoutGrid from '@lucide/svelte/icons/layout-grid';
     import Users from '@lucide/svelte/icons/users';
@@ -19,6 +20,7 @@
     } from '@/components/ui/sidebar';
     import { toUrl } from '@/lib/utils';
     import { dashboard } from '@/routes';
+    import * as frameworks from '@/routes/frameworks';
     import * as promotions from '@/routes/promotions';
     import type { NavItem } from '@/types';
 
@@ -42,6 +44,11 @@
                       title: 'Promotions',
                       href: promotions.index(),
                       icon: Users,
+                  },
+                  {
+                      title: 'Référentiels',
+                      href: frameworks.index(),
+                      icon: BookCheck,
                   },
               ]
             : []),

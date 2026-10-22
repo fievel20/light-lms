@@ -15,9 +15,13 @@
     import { Button } from '@/components/ui/button';
     import { Spinner } from '@/components/ui/spinner';
     import { toUrl } from '@/lib/utils';
+    import type { FrameworkOption } from '@/types/framework';
     import type { Promotion } from '@/types/promotion';
 
-    let { promotion }: { promotion: Promotion } = $props();
+    let {
+        promotion,
+        frameworks,
+    }: { promotion: Promotion; frameworks: FrameworkOption[] } = $props();
 </script>
 
 <AppHead title={`Modifier ${promotion.name}`} />
@@ -30,7 +34,7 @@
         class="space-y-6"
     >
         {#snippet children({ errors, processing })}
-            <PromotionFields {errors} {promotion} />
+            <PromotionFields {errors} {frameworks} {promotion} />
 
             <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                 <Button variant="outline" asChild>

@@ -100,6 +100,9 @@
                                 promotion.ends_on,
                             )}
                         </p>
+                        <p class="truncate text-sm text-muted-foreground">
+                            {promotion.framework?.name ?? 'Aucun référentiel'}
+                        </p>
                     </div>
 
                     <div class="flex gap-2">

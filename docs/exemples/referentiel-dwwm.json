@@ -1,0 +1,71 @@
+{
+    "name": "Développeur Web et Web Mobile",
+    "description": "Exemple de référentiel inspiré du titre professionnel DWWM.",
+    "competencies": [
+        {
+            "code": "CP1",
+            "name": "Installer et configurer son environnement de travail",
+            "type": "binary"
+        },
+        {
+            "code": "CP2",
+            "name": "Maquetter des interfaces utilisateur web ou web mobile",
+            "type": "scale",
+            "validation_threshold": 3,
+            "levels": [
+                { "value": 1, "label": "Découverte" },
+                { "value": 2, "label": "Guidé" },
+                { "value": 3, "label": "Autonome" },
+                { "value": 4, "label": "Expert" }
+            ]
+        },
+        {
+            "code": "CP3",
+            "name": "Réaliser des interfaces utilisateur statiques web ou web mobile",
+            "type": "scale",
+            "levels": [
+                { "value": 1, "label": "Découverte" },
+                { "value": 2, "label": "Guidé" },
+                { "value": 3, "label": "Autonome" },
+                { "value": 4, "label": "Expert" }
+            ]
+        },
+        {
+            "code": "CP4",
+            "name": "Développer la partie dynamique des interfaces utilisateur",
+            "type": "scale",
+            "validation_threshold": 3,
+            "levels": [
+                { "value": 1, "label": "Découverte" },
+                { "value": 2, "label": "Guidé" },
+                { "value": 3, "label": "Autonome" },
+                { "value": 4, "label": "Expert" }
+            ]
+        },
+        {
+            "code": "CP5",
+            "name": "Mettre en place une base de données relationnelle",
+            "type": "binary"
+        },
+        {
+            "code": "CP6",
+            "name": "Développer des composants d'accès aux données SQL et NoSQL",
+            "type": "scale",
+            "levels": [
+                { "value": 0, "label": "Non acquis" },
+                { "value": 1, "label": "En cours" },
+                { "value": 2, "label": "Acquis" }
+            ]
+        },
+        {
+            "code": "CP7",
+            "name": "Développer des composants métier côté serveur",
+            "type": "binary"
+        },
+        {
+            "code": "CP8",
+            "name": "Documenter le déploiement d'une application dynamique",
+            "type": "binary"
+        }
+    ]
+}

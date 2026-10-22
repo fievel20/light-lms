@@ -18,6 +18,9 @@
     import { Button } from '@/components/ui/button';
     import { Spinner } from '@/components/ui/spinner';
     import { toUrl } from '@/lib/utils';
+    import type { FrameworkOption } from '@/types/framework';
+
+    let { frameworks }: { frameworks: FrameworkOption[] } = $props();
 </script>
 
 <AppHead title="Nouvelle promotion" />
@@ -30,7 +33,7 @@
 
     <Form {...PromotionController.store.form()} class="space-y-6">
         {#snippet children({ errors, processing })}
-            <PromotionFields {errors} />
+            <PromotionFields {errors} {frameworks} />
 
             <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                 <Button variant="outline" asChild>
