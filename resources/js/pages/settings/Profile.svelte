@@ -44,18 +44,32 @@
         options={{ preserveScroll: true }}
     >
         {#snippet children({ errors, processing })}
-            <div class="grid gap-2">
-                <Label for="name">Name</Label>
-                <Input
-                    id="name"
-                    name="name"
-                    class="mt-1 block w-full"
-                    value={user.name}
-                    required
-                    autocomplete="name"
-                    placeholder="Full name"
-                />
-                <InputError class="mt-2" message={errors.name} />
+            <div class="grid gap-6 sm:grid-cols-2">
+                <div class="grid gap-2">
+                    <Label for="first_name">Prénom</Label>
+                    <Input
+                        id="first_name"
+                        name="first_name"
+                        class="mt-1 block w-full"
+                        value={user.first_name}
+                        required
+                        autocomplete="given-name"
+                    />
+                    <InputError class="mt-2" message={errors.first_name} />
+                </div>
+
+                <div class="grid gap-2">
+                    <Label for="last_name">Nom</Label>
+                    <Input
+                        id="last_name"
+                        name="last_name"
+                        class="mt-1 block w-full"
+                        value={user.last_name}
+                        required
+                        autocomplete="family-name"
+                    />
+                    <InputError class="mt-2" message={errors.last_name} />
+                </div>
             </div>
 
             <div class="grid gap-2">

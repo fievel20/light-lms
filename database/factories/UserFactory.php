@@ -26,10 +26,12 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'role' => Role::Learner,
             'email_verified_at' => now(),
+            'activated_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'two_factor_secret' => null,
@@ -45,6 +47,19 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'role' => Role::Trainer,
+        ]);
+    }
+
+    /**
+     * Indicate that the learner was invited but has not chosen a password yet.
+     */
+    public function invited(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'password' => null,
+            'email_verified_at' => null,
+            'invited_at' => now(),
+            'activated_at' => null,
         ]);
     }
 

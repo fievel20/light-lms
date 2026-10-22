@@ -17,12 +17,14 @@ class DatabaseSeeder extends Seeder
     {
         // Données de développement local uniquement (mot de passe : "password").
         User::factory()->trainer()->create([
-            'name' => 'Formateur Démo',
+            'first_name' => 'Formateur',
+            'last_name' => 'Démo',
             'email' => 'formateur@example.com',
         ]);
 
         User::factory()->create([
-            'name' => 'Apprenant Démo',
+            'first_name' => 'Apprenant',
+            'last_name' => 'Démo',
             'email' => 'apprenant@example.com',
         ]);
 

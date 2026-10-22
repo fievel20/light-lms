@@ -42,6 +42,17 @@ class PromotionController extends Controller
         return to_route('promotions.index');
     }
 
+    public function show(Promotion $promotion): Response
+    {
+        return Inertia::render('promotions/Show', [
+            'promotion' => $promotion->only(['id', 'name', 'starts_on', 'ends_on', 'archived_at']),
+            'learners' => $promotion->learners()
+                ->orderByName()
+                ->get(['users.id', 'first_name', 'last_name', 'email', 'invited_at', 'activated_at'])
+                ->map->only(['id', 'first_name', 'last_name', 'name', 'email', 'invited_at', 'activated_at']),
+        ]);
+    }
+
     public function edit(Promotion $promotion): Response
     {
         return Inertia::render('promotions/Edit', [

@@ -18,7 +18,7 @@
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
     import { cn, toUrl } from '@/lib/utils';
-    import { create, edit } from '@/routes/promotions';
+    import { create, edit, show } from '@/routes/promotions';
     import type { Promotion } from '@/types/promotion';
 
     let {
@@ -89,7 +89,12 @@
                     class="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                     <div class="min-w-0">
-                        <p class="truncate font-medium">{promotion.name}</p>
+                        <Link
+                            href={toUrl(show(promotion.id))}
+                            class="block truncate font-medium underline-offset-4 hover:underline"
+                        >
+                            {promotion.name}
+                        </Link>
                         <p class="text-sm text-muted-foreground">
                             Du {formatDate(promotion.starts_on)} au {formatDate(
                                 promotion.ends_on,
