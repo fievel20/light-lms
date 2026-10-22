@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { Link } from '@inertiajs/svelte';
-    import BookOpen from '@lucide/svelte/icons/book-open';
+    import { Link, page } from '@inertiajs/svelte';
     import FolderGit2 from '@lucide/svelte/icons/folder-git-2';
     import LayoutGrid from '@lucide/svelte/icons/layout-grid';
+    import Users from '@lucide/svelte/icons/users';
     import type { Snippet } from 'svelte';
     import AppLogo from '@/components/AppLogo.svelte';
     import NavFooter from '@/components/NavFooter.svelte';
@@ -19,6 +19,7 @@
     } from '@/components/ui/sidebar';
     import { toUrl } from '@/lib/utils';
     import { dashboard } from '@/routes';
+    import * as promotions from '@/routes/promotions';
     import type { NavItem } from '@/types';
 
     let {
@@ -27,24 +28,30 @@
         children?: Snippet;
     } = $props();
 
-    const mainNavItems: NavItem[] = [
+    const isTrainer = $derived(page.props.auth.user?.role === 'trainer');
+
+    const mainNavItems: NavItem[] = $derived([
         {
-            title: 'Dashboard',
+            title: 'Tableau de bord',
             href: dashboard(),
             icon: LayoutGrid,
         },
-    ];
+        ...(isTrainer
+            ? [
+                  {
+                      title: 'Promotions',
+                      href: promotions.index(),
+                      icon: Users,
+                  },
+              ]
+            : []),
+    ]);
 
     const footerNavItems: NavItem[] = [
         {
-            title: 'Repository',
-            href: 'https://github.com/laravel/svelte-starter-kit',
+            title: 'Code source',
+            href: 'https://github.com/fievel20/light-lms',
             icon: FolderGit2,
-        },
-        {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits#svelte',
-            icon: BookOpen,
         },
     ];
 </script>

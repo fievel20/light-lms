@@ -106,7 +106,7 @@ Les emails déjà existants sont rattachés à la promotion sans créer de doubl
 
 0. ✅ Initialisation : Laravel + kit Svelte, Pest, français, inscription publique désactivée, CI
 1. ✅ US1 — Rôles et commande de création du formateur
-2. US2 — Promotions
+2. ✅ US2 — Promotions
 3. US3/US4 — Apprenants, import CSV, invitations
 4. US5/US6/US7 — Référentiels, compétences, import JSON
 5. US8/US9 — Autovalidation et validation

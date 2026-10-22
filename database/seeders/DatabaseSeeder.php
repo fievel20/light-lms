@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory(8)->create();
+
+        $this->call(PromotionSeeder::class);
     }
 }
