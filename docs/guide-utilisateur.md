@@ -94,15 +94,18 @@ La progression d'un apprenant est le pourcentage de compétences acquises ; cell
 
 Ouvrir le lien reçu par email, choisir un mot de passe : le compte est activé et l'apprenant est connecté. Le lien ne sert qu'une fois ; s'il a expiré, demander au formateur de renvoyer l'invitation. Ensuite, connexion classique avec email et mot de passe (« Mot de passe oublié » disponible).
 
-### 2. Tableau de bord
+### 2. Accueil
 
-Pour chaque promotion : référentiel, pourcentage de compétences validées, nombre de compétences autoévaluées et en attente du formateur, bouton **Me positionner**.
+Pour chaque promotion en cours : un **anneau de progression** (pourcentage de compétences acquises), trois chiffres clés (acquises, autoévaluées, en attente du formateur) et une seule action proposée, par exemple « 2 compétences t'attendent », qui ouvre directement les compétences à faire. Les promotions archivées sont listées plus bas.
+
+**Célébration** : quand le formateur a validé une compétence au niveau requis, l'apprenant est félicité (confettis et liste des compétences nouvellement acquises) à sa prochaine visite. Chaque compétence n'est célébrée qu'une fois.
 
 ### 3. Mes compétences
 
-Menu **Mes compétences** (choix de la promotion s'il y en a plusieurs). Pour chaque compétence :
+Onglet **Compétences** (choix de la promotion s'il y en a plusieurs).
 
-- l'autoévaluation actuelle et la validation du formateur (avec son commentaire) ;
-- les boutons **Je me positionne** : un clic enregistre le niveau choisi. On peut se repositionner à tout moment tant que la promotion n'est pas archivée.
+- Des **filtres** avec compteur : _Toutes_, _À faire_ (pas encore autoévaluée), _En attente_ (autoévaluation pas encore examinée par le formateur), _Acquises_.
+- Chaque compétence affiche son statut et ses **pastilles de niveau** : toucher une pastille enregistre son autoévaluation. 🏁 marque le niveau à atteindre, la coche verte le niveau validé par le formateur. Le commentaire du formateur s'affiche dessous.
+- On peut se repositionner à tout moment tant que la promotion n'est pas archivée.
 
 Une compétence n'est **acquise** que lorsque le formateur l'a validée au niveau requis : l'autoévaluation sert à lui signaler où l'on pense en être.

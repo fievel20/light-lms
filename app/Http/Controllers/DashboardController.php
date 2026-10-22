@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Progress\PullCelebrations;
 use App\Models\Promotion;
 use App\Models\User;
 use App\Queries\LearnerCompetencies;
@@ -12,20 +13,24 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request, LearnerCompetencies $competencies, PromotionProgress $progress): Response
-    {
+    public function __invoke(
+        Request $request,
+        LearnerCompetencies $competencies,
+        PromotionProgress $progress,
+        PullCelebrations $celebrations,
+    ): Response {
         /** @var User $user */
         $user = $request->user();
 
         return $user->isTrainer()
             ? $this->trainer($progress)
-            : $this->learner($user, $competencies);
+            : $this->learner($user, $competencies, $celebrations);
     }
 
     /**
      * US10: the learner's progress in each of their promotions.
      */
-    private function learner(User $learner, LearnerCompetencies $competencies): Response
+    private function learner(User $learner, LearnerCompetencies $competencies, PullCelebrations $celebrations): Response
     {
         $promotions = $learner->promotions()
             ->with('framework:id,name')
@@ -42,6 +47,7 @@ class DashboardController extends Controller
 
         return Inertia::render('learner/Dashboard', [
             'promotions' => $promotions->values(),
+            'celebrations' => $celebrations->handle($learner),
         ]);
     }
 

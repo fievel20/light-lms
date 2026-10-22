@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Assessments\RecordAssessment;
+use App\Actions\Progress\PullCelebrations;
 use App\Enums\AssessmentSource;
 use App\Models\Competency;
 use App\Models\Promotion;
@@ -18,7 +19,7 @@ use Inertia\Response;
  */
 class MyCompetencyController extends Controller
 {
-    public function index(Request $request, LearnerCompetencies $competencies): Response
+    public function index(Request $request, LearnerCompetencies $competencies, PullCelebrations $celebrations): Response
     {
         /** @var User $learner */
         $learner = $request->user();
@@ -39,6 +40,7 @@ class MyCompetencyController extends Controller
             'promotion' => $promotion?->only(['id', 'name', 'archived_at']),
             'framework' => $framework?->only(['id', 'name']),
             'competencies' => $promotion ? $competencies->get($promotion, $learner) : [],
+            'celebrations' => $celebrations->handle($learner),
         ]);
     }
 
