@@ -24,10 +24,12 @@
         framework,
         types,
         competency,
+        assessed = false,
     }: {
         framework: FrameworkOption;
         types: TypeOption[];
         competency?: Competency;
+        assessed?: boolean;
     } = $props();
 
     const defaultLevels = [
@@ -118,6 +120,14 @@
         <InputError message={errors.description} />
     </div>
 
+    {#if assessed}
+        <p class="rounded-lg border p-3 text-sm text-muted-foreground">
+            Cette compétence a déjà été évaluée : son type et les valeurs de ses
+            niveaux sont verrouillés. Vous pouvez encore modifier les libellés et
+            le seuil.
+        </p>
+    {/if}
+
     <fieldset class="grid gap-2">
         <legend class="mb-2 text-sm font-medium">Type d'évaluation</legend>
         <div class="grid gap-2 sm:grid-cols-2">
@@ -130,6 +140,7 @@
                         name="type"
                         value={type.value}
                         bind:group={form.type}
+                        disabled={assessed}
                         class="size-4"
                     />
                     {type.label}
@@ -157,6 +168,7 @@
                                 min={0}
                                 max={100}
                                 required
+                                readonly={assessed}
                                 bind:value={level.value}
                             />
                             <InputError message={errors[`levels.${index}.value`]} />
@@ -180,7 +192,7 @@
                             size="icon"
                             class="size-11 sm:size-9"
                             aria-label={`Supprimer le niveau ${index + 1}`}
-                            disabled={form.levels.length <= 2}
+                            disabled={assessed || form.levels.length <= 2}
                             onclick={() => removeLevel(index)}
                         >
                             <X class="size-4" />
@@ -195,7 +207,7 @@
                 variant="outline"
                 size="sm"
                 class="h-11 justify-self-start sm:h-9"
-                disabled={form.levels.length >= MAX_LEVELS}
+                disabled={assessed || form.levels.length >= MAX_LEVELS}
                 onclick={addLevel}
             >
                 <Plus class="size-4" />

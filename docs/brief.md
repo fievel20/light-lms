@@ -109,6 +109,6 @@ Les emails déjà existants sont rattachés à la promotion sans créer de doubl
 2. ✅ US2 — Promotions
 3. ✅ US3/US4 — Apprenants, import CSV, invitations
 4. ✅ US5/US6/US7 — Référentiels, compétences, import JSON
-5. US8/US9 — Autovalidation et validation
+5. ✅ US8/US9 — Autovalidation et validation
 6. US10–US12 — Tableaux de bord
 7. Préparation du VPS Ionos et déploiement continu

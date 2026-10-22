@@ -15,6 +15,16 @@ export type Competency = {
     levels: ScaleLevel[];
 };
 
+export type AssessedCompetency = Competency & {
+    self: { value: number; created_at: string } | null;
+    trainer: {
+        value: number;
+        comment: string | null;
+        created_at: string;
+    } | null;
+    acquired: boolean;
+};
+
 export type Framework = {
     id: number;
     name: string;

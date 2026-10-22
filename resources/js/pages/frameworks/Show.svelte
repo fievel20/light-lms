@@ -7,7 +7,7 @@
 </script>
 
 <script lang="ts">
-    import { Form, Link } from '@inertiajs/svelte';
+    import { Form, Link, page } from '@inertiajs/svelte';
     import Pencil from '@lucide/svelte/icons/pencil';
     import Plus from '@lucide/svelte/icons/plus';
     import Trash2 from '@lucide/svelte/icons/trash-2';
@@ -30,6 +30,8 @@
         competencies: Competency[];
         promotions: { id: number; name: string }[];
     } = $props();
+
+    const competencyError = $derived(page.props.errors?.competency);
 </script>
 
 <AppHead title={framework.name} />
@@ -81,6 +83,12 @@
             </Button>
         </div>
     </header>
+
+    {#if competencyError}
+        <p class="rounded-xl border border-destructive p-4 text-sm text-destructive">
+            {competencyError}
+        </p>
+    {/if}
 
     {#if competencies.length === 0}
         <p

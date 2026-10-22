@@ -20,10 +20,12 @@
         framework,
         competency,
         types,
+        assessed,
     }: {
         framework: FrameworkOption;
         competency: Competency;
         types: TypeOption[];
+        assessed: boolean;
     } = $props();
 </script>
 
@@ -34,5 +36,5 @@
         title={`Modifier la compétence ${competency.code}`}
         description={framework.name}
     />
-    <CompetencyForm {framework} {types} {competency} />
+    <CompetencyForm {framework} {types} {competency} {assessed} />
 </div>

@@ -4,7 +4,9 @@ use App\Http\Controllers\CompetencyController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\LearnerAssessmentController;
 use App\Http\Controllers\LearnerInvitationController;
+use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
@@ -16,6 +18,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 });
 
+Route::middleware(['auth', 'verified', 'learner'])->group(function () {
+    Route::get('mes-competences', [MyCompetencyController::class, 'index'])->name('my-competencies.index');
+    Route::post('mes-competences/{promotion}/{competency}', [MyCompetencyController::class, 'store'])->name('my-competencies.store');
+});
+
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('promotions', PromotionController::class)->except(['destroy']);
     Route::patch('promotions/{promotion}/archive', [PromotionController::class, 'archive'])->name('promotions.archive');
@@ -24,6 +31,8 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('promotions/{promotion}/learners', [PromotionLearnerController::class, 'store'])->name('promotions.learners.store');
     Route::post('promotions/{promotion}/learners/import', [PromotionLearnerImportController::class, 'store'])->name('promotions.learners.import');
     Route::delete('promotions/{promotion}/learners/{learner}', [PromotionLearnerController::class, 'destroy'])->name('promotions.learners.destroy');
+    Route::get('promotions/{promotion}/learners/{learner}', [LearnerAssessmentController::class, 'show'])->name('promotions.learners.show');
+    Route::post('promotions/{promotion}/learners/{learner}/assessments/{competency}', [LearnerAssessmentController::class, 'store'])->name('promotions.learners.assessments.store');
 
     Route::post('learners/{learner}/invitation', [LearnerInvitationController::class, 'store'])->name('learners.invitation.resend');
 

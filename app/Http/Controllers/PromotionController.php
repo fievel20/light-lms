@@ -8,6 +8,7 @@ use App\Models\Promotion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -83,7 +84,16 @@ class PromotionController extends Controller
 
     public function update(PromotionRequest $request, Promotion $promotion): RedirectResponse
     {
-        $promotion->update($request->validated());
+        $data = $request->validated();
+        $newFramework = isset($data['framework_id']) ? (int) $data['framework_id'] : null;
+
+        if ($newFramework !== $promotion->framework_id && $promotion->assessments()->exists()) {
+            throw ValidationException::withMessages([
+                'framework_id' => 'Des compétences ont déjà été évaluées dans cette promotion : son référentiel ne peut plus changer.',
+            ]);
+        }
+
+        $promotion->update($data);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Promotion mise à jour.']);
 

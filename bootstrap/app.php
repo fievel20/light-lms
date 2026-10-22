@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsLearner;
 use App\Http\Middleware\EnsureUserIsTrainer;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'trainer' => EnsureUserIsTrainer::class,
+            'learner' => EnsureUserIsLearner::class,
         ]);
 
         $middleware->web(append: [

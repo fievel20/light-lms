@@ -46,6 +46,55 @@ class Competency extends Model
     }
 
     /**
+     * @return HasMany<Assessment, $this>
+     */
+    public function assessments(): HasMany
+    {
+        return $this->hasMany(Assessment::class);
+    }
+
+    /**
+     * Once assessed, the type and level values are frozen and it cannot be deleted.
+     */
+    public function isAssessed(): bool
+    {
+        return $this->assessments()->exists();
+    }
+
+    /**
+     * Whether a value can be given to this competency
+     * (0 or 1 for a binary one, one of the level values for a scale).
+     */
+    public function acceptsValue(int $value): bool
+    {
+        return in_array($value, $this->allowedValues(), true);
+    }
+
+    /**
+     * Whether a (trainer) value means the competency is acquired.
+     */
+    public function isAcquiredWith(?int $value): bool
+    {
+        if ($value === null) {
+            return false;
+        }
+
+        return $this->type === CompetencyType::Binary
+            ? $value === 1
+            : $value >= (int) $this->validation_threshold;
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function allowedValues(): array
+    {
+        return $this->type === CompetencyType::Binary
+            ? [0, 1]
+            : array_values($this->levels->map(fn (ScaleLevel $level) => $level->value)->all());
+    }
+
+    /**
      * Replace the scale levels (empty for a binary competency).
      *
      * @param  array<int, array{value: int, label: string}>  $levels

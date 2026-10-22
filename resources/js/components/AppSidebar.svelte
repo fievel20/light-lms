@@ -21,6 +21,7 @@
     import { toUrl } from '@/lib/utils';
     import { dashboard } from '@/routes';
     import * as frameworks from '@/routes/frameworks';
+    import * as myCompetencies from '@/routes/my-competencies';
     import * as promotions from '@/routes/promotions';
     import type { NavItem } from '@/types';
 
@@ -51,7 +52,13 @@
                       icon: BookCheck,
                   },
               ]
-            : []),
+            : [
+                  {
+                      title: 'Mes compétences',
+                      href: myCompetencies.index(),
+                      icon: BookCheck,
+                  },
+              ]),
     ]);
 
     const footerNavItems: NavItem[] = [

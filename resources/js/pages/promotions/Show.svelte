@@ -25,6 +25,7 @@
     import { toUrl } from '@/lib/utils';
     import * as frameworks from '@/routes/frameworks';
     import { edit } from '@/routes/promotions';
+    import { show as learnerPage } from '@/routes/promotions/learners';
     import type { ImportReport, Learner } from '@/types/learner';
     import type { Promotion } from '@/types/promotion';
 
@@ -192,7 +193,13 @@
                 >
                     <div class="min-w-0">
                         <p class="flex flex-wrap items-center gap-2 font-medium">
-                            <span class="truncate">{learner.name}</span>
+                            <Link
+                                href={toUrl(
+                                    learnerPage([promotion.id, learner.id]),
+                                )}
+                                class="truncate underline-offset-4 hover:underline"
+                                >{learner.name}</Link
+                            >
                             {#if learner.activated_at}
                                 <Badge variant="secondary">Activé</Badge>
                             {:else}
