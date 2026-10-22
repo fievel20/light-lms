@@ -1,5 +1,7 @@
 # Light LMS — Brief MVP v1 : référentiels de compétences par promotion
 
+> Cahier des charges initial, conservé pour référence. Le MVP est livré : voir la [feuille de route](feuille-de-route.md) pour l'état actuel et le [guide utilisateur](guide-utilisateur.md) pour le fonctionnement réel.
+
 ## Stack
 
 | Couche          | Choix                                                                             |
