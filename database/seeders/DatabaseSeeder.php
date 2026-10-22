@@ -30,6 +30,6 @@ class DatabaseSeeder extends Seeder
 
         User::factory(8)->create();
 
-        $this->call([PromotionSeeder::class, FrameworkSeeder::class]);
+        $this->call([PromotionSeeder::class, FrameworkSeeder::class, AssessmentSeeder::class]);
     }
 }

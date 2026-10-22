@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompetencyController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\InvitationController;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'Welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 });
 
 Route::middleware(['auth', 'verified', 'learner'])->group(function () {
@@ -25,6 +26,7 @@ Route::middleware(['auth', 'verified', 'learner'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('promotions', PromotionController::class)->except(['destroy']);
+    Route::get('promotions/{promotion}/suivi', [PromotionController::class, 'progress'])->name('promotions.progress');
     Route::patch('promotions/{promotion}/archive', [PromotionController::class, 'archive'])->name('promotions.archive');
     Route::patch('promotions/{promotion}/unarchive', [PromotionController::class, 'unarchive'])->name('promotions.unarchive');
 

@@ -9,6 +9,7 @@
 <script lang="ts">
     import { Form, Link, page } from '@inertiajs/svelte';
     import BookCheck from '@lucide/svelte/icons/book-check';
+    import ChartColumn from '@lucide/svelte/icons/chart-column';
     import FileUp from '@lucide/svelte/icons/file-up';
     import Mail from '@lucide/svelte/icons/mail';
     import Pencil from '@lucide/svelte/icons/pencil';
@@ -24,7 +25,7 @@
     import { formatDate } from '@/lib/dates';
     import { toUrl } from '@/lib/utils';
     import * as frameworks from '@/routes/frameworks';
-    import { edit } from '@/routes/promotions';
+    import { edit, progress } from '@/routes/promotions';
     import { show as learnerPage } from '@/routes/promotions/learners';
     import type { ImportReport, Learner } from '@/types/learner';
     import type { Promotion } from '@/types/promotion';
@@ -71,14 +72,26 @@
             </p>
         </div>
 
-        <Button variant="outline" size="sm" asChild class="h-11 sm:h-9">
-            {#snippet children(props)}
-                <Link {...props} href={toUrl(edit(promotion.id))}>
-                    <Pencil class="size-4" />
-                    Modifier
-                </Link>
-            {/snippet}
-        </Button>
+        <div class="flex w-full gap-2 sm:w-auto">
+            {#if framework}
+                <Button size="sm" asChild class="h-11 flex-1 sm:h-9">
+                    {#snippet children(props)}
+                        <Link {...props} href={toUrl(progress(promotion.id))}>
+                            <ChartColumn class="size-4" />
+                            Suivi
+                        </Link>
+                    {/snippet}
+                </Button>
+            {/if}
+            <Button variant="outline" size="sm" asChild class="h-11 flex-1 sm:h-9">
+                {#snippet children(props)}
+                    <Link {...props} href={toUrl(edit(promotion.id))}>
+                        <Pencil class="size-4" />
+                        Modifier
+                    </Link>
+                {/snippet}
+            </Button>
+        </div>
     </header>
 
     <section

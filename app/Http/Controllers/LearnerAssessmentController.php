@@ -22,11 +22,14 @@ class LearnerAssessmentController extends Controller
     {
         $this->ensureEnrolled($promotion, $learner);
 
+        $rows = $competencies->get($promotion, $learner);
+
         return Inertia::render('promotions/Learner', [
             'promotion' => $promotion->only(['id', 'name', 'archived_at']),
             'learner' => $learner->only(['id', 'first_name', 'last_name', 'name', 'email', 'activated_at']),
             'framework' => $promotion->framework()->first(['id', 'name'])?->only(['id', 'name']),
-            'competencies' => $competencies->get($promotion, $learner),
+            'competencies' => $rows,
+            'summary' => LearnerCompetencies::totals($rows),
         ]);
     }
 

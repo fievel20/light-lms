@@ -3,11 +3,10 @@
 namespace App\Queries;
 
 use App\Enums\AssessmentSource;
-use App\Models\Assessment;
 use App\Models\Competency;
 use App\Models\Promotion;
 use App\Models\User;
-use Illuminate\Support\Collection;
+use App\Support\CompetencyCell;
 
 /**
  * The competencies of a promotion's framework with a learner's latest
@@ -15,6 +14,8 @@ use Illuminate\Support\Collection;
  */
 class LearnerCompetencies
 {
+    public function __construct(private LatestAssessments $latestAssessments) {}
+
     /**
      * @return list<array<string, mixed>>
      */
@@ -24,15 +25,7 @@ class LearnerCompetencies
             return [];
         }
 
-        /** @var Collection<string, Assessment> $latest keyed by "competency_id:source" */
-        $latest = Assessment::query()
-            ->where('promotion_id', $promotion->id)
-            ->where('learner_id', $learner->id)
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
-            ->get()
-            ->unique(fn (Assessment $assessment) => "{$assessment->competency_id}:{$assessment->source->value}")
-            ->keyBy(fn (Assessment $assessment) => "{$assessment->competency_id}:{$assessment->source->value}");
+        $latest = $this->latestAssessments->get($promotion, $learner->id);
 
         return array_values(Competency::query()
             ->where('framework_id', $promotion->framework_id)
@@ -40,9 +33,10 @@ class LearnerCompetencies
             ->orderBy('position')
             ->orderBy('id')
             ->get()
-            ->map(function (Competency $competency) use ($latest): array {
-                $self = $latest->get("{$competency->id}:".AssessmentSource::Self->value);
-                $trainer = $latest->get("{$competency->id}:".AssessmentSource::Trainer->value);
+            ->map(function (Competency $competency) use ($latest, $learner): array {
+                $self = $latest->get(LatestAssessments::key($learner->id, $competency->id, AssessmentSource::Self));
+                $trainer = $latest->get(LatestAssessments::key($learner->id, $competency->id, AssessmentSource::Trainer));
+                $cell = CompetencyCell::from($competency, $self, $trainer);
 
                 return [
                     ...$competency->toPresentation(),
@@ -55,9 +49,28 @@ class LearnerCompetencies
                         'comment' => $trainer->comment,
                         'created_at' => $trainer->created_at?->toIso8601String(),
                     ] : null,
-                    'acquired' => $competency->isAcquiredWith($trainer?->value),
+                    'acquired' => $cell['acquired'],
+                    'gap' => $cell['gap'],
+                    'to_review' => $cell['to_review'],
                 ];
             })
             ->all());
+    }
+
+    /**
+     * Totals for a list returned by get().
+     *
+     * @param  list<array<string, mixed>>  $competencies
+     * @return array{total: int, acquired: int, self_assessed: int, to_review: int, gaps: int, percent: int}
+     */
+    public static function totals(array $competencies): array
+    {
+        return PromotionProgress::totals(array_map(fn (array $competency) => [
+            'self' => $competency['self']['value'] ?? null,
+            'trainer' => $competency['trainer']['value'] ?? null,
+            'acquired' => (bool) $competency['acquired'],
+            'gap' => (bool) $competency['gap'],
+            'to_review' => (bool) $competency['to_review'],
+        ], $competencies));
     }
 }

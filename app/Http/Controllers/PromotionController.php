@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PromotionRequest;
 use App\Models\Framework;
 use App\Models\Promotion;
+use App\Queries\PromotionProgress;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -60,6 +61,18 @@ class PromotionController extends Controller
                 ->orderByName()
                 ->get(['users.id', 'first_name', 'last_name', 'email', 'invited_at', 'activated_at'])
                 ->map->only(['id', 'first_name', 'last_name', 'name', 'email', 'invited_at', 'activated_at']),
+        ]);
+    }
+
+    /**
+     * US11: learners × competencies matrix.
+     */
+    public function progress(Promotion $promotion, PromotionProgress $progress): Response
+    {
+        return Inertia::render('promotions/Progress', [
+            'promotion' => $promotion->only(['id', 'name', 'starts_on', 'ends_on', 'archived_at']),
+            'framework' => $promotion->framework()->first(['id', 'name'])?->only(['id', 'name']),
+            ...$progress->get($promotion),
         ]);
     }
 

@@ -109,7 +109,7 @@
 
         <ol class="grid gap-4">
             {#each competencies as competency (competency.id)}
-                <li class="flex flex-col gap-4 rounded-xl border p-4">
+                <li class="flex min-w-0 flex-col gap-4 rounded-xl border p-4">
                     <div class="flex items-start gap-3">
                         <Badge variant="outline" class="shrink-0 font-mono"
                             >{competency.code}</Badge

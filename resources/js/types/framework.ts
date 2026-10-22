@@ -23,6 +23,8 @@ export type AssessedCompetency = Competency & {
         created_at: string;
     } | null;
     acquired: boolean;
+    gap: boolean;
+    to_review: boolean;
 };
 
 export type Framework = {
