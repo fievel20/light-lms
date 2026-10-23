@@ -9,3 +9,7 @@
 CHANGELOG.md export-ignore
 README.md export-ignore
 .github/workflows/browser-tests.yml export-ignore
+
+# Scripts et fichiers de configuration exécutés sur le serveur Linux.
+deploy/* text eol=lf
+*.sh text eol=lf

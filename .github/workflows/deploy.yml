@@ -1,0 +1,86 @@
+name: deploy
+
+# Deploys main to the VPS once the "tests" workflow has passed.
+# Disabled until the repository variable DEPLOY_ENABLED is set to "true"
+# (Settings → Secrets and variables → Actions → Variables).
+on:
+  workflow_run:
+    workflows: [tests]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      vars.DEPLOY_ENABLED == 'true' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+
+      - name: Install PHP dependencies (production)
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+      - name: Build assets
+        run: |
+          cp .env.example .env
+          php artisan key:generate --ansi
+          npm ci
+          npm run build
+          rm .env
+
+      - name: Package release
+        run: |
+          echo "RELEASE=$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+          rm -rf node_modules tests
+          tar --exclude=.git --exclude=.github -czf "$RUNNER_TEMP/release.tgz" .
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Upload and activate
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $PORT $USER@$HOST"
+          scp -i ~/.ssh/deploy_key -P "$PORT" "$RUNNER_TEMP/release.tgz" "$USER@$HOST:/tmp/light-lms-$RELEASE.tgz"
+          $SSH "set -e
+            mkdir -p /var/www/light-lms/releases/$RELEASE
+            tar -xzf /tmp/light-lms-$RELEASE.tgz -C /var/www/light-lms/releases/$RELEASE
+            rm /tmp/light-lms-$RELEASE.tgz
+            bash /var/www/light-lms/releases/$RELEASE/deploy/activate.sh $RELEASE"
