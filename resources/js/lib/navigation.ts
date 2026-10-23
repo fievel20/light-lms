@@ -1,4 +1,3 @@
-import Award from '@lucide/svelte/icons/award';
 import ChartColumn from '@lucide/svelte/icons/chart-column';
 import LayoutGrid from '@lucide/svelte/icons/layout-grid';
 import Library from '@lucide/svelte/icons/library';
@@ -9,7 +8,6 @@ import UsersRound from '@lucide/svelte/icons/users-round';
 import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import * as frameworks from '@/routes/frameworks';
-import * as myBadges from '@/routes/my-badges';
 import * as myCompetencies from '@/routes/my-competencies';
 import { edit as profile } from '@/routes/profile';
 import * as promotions from '@/routes/promotions';
@@ -43,7 +41,6 @@ export function navGroups(
                         href: myCompetencies.index(),
                         icon: Target,
                     },
-                    { title: 'Badges', href: myBadges.index(), icon: Award },
                 ],
             },
         ];

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Progress\PullCelebrations;
-use App\Actions\Progress\PullNewBadges;
 use App\Models\Promotion;
 use App\Models\User;
 use App\Queries\LearnerActivity;
@@ -26,25 +25,20 @@ class DashboardController extends Controller
         LearnerCompetencies $competencies,
         PromotionProgress $progress,
         PullCelebrations $celebrations,
-        PullNewBadges $newBadges,
     ): Response {
         /** @var User $user */
         $user = $request->user();
 
         return $user->isTrainer()
             ? $this->trainer($user, $progress)
-            : $this->learner($user, $competencies, $celebrations, $newBadges);
+            : $this->learner($user, $competencies, $celebrations);
     }
 
     /**
      * US10: the learner's progress in each of their promotions.
      */
-    private function learner(
-        User $learner,
-        LearnerCompetencies $competencies,
-        PullCelebrations $celebrations,
-        PullNewBadges $newBadges,
-    ): Response {
+    private function learner(User $learner, LearnerCompetencies $competencies, PullCelebrations $celebrations): Response
+    {
         $promotions = $learner->promotions()
             ->with('framework:id,name')
             ->orderByRaw('archived_at is not null')
@@ -60,17 +54,11 @@ class DashboardController extends Controller
 
         return Inertia::render('learner/Dashboard', [
             'promotions' => $promotions->values(),
-            // Computed before awarding badges: a badge earned on this visit is
-            // celebrated first, then listed in the feed on the next one.
             'activity' => $this->activity->get($learner),
             'celebrations' => $celebrations->handle($learner),
-            'newBadges' => $newBadges->handle($learner),
         ]);
     }
 
-    /**
-     * The trainer's overview of current promotions.
-     */
     /**
      * Overview of the promotion chosen in the menu.
      */

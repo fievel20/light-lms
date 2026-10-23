@@ -23,9 +23,8 @@
     import { Button } from '@/components/ui/button';
     import { toUrl } from '@/lib/utils';
     import ActivityFeed from '@/components/progress/ActivityFeed.svelte';
-    import { index as myBadges } from '@/routes/my-badges';
     import { index as myCompetencies } from '@/routes/my-competencies';
-    import type { ActivityItem, BadgeInfo } from '@/types/badge';
+    import type { ActivityItem } from '@/types/activity';
 
     type PromotionProgress = {
         id: number;
@@ -42,12 +41,10 @@
     let {
         promotions,
         celebrations,
-        newBadges,
         activity,
     }: {
         promotions: PromotionProgress[];
         celebrations: { promotion: string; code: string; name: string }[];
-        newBadges: BadgeInfo[];
         activity: ActivityItem[];
     } = $props();
 
@@ -69,7 +66,7 @@
 </script>
 
 <AppHead title="Accueil" />
-<Celebrate {celebrations} badges={newBadges} />
+<Celebrate {celebrations} />
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-6 p-4 sm:p-6">
     <PageHeader
@@ -156,14 +153,7 @@
 
     {#if activity.length > 0}
         <section class="surface space-y-4 p-5" aria-labelledby="activity-title">
-            <div class="flex items-center justify-between gap-2">
-                <h2 id="activity-title" class="font-bold">Activité récente</h2>
-                <Link
-                    href={toUrl(myBadges())}
-                    class="text-sm font-semibold text-primary underline-offset-4 hover:underline"
-                    >Mes badges</Link
-                >
-            </div>
+            <h2 id="activity-title" class="font-bold">Activité récente</h2>
             <ActivityFeed items={activity} />
         </section>
     {/if}

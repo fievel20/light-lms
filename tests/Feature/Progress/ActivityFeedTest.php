@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Badge;
 use App\Models\Assessment;
 use App\Models\Competency;
 use App\Models\Framework;
@@ -19,30 +18,30 @@ beforeEach(function () {
     $this->promotion->learners()->attach($this->learner);
 });
 
-it('liste les validations du formateur et les badges, les plus récents d\'abord', function () {
+it('liste les validations du formateur, les plus récentes d\'abord', function () {
     Assessment::factory()->for($this->promotion)->byTrainer($this->trainer, $this->learner)
         ->create(['competency_id' => $this->binary->id, 'value' => 1, 'created_at' => now()->subDays(2)]);
     Assessment::factory()->for($this->promotion)->byTrainer($this->trainer, $this->learner)
         ->create(['competency_id' => $this->scale->id, 'value' => 1, 'comment' => 'Encore un effort', 'created_at' => now()->subDay()]);
-    $this->learner->badges()->create(['badge' => Badge::FirstSuccess, 'earned_at' => now()->subHours(36), 'seen_at' => now()]);
 
     $this->actingAs($this->learner)
         ->get(route('dashboard'))
         ->assertInertia(fn (Assert $page) => $page
-            ->has('activity', 3)
-            ->where('activity.0.type', 'validation')
+            ->has('activity', 2)
             ->where('activity.0.code', 'C2')
             ->where('activity.0.competency', 'Coder')
             ->where('activity.0.level', 'Guidé')
             ->where('activity.0.acquired', false)
             ->where('activity.0.comment', 'Encore un effort')
             ->where('activity.0.promotion', 'DWWM 2026')
-            ->where('activity.1.type', 'badge')
-            ->where('activity.1.badge.key', 'premiere-reussite')
-            ->where('activity.2.type', 'validation')
-            ->where('activity.2.code', 'C1')
-            ->where('activity.2.level', 'Acquis')
-            ->where('activity.2.acquired', true));
+            ->where('activity.1.code', 'C1')
+            ->where('activity.1.level', 'Acquis')
+            ->where('activity.1.acquired', true)
+            ->missing('newBadges'));
+});
+
+it('n\'a plus de page de badges', function () {
+    $this->actingAs($this->learner)->get('/mes-badges')->assertNotFound();
 });
 
 it('ignore les autoévaluations et l\'activité des autres apprenants', function () {
@@ -53,7 +52,7 @@ it('ignore les autoévaluations et l\'activité des autres apprenants', function
 
     $this->actingAs($this->learner)
         ->get(route('dashboard'))
-        ->assertInertia(fn (Assert $page) => $page->where('activity', fn ($activity) => collect($activity)->where('type', 'validation')->isEmpty()));
+        ->assertInertia(fn (Assert $page) => $page->where('activity', []));
 });
 
 it('limite le fil aux 8 événements les plus récents', function () {

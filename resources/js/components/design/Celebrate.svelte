@@ -2,20 +2,15 @@
     import PartyPopper from '@lucide/svelte/icons/party-popper';
     import { onMount } from 'svelte';
     import { fade, scale } from 'svelte/transition';
-    import BadgeMedal from '@/components/design/BadgeMedal.svelte';
     import { Button } from '@/components/ui/button';
-    import type { BadgeInfo } from '@/types/badge';
 
     type Celebration = { promotion: string; code: string; name: string };
 
-    let {
-        celebrations,
-        badges = [],
-    }: { celebrations: Celebration[]; badges?: BadgeInfo[] } = $props();
+    let { celebrations }: { celebrations: Celebration[] } = $props();
 
     let open = $state(false);
 
-    const colors = ['#6d5ef8', '#22c55e', '#f59e0b', '#ec4899', '#06b6d4'];
+    const colors = ['#c8ff1a', '#7c5cff', '#15093a', '#e4d0f7', '#f5a524'];
 
     // Pre-computed confetti: position, colour, delay, drift and rotation.
     const confetti = Array.from({ length: 48 }, (_, index) => ({
@@ -30,7 +25,7 @@
     }));
 
     onMount(() => {
-        open = celebrations.length > 0 || badges.length > 0;
+        open = celebrations.length > 0;
     });
 
     function close(): void {
@@ -98,24 +93,6 @@
                 </ul>
             {/if}
 
-            {#if badges.length > 0}
-                <p class="mt-4 text-sm text-muted-foreground">
-                    {badges.length > 1 ? 'Nouveaux badges débloqués :' : 'Nouveau badge débloqué :'}
-                </p>
-                <ul class="mt-3 grid gap-2 text-left">
-                    {#each badges as badge (badge.key)}
-                        <li class="flex items-center gap-3 rounded-xl bg-muted/60 px-3 py-2">
-                            <BadgeMedal badgeKey={badge.key} size="sm" />
-                            <span class="min-w-0">
-                                <span class="block text-sm font-bold">{badge.label}</span>
-                                <span class="block truncate text-xs text-muted-foreground"
-                                    >{badge.description}</span
-                                >
-                            </span>
-                        </li>
-                    {/each}
-                </ul>
-            {/if}
             <Button class="mt-6 h-11 w-full" onclick={close}>Continuer</Button>
         </div>
     </div>

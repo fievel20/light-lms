@@ -22,7 +22,6 @@
     import ProgressBar from '@/components/progress/ProgressBar.svelte';
     import { competencyOptions } from '@/lib/competencies';
     import { cn, toUrl } from '@/lib/utils';
-    import type { BadgeInfo } from '@/types/badge';
     import type { AssessedCompetency } from '@/types/framework';
 
     type PromotionOption = { id: number; name: string };
@@ -34,14 +33,12 @@
         framework,
         competencies,
         celebrations,
-        newBadges,
     }: {
         promotions: PromotionOption[];
         promotion: (PromotionOption & { archived_at: string | null }) | null;
         framework: { id: number; name: string } | null;
         competencies: AssessedCompetency[];
         celebrations: { promotion: string; code: string; name: string }[];
-        newBadges: BadgeInfo[];
     } = $props();
 
     const filters: { key: Filter; label: string; matches: (c: AssessedCompetency) => boolean }[] = [
@@ -107,7 +104,7 @@
 </script>
 
 <AppHead title="Mes compétences" />
-<Celebrate {celebrations} badges={newBadges} />
+<Celebrate {celebrations} />
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:p-6">
     <PageHeader
