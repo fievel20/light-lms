@@ -92,6 +92,9 @@ Points clés :
 | Validation d'une compétence (formulaire et import) | `App\Validation\CompetencyRules`                                            |
 | Enregistrement d'une évaluation                    | `App\Actions\Assessments\RecordAssessment`                                  |
 | Progression                                        | `App\Queries\PromotionProgress`, `LearnerCompetencies`, `LatestAssessments` |
+| Badges : règles et attribution                     | `App\Enums\Badge`, `App\Actions\Progress\SyncBadges`                        |
+| Nouveaux badges et compétences à fêter             | `App\Actions\Progress\PullNewBadges`, `PullCelebrations`                    |
+| Fil d'activité de l'apprenant                      | `App\Queries\LearnerActivity`                                               |
 
 Détail des définitions :
 

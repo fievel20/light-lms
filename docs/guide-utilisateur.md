@@ -109,3 +109,20 @@ Onglet **Compétences** (choix de la promotion s'il y en a plusieurs).
 - On peut se repositionner à tout moment tant que la promotion n'est pas archivée.
 
 Une compétence n'est **acquise** que lorsque le formateur l'a validée au niveau requis : l'autoévaluation sert à lui signaler où l'on pense en être.
+
+### 4. Badges et activité
+
+Onglet **Badges** : les 8 badges, débloqués (médaille colorée et date) ou à débloquer (grisés). Ils sont attribués automatiquement et ne sont jamais retirés ; chaque nouveau badge est fêté dans la fenêtre « Bravo ».
+
+| Badge             | Condition                                                     |
+| ----------------- | ------------------------------------------------------------- |
+| Premier pas       | Première autoévaluation                                       |
+| Première réussite | Première compétence acquise                                   |
+| Assidu            | Toutes les compétences d'une promotion autoévaluées           |
+| Lucide            | 5 autoévaluations confirmées à l'identique par le formateur   |
+| Expert            | Une compétence validée au niveau le plus élevé de son échelle |
+| Mi-parcours       | 50 % des compétences d'une promotion acquises                 |
+| Sprint final      | 75 % des compétences d'une promotion acquises                 |
+| Diplômable        | 100 % des compétences d'une promotion acquises                |
+
+Sur l'accueil, **Activité récente** liste les dernières validations du formateur (niveau, commentaire) et les badges gagnés, du plus récent au plus ancien.

@@ -7,6 +7,7 @@ use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LearnerAssessmentController;
 use App\Http\Controllers\LearnerInvitationController;
+use App\Http\Controllers\MyBadgeController;
 use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
@@ -22,6 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'learner'])->group(function () {
     Route::get('mes-competences', [MyCompetencyController::class, 'index'])->name('my-competencies.index');
     Route::post('mes-competences/{promotion}/{competency}', [MyCompetencyController::class, 'store'])->name('my-competencies.store');
+    Route::get('mes-badges', [MyBadgeController::class, 'index'])->name('my-badges.index');
 });
 
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {

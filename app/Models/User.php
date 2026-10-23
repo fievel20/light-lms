@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\Contracts\PasskeyUser;
@@ -85,6 +86,14 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     public function promotions(): BelongsToMany
     {
         return $this->belongsToMany(Promotion::class)->withTimestamps();
+    }
+
+    /**
+     * @return HasMany<LearnerBadge, $this>
+     */
+    public function badges(): HasMany
+    {
+        return $this->hasMany(LearnerBadge::class, 'learner_id');
     }
 
     public function isActivated(): bool
