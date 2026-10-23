@@ -2,141 +2,145 @@
     import { dashboard } from '@/routes';
 
     export const layout = {
-        breadcrumbs: [{ title: 'Tableau de bord', href: dashboard() }],
+        breadcrumbs: [{ title: 'Accueil', href: dashboard() }],
     };
 </script>
 
 <script lang="ts">
     import { Link } from '@inertiajs/svelte';
+    import ArrowRight from '@lucide/svelte/icons/arrow-right';
     import ChartColumn from '@lucide/svelte/icons/chart-column';
+    import Gauge from '@lucide/svelte/icons/gauge';
     import Inbox from '@lucide/svelte/icons/inbox';
     import Mail from '@lucide/svelte/icons/mail';
-    import Users from '@lucide/svelte/icons/users';
-    import StatTile from '@/components/design/StatTile.svelte';
     import Plus from '@lucide/svelte/icons/plus';
+    import Users from '@lucide/svelte/icons/users';
+    import UsersRound from '@lucide/svelte/icons/users-round';
+    import type { Component } from 'svelte';
     import AppHead from '@/components/AppHead.svelte';
-    import Heading from '@/components/Heading.svelte';
-    import ProgressBar from '@/components/progress/ProgressBar.svelte';
-    import Zap from '@lucide/svelte/icons/zap';
+    import EmptyState from '@/components/design/EmptyState.svelte';
+    import PageHeader from '@/components/design/PageHeader.svelte';
+    import StatTile from '@/components/design/StatTile.svelte';
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
     import { toUrl } from '@/lib/utils';
-    import { create, progress, review, show } from '@/routes/promotions';
+    import { create, edit, progress, show } from '@/routes/promotions';
 
-    type PromotionSummary = {
+    type Promotion = {
         id: number;
         name: string;
         framework: string | null;
         starts_on: string;
         ends_on: string;
-        learners: number;
-        competencies: number;
-        average_percent: number;
-        to_review: number;
+        archived_at: string | null;
     };
 
     let {
-        promotions,
+        promotion,
+        summary,
         pendingInvitations,
     }: {
-        promotions: PromotionSummary[];
+        promotion: Promotion | null;
+        summary: {
+            learners: number;
+            competencies: number;
+            average_percent: number;
+            to_review: number;
+        } | null;
         pendingInvitations: number;
     } = $props();
 
-    const toReview = $derived(
-        promotions.reduce((sum, promotion) => sum + promotion.to_review, 0),
+    type Entry = {
+        title: string;
+        description: string;
+        href: string;
+        icon: Component<{ class?: string }>;
+    };
+
+    const entries = $derived<Entry[]>(
+        promotion
+            ? [
+                  {
+                      title: 'Suivi',
+                      description: 'Carte de chaleur des compétences de la promotion.',
+                      href: toUrl(progress(promotion.id)),
+                      icon: ChartColumn,
+                  },
+                  {
+                      title: 'Apprenants',
+                      description: 'Inscriptions, invitations et fiches des apprenants.',
+                      href: toUrl(show(promotion.id)),
+                      icon: UsersRound,
+                  },
+              ]
+            : [],
     );
 </script>
 
-<AppHead title="Tableau de bord" />
+<AppHead title="Accueil" />
 
-<div class="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
-    <Heading title="Tableau de bord" description="Tes promotions en cours." />
-
-    <div class="grid grid-cols-3 gap-3">
-        <StatTile label="Promotions" value={promotions.length} icon={Users} tone="primary" />
-        <StatTile
-            label="À examiner"
-            value={toReview}
-            icon={Inbox}
-            tone={toReview > 0 ? 'warning' : 'success'}
-        />
-        <StatTile label="Invitations" value={pendingInvitations} icon={Mail} />
-    </div>
-
-    {#if promotions.length === 0}
-        <div
-            class="flex flex-col items-center gap-4 rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground"
-        >
-            Aucune promotion en cours.
-            <Button asChild class="h-11 sm:h-9">
-                {#snippet children(props)}
-                    <Link {...props} href={toUrl(create())}>
-                        <Plus class="size-4" />
-                        Créer une promotion
-                    </Link>
-                {/snippet}
-            </Button>
-        </div>
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4 sm:p-6">
+    {#if !promotion || !summary}
+        <PageHeader title="Bienvenue 👋" subtitle="Commence par créer ta première promotion." />
+        <EmptyState icon={Users} title="Aucune promotion" description="Une promotion regroupe des apprenants et un référentiel.">
+            {#snippet action()}
+                <Button asChild class="h-11">
+                    {#snippet children(props)}
+                        <Link {...props} href={toUrl(create())}>
+                            <Plus class="size-4" />
+                            Créer une promotion
+                        </Link>
+                    {/snippet}
+                </Button>
+            {/snippet}
+        </EmptyState>
     {:else}
-        <ul class="grid gap-4 md:grid-cols-2">
-            {#each promotions as promotion (promotion.id)}
-                <li class="flex min-w-0 flex-col gap-4 surface p-4">
-                    <div class="flex items-start justify-between gap-2">
-                        <div class="min-w-0">
-                            <Link
-                                href={toUrl(show(promotion.id))}
-                                class="font-medium underline-offset-4 hover:underline"
-                                >{promotion.name}</Link
-                            >
-                            <p class="text-sm text-muted-foreground">
-                                {formatDate(promotion.starts_on)} → {formatDate(
-                                    promotion.ends_on,
-                                )}
-                            </p>
-                            <p class="truncate text-sm text-muted-foreground">
-                                {promotion.framework ?? 'Aucun référentiel'}
-                            </p>
-                            <p class="text-sm text-muted-foreground">
-                                {promotion.learners} apprenant{promotion.learners >
-                                1
-                                    ? 's'
-                                    : ''}
-                            </p>
-                        </div>
-                        {#if promotion.to_review > 0}
-                            <Link
-                                href={toUrl(review(promotion.id))}
-                                class="inline-flex shrink-0 items-center gap-1 rounded-full bg-warning-soft px-2.5 py-1 text-xs font-semibold text-warning-foreground transition-colors hover:bg-warning/30 dark:text-warning"
-                            >
-                                <Zap class="size-3" />
-                                {promotion.to_review} à examiner
-                            </Link>
-                        {/if}
-                    </div>
+        <PageHeader
+            title={promotion.name}
+            subtitle={`${promotion.framework ?? 'Aucun référentiel'} · ${formatDate(promotion.starts_on)} → ${formatDate(promotion.ends_on)}${promotion.archived_at ? ' · archivée' : ''}`}
+        />
 
-                    {#if promotion.framework}
-                        <ProgressBar
-                            percent={promotion.average_percent}
-                            label="Progression moyenne"
-                        />
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <StatTile label="Apprenants" value={summary.learners} icon={Users} />
+            <StatTile label="Progression moyenne" value={`${summary.average_percent}%`} icon={Gauge} tone="primary" />
+            <StatTile
+                label="À examiner"
+                value={summary.to_review}
+                icon={Inbox}
+                tone={summary.to_review > 0 ? 'warning' : 'success'}
+            />
+            <StatTile label="Invitations en attente" value={pendingInvitations} icon={Mail} />
+        </div>
 
-                        <Button
-                            variant="outline"
-                            asChild
-                            class="mt-auto h-11 sm:h-9"
-                        >
-                            {#snippet children(props)}
-                                <Link
-                                    {...props}
-                                    href={toUrl(progress(promotion.id))}
-                                >
-                                    <ChartColumn class="size-4" />
-                                    Suivi de la promotion
-                                </Link>
-                            {/snippet}
-                        </Button>
-                    {/if}
+        {#if !promotion.framework}
+            <EmptyState
+                icon={ChartColumn}
+                title="Pas encore de référentiel"
+                description="Affecte un référentiel à cette promotion pour suivre les compétences."
+            >
+                {#snippet action()}
+                    <Button asChild variant="outline" class="h-11">
+                        {#snippet children(props)}
+                            <Link {...props} href={toUrl(edit(promotion.id))}>Choisir un référentiel</Link>
+                        {/snippet}
+                    </Button>
+                {/snippet}
+            </EmptyState>
+        {/if}
+
+        <ul class="grid gap-3 sm:grid-cols-2">
+            {#each entries as entry (entry.title)}
+                <li>
+                    <Link href={entry.href} class="surface group flex h-full items-center gap-4 p-5 transition-colors hover:bg-muted/40">
+                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-primary-soft text-primary">
+                            <entry.icon class="size-5" />
+                        </span>
+                        <span class="min-w-0 flex-1">
+                            <span class="block font-bold">{entry.title}</span>
+                            <span class="block text-sm text-muted-foreground">{entry.description}</span>
+                        </span>
+                        <ArrowRight class="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    </Link>
                 </li>
             {/each}
         </ul>

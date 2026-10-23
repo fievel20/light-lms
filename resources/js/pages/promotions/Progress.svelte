@@ -13,16 +13,14 @@
     import Gauge from '@lucide/svelte/icons/gauge';
     import Inbox from '@lucide/svelte/icons/inbox';
     import Users from '@lucide/svelte/icons/users';
-    import Zap from '@lucide/svelte/icons/zap';
     import AppHead from '@/components/AppHead.svelte';
     import EmptyState from '@/components/design/EmptyState.svelte';
     import StatTile from '@/components/design/StatTile.svelte';
     import ProgressBar from '@/components/progress/ProgressBar.svelte';
-    import { Button } from '@/components/ui/button';
     import { valueLabel } from '@/lib/competencies';
     import { heatClass, type HeatCell } from '@/lib/heat';
     import { cn, toUrl } from '@/lib/utils';
-    import { review, show } from '@/routes/promotions';
+    import { show } from '@/routes/promotions';
     import { show as learnerPage } from '@/routes/promotions/learners';
     import type { Competency } from '@/types/framework';
 
@@ -100,16 +98,6 @@
                 <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Suivi</h1>
                 <p class="text-sm text-muted-foreground">{framework?.name ?? 'Aucun référentiel'}</p>
             </div>
-            {#if summary.to_review > 0 && !promotion.archived_at}
-                <Button asChild class="h-11 w-full sm:w-auto">
-                    {#snippet children(props)}
-                        <Link {...props} href={toUrl(review(promotion.id))}>
-                            <Zap class="size-4" />
-                            Examiner ({summary.to_review})
-                        </Link>
-                    {/snippet}
-                </Button>
-            {/if}
         </div>
     </header>
 

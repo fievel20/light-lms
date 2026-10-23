@@ -7,21 +7,18 @@
 </script>
 
 <script lang="ts">
-    import { Link, page } from '@inertiajs/svelte';
+    import { Link } from '@inertiajs/svelte';
     import ArrowLeft from '@lucide/svelte/icons/arrow-left';
     import Inbox from '@lucide/svelte/icons/inbox';
     import PencilLine from '@lucide/svelte/icons/pencil-line';
     import Split from '@lucide/svelte/icons/split';
-    import Zap from '@lucide/svelte/icons/zap';
     import AppHead from '@/components/AppHead.svelte';
     import AssessmentSummary from '@/components/assessments/AssessmentSummary.svelte';
-    import QuickReview from '@/components/assessments/QuickReview.svelte';
     import TrainerValidationForm from '@/components/assessments/TrainerValidationForm.svelte';
     import EmptyState from '@/components/design/EmptyState.svelte';
     import ProgressRing from '@/components/design/ProgressRing.svelte';
     import StatTile from '@/components/design/StatTile.svelte';
     import { Badge } from '@/components/ui/badge';
-    import { Button } from '@/components/ui/button';
     import { toUrl } from '@/lib/utils';
     import { show } from '@/routes/promotions';
     import type { AssessedCompetency } from '@/types/framework';
@@ -33,7 +30,6 @@
         framework,
         competencies,
         summary,
-        nextToReview,
     }: {
         promotion: { id: number; name: string; archived_at: string | null };
         learner: Learner;
@@ -47,13 +43,9 @@
             gaps: number;
             percent: number;
         };
-        nextToReview: { id: number; name: string; to_review: number } | null;
     } = $props();
 
     const canValidate = $derived(framework !== null && promotion.archived_at === null);
-
-    // Quick mode can be opened from a link (?mode=rapide) or with the button.
-    let quick = $state(new URL(page.url, 'http://localhost').searchParams.get('mode') === 'rapide');
 </script>
 
 <AppHead title={learner.name} />
@@ -99,21 +91,6 @@
             <StatTile label="Écarts" value={summary.gaps} icon={Split} />
         </div>
 
-        {#if canValidate && quick}
-            <QuickReview
-                promotionId={promotion.id}
-                {learner}
-                {competencies}
-                {nextToReview}
-                onclose={() => (quick = false)}
-            />
-        {:else if canValidate && summary.to_review > 0}
-            <Button class="h-12 w-full text-base" onclick={() => (quick = true)}>
-                <Zap class="size-4" />
-                Validation rapide ({summary.to_review})
-            </Button>
-        {/if}
-
         <ol class="grid gap-3">
             {#each competencies as competency (competency.id)}
                 <li class="surface flex min-w-0 flex-col gap-4 p-4">
@@ -140,7 +117,7 @@
 
                     <AssessmentSummary {competency} />
 
-                    {#if canValidate && !quick}
+                    {#if canValidate}
                         <TrainerValidationForm promotionId={promotion.id} learnerId={learner.id} {competency} />
                     {/if}
                 </li>

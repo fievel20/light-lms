@@ -9,13 +9,17 @@ use App\Models\User;
 use App\Queries\LearnerActivity;
 use App\Queries\LearnerCompetencies;
 use App\Queries\PromotionProgress;
+use App\Support\CurrentPromotion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function __construct(private LearnerActivity $activity) {}
+    public function __construct(
+        private LearnerActivity $activity,
+        private CurrentPromotion $currentPromotion,
+    ) {}
 
     public function __invoke(
         Request $request,
@@ -28,7 +32,7 @@ class DashboardController extends Controller
         $user = $request->user();
 
         return $user->isTrainer()
-            ? $this->trainer($progress)
+            ? $this->trainer($user, $progress)
             : $this->learner($user, $competencies, $celebrations, $newBadges);
     }
 
@@ -67,35 +71,26 @@ class DashboardController extends Controller
     /**
      * The trainer's overview of current promotions.
      */
-    private function trainer(PromotionProgress $progress): Response
+    /**
+     * Overview of the promotion chosen in the menu.
+     */
+    private function trainer(User $trainer, PromotionProgress $progress): Response
     {
-        $promotions = Promotion::query()
-            ->archived(false)
-            ->with('framework:id,name')
-            ->orderByDesc('starts_on')
-            ->orderBy('name')
-            ->get();
+        $promotion = $this->currentPromotion->resolve($trainer);
 
         return Inertia::render('trainer/Dashboard', [
-            'promotions' => $promotions->map(function (Promotion $promotion) use ($progress): array {
-                $summary = $progress->get($promotion)['summary'];
-
-                return [
-                    'id' => $promotion->id,
-                    'name' => $promotion->name,
-                    'framework' => $promotion->framework?->name,
-                    'starts_on' => $promotion->starts_on->toDateString(),
-                    'ends_on' => $promotion->ends_on->toDateString(),
-                    'learners' => $summary['learners'],
-                    'competencies' => $summary['competencies'],
-                    'average_percent' => $summary['average_percent'],
-                    'to_review' => $summary['to_review'],
-                ];
-            })->values(),
-            'pendingInvitations' => User::query()
-                ->whereNull('activated_at')
-                ->whereHas('promotions', fn ($query) => $query->whereNull('archived_at'))
-                ->count(),
+            'promotion' => $promotion ? [
+                'id' => $promotion->id,
+                'name' => $promotion->name,
+                'framework' => $promotion->framework()->value('name'),
+                'starts_on' => $promotion->starts_on->toDateString(),
+                'ends_on' => $promotion->ends_on->toDateString(),
+                'archived_at' => $promotion->archived_at?->toIso8601String(),
+            ] : null,
+            'summary' => $promotion ? $progress->get($promotion)['summary'] : null,
+            'pendingInvitations' => $promotion
+                ? $promotion->learners()->whereNull('activated_at')->count()
+                : 0,
         ]);
     }
 }

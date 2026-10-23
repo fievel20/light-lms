@@ -1,6 +1,8 @@
 <script lang="ts">
     import { Link, page } from '@inertiajs/svelte';
     import AppLogo from '@/components/AppLogo.svelte';
+    import AppLogoIcon from '@/components/AppLogoIcon.svelte';
+    import PromotionSwitcher from '@/components/navigation/PromotionSwitcher.svelte';
     import Breadcrumbs from '@/components/Breadcrumbs.svelte';
     import { Avatar, AvatarFallback } from '@/components/ui/avatar';
     import { SidebarTrigger } from '@/components/ui/sidebar';
@@ -23,9 +25,24 @@
 <header
     class="sticky top-0 z-30 flex h-14 items-center justify-between bg-background/85 px-4 backdrop-blur-lg md:hidden"
 >
-    <Link href={toUrl(dashboard())} class="flex items-center gap-1">
-        <AppLogo />
-    </Link>
+    {#if page.props.promotionSwitcher}
+        <div class="flex min-w-0 flex-1 items-center gap-2 pr-3">
+            <Link
+                href={toUrl(dashboard())}
+                class="grid size-8 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground"
+                aria-label="Accueil"
+            >
+                <AppLogoIcon class="size-5" />
+            </Link>
+            <div class="min-w-0 flex-1">
+                <PromotionSwitcher compact />
+            </div>
+        </div>
+    {:else}
+        <Link href={toUrl(dashboard())} class="flex items-center gap-1">
+            <AppLogo />
+        </Link>
+    {/if}
     {#if user}
         <Link href={toUrl(profile())} aria-label="Mon profil">
             <Avatar class="size-9">

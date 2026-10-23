@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompetencyController;
+use App\Http\Controllers\CurrentPromotionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkImportController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
-use App\Http\Controllers\PromotionReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => to_route(auth()->check() ? 'dashboard' : 'login'))->name('home');
@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified', 'learner'])->group(function () {
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('promotions', PromotionController::class)->except(['destroy']);
     Route::get('promotions/{promotion}/suivi', [PromotionController::class, 'progress'])->name('promotions.progress');
-    Route::get('promotions/{promotion}/a-examiner', PromotionReviewController::class)->name('promotions.review');
+    Route::put('promotion-active', [CurrentPromotionController::class, 'update'])->name('current-promotion.update');
     Route::patch('promotions/{promotion}/archive', [PromotionController::class, 'archive'])->name('promotions.archive');
     Route::patch('promotions/{promotion}/unarchive', [PromotionController::class, 'unarchive'])->name('promotions.unarchive');
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
+use App\Support\CurrentPromotion;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,6 +44,13 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'promotionSwitcher' => function () use ($request) {
+                $user = $request->user();
+
+                return $user instanceof User && $user->isTrainer()
+                    ? app(CurrentPromotion::class)->switcher($user)
+                    : null;
+            },
         ];
     }
 }

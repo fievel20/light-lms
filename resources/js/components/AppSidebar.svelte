@@ -13,7 +13,8 @@
         SidebarMenuButton,
         SidebarMenuItem,
     } from '@/components/ui/sidebar';
-    import { mainNavItems } from '@/lib/navigation';
+    import PromotionSwitcher from '@/components/navigation/PromotionSwitcher.svelte';
+    import { navGroups } from '@/lib/navigation';
     import { toUrl } from '@/lib/utils';
     import { dashboard } from '@/routes';
 
@@ -23,7 +24,10 @@
         children?: Snippet;
     } = $props();
 
-    const items = $derived(mainNavItems(page.props.auth.user));
+    const currentPromotionId = $derived(
+        (page.props.promotionSwitcher as { current: { id: number } | null } | null)?.current?.id ?? null,
+    );
+    const groups = $derived(navGroups(page.props.auth.user, currentPromotionId));
 </script>
 
 <Sidebar collapsible="icon" variant="inset">
@@ -43,10 +47,13 @@
                 </SidebarMenuButton>
             </SidebarMenuItem>
         </SidebarMenu>
+        <div class="group-data-[collapsible=icon]:hidden">
+            <PromotionSwitcher />
+        </div>
     </SidebarHeader>
 
     <SidebarContent>
-        <NavMain {items} />
+        <NavMain {groups} />
     </SidebarContent>
 
     <SidebarFooter>

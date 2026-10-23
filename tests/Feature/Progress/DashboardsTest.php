@@ -52,26 +52,40 @@ describe('tableau de bord de l\'apprenant (US10)', function () {
 });
 
 describe('tableau de bord du formateur', function () {
-    it('résume ses promotions en cours', function () {
+    it('présente la promotion active', function () {
         $invited = User::factory()->invited()->create();
         $this->promotion->learners()->attach($invited);
         Assessment::factory()->for($this->promotion)->byTrainer($this->trainer, $this->learner)->create(['competency_id' => $this->c1->id, 'value' => 1]);
         Assessment::factory()->for($this->promotion)->selfAssessed($this->learner)->create(['competency_id' => $this->c2->id, 'value' => 1]);
-        Promotion::factory()->archived()->create();
+
+        // Une autre promotion, plus récente, mais pas celle choisie.
+        Promotion::factory()->create(['starts_on' => '2027-01-01']);
+        $this->trainer->forceFill(['current_promotion_id' => $this->promotion->id])->save();
 
         $this->actingAs($this->trainer)
             ->get(route('dashboard'))
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('trainer/Dashboard')
-                ->has('promotions', 1)
-                ->where('promotions.0.id', $this->promotion->id)
-                ->where('promotions.0.name', 'DWWM 2026')
-                ->where('promotions.0.framework', 'Développeur Web')
-                ->where('promotions.0.learners', 2)
-                ->where('promotions.0.average_percent', 25)
-                ->where('promotions.0.to_review', 1)
+                ->where('promotion.id', $this->promotion->id)
+                ->where('promotion.name', 'DWWM 2026')
+                ->where('promotion.framework', 'Développeur Web')
+                ->where('summary.learners', 2)
+                ->where('summary.competencies', 2)
+                ->where('summary.average_percent', 25)
+                ->where('summary.to_review', 1)
                 ->where('pendingInvitations', 1));
+    });
+
+    it('invite à créer une promotion quand il n\'y en a aucune', function () {
+        Promotion::query()->delete();
+
+        $this->actingAs($this->trainer)
+            ->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('trainer/Dashboard')
+                ->where('promotion', null)
+                ->where('summary', null));
     });
 });
 
