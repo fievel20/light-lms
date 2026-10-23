@@ -7,17 +7,24 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+  Light LMS "lab" identity: paper background, indigo ink, hairline ink
+  rules instead of shadows, acid lime for the main action and "acquired",
+  violet for navigation and self-assessment, small 4px radii.
+*/
 @theme inline {
     --font-sans:
-        'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+        'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, sans-serif;
+    --font-mono:
+        'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    --radius-2xl: calc(var(--radius) + 0.5rem);
-    --radius-xl: calc(var(--radius) + 0.25rem);
+    --radius-2xl: calc(var(--radius) + 2px);
+    --radius-xl: var(--radius);
     --radius-lg: var(--radius);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 1px);
+    --radius-sm: calc(var(--radius) - 2px);
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -30,6 +37,7 @@
 
     --color-primary: var(--primary);
     --color-primary-foreground: var(--primary-foreground);
+    --color-primary-soft: var(--primary-soft);
 
     --color-secondary: var(--secondary);
     --color-secondary-foreground: var(--secondary-foreground);
@@ -43,14 +51,24 @@
     --color-destructive: var(--destructive);
     --color-destructive-foreground: var(--destructive-foreground);
 
-    /* Gamification: acquired (green) and to review (amber). */
+    /* Main call to action (acid lime with ink text). */
+    --color-cta: var(--cta);
+    --color-cta-foreground: var(--cta-foreground);
+
+    /* Acquired: lime fills, readable green for text. */
     --color-success: var(--success);
     --color-success-foreground: var(--success-foreground);
     --color-success-soft: var(--success-soft);
+    --color-success-ink: var(--success-ink);
+
+    /* To review: amber. */
     --color-warning: var(--warning);
     --color-warning-foreground: var(--warning-foreground);
     --color-warning-soft: var(--warning-soft);
-    --color-primary-soft: var(--primary-soft);
+
+    /* Ink: indigo used for text and hairline rules. */
+    --color-ink: var(--ink);
+    --color-night: var(--night);
 
     --color-border: var(--border);
     --color-input: var(--input);
@@ -76,9 +94,6 @@
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
 */
 @layer base {
     *,
@@ -90,117 +105,147 @@
     }
 }
 
-@layer utilities {
-    body,
-    html {
-        --font-sans:
-            'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif,
-            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-            'Noto Color Emoji';
-    }
-}
-
-/* A borderless card: soft background, hairline ring and gentle shadow. */
+/* A card: white surface with a hairline ink rule, no shadow. */
 @utility surface {
     border-radius: var(--radius-2xl);
     background-color: var(--card);
-    box-shadow:
-        0 0 0 1px color-mix(in oklab, var(--border) 70%, transparent),
-        0 1px 2px 0 rgb(15 15 40 / 0.04),
-        0 4px 16px -4px rgb(15 15 40 / 0.06);
+    border: 1px solid var(--ink-rule);
+}
+
+/* Small uppercase monospace label, e.g. "// PROMOTION". */
+@utility eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+}
+
+/* Page titles: bold grotesk, uppercase, tight. */
+@utility display-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+}
+
+/* Secondary links: underlined monospace. */
+@utility mono-link {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    text-decoration: underline;
+    text-underline-offset: 4px;
 }
 
 /* Tabular figures for scores and counters. */
 @utility figures {
+    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
 }
 
-:root {
-    --background: hsl(240 25% 98.5%);
-    --foreground: hsl(240 20% 10%);
-    --card: hsl(0 0% 100%);
-    --card-foreground: hsl(240 20% 10%);
-    --popover: hsl(0 0% 100%);
-    --popover-foreground: hsl(240 20% 10%);
-    --primary: hsl(246 92% 67%);
-    --primary-foreground: hsl(0 0% 100%);
-    --primary-soft: hsl(246 100% 96.5%);
-    --secondary: hsl(240 20% 95%);
-    --secondary-foreground: hsl(240 20% 15%);
-    --muted: hsl(240 20% 96%);
-    --muted-foreground: hsl(240 8% 46%);
-    --accent: hsl(246 100% 96.5%);
-    --accent-foreground: hsl(246 60% 40%);
-    --destructive: hsl(0 78% 58%);
-    --destructive-foreground: hsl(0 0% 100%);
-    --success: hsl(142 71% 40%);
-    --success-foreground: hsl(0 0% 100%);
-    --success-soft: hsl(142 70% 94%);
-    --warning: hsl(36 95% 50%);
-    --warning-foreground: hsl(30 80% 15%);
-    --warning-soft: hsl(40 100% 93%);
-    --border: hsl(240 18% 91%);
-    --input: hsl(240 15% 88%);
-    --ring: hsl(246 92% 67%);
-    --chart-1: hsl(246 92% 67%);
-    --chart-2: hsl(142 71% 45%);
-    --chart-3: hsl(36 95% 55%);
-    --chart-4: hsl(330 80% 62%);
-    --chart-5: hsl(190 85% 45%);
-    --radius: 0.75rem;
-    --sidebar-background: hsl(240 25% 98.5%);
-    --sidebar-foreground: hsl(240 10% 30%);
-    --sidebar-primary: hsl(246 92% 67%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(246 100% 96.5%);
-    --sidebar-accent-foreground: hsl(246 60% 40%);
-    --sidebar-border: hsl(240 18% 93%);
-    --sidebar-ring: hsl(246 92% 67%);
-    --sidebar: hsl(240 25% 98.5%);
+:root,
+.light {
+    --ink: #15093a;
+    --ink-rule: #15093a;
+    --night: #0e0926;
+
+    --background: #ecebe5;
+    --foreground: #15093a;
+    --card: #ffffff;
+    --card-foreground: #15093a;
+    --popover: #ffffff;
+    --popover-foreground: #15093a;
+    --primary: #7c5cff;
+    --primary-foreground: #ffffff;
+    --primary-soft: #ece0fb;
+    --secondary: #e2e0d8;
+    --secondary-foreground: #15093a;
+    --muted: #e2e0d8;
+    --muted-foreground: #5b5677;
+    --accent: #ece0fb;
+    --accent-foreground: #3b2a8f;
+    --destructive: #e5484d;
+    --destructive-foreground: #ffffff;
+    --cta: #c8ff1a;
+    --cta-foreground: #15093a;
+    --success: #c8ff1a;
+    --success-foreground: #15093a;
+    --success-soft: #efffbf;
+    --success-ink: #3b7000;
+    --warning: #f5a524;
+    --warning-foreground: #3d2400;
+    --warning-soft: #fdebc8;
+    --border: rgb(21 9 58 / 0.16);
+    --input: rgb(21 9 58 / 0.35);
+    --ring: #7c5cff;
+    --chart-1: #7c5cff;
+    --chart-2: #c8ff1a;
+    --chart-3: #f5a524;
+    --chart-4: #e4d0f7;
+    --chart-5: #15093a;
+    --radius: 4px;
+    --sidebar-background: #ecebe5;
+    --sidebar-foreground: #15093a;
+    --sidebar-primary: #7c5cff;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #ece0fb;
+    --sidebar-accent-foreground: #3b2a8f;
+    --sidebar-border: rgb(21 9 58 / 0.16);
+    --sidebar-ring: #7c5cff;
+    --sidebar: #ecebe5;
 }
 
 .dark {
-    --background: hsl(240 14% 6%);
-    --foreground: hsl(240 20% 96%);
-    --card: hsl(240 12% 10%);
-    --card-foreground: hsl(240 20% 96%);
-    --popover: hsl(240 12% 10%);
-    --popover-foreground: hsl(240 20% 96%);
-    --primary: hsl(246 95% 72%);
-    --primary-foreground: hsl(240 30% 8%);
-    --primary-soft: hsl(246 40% 18%);
-    --secondary: hsl(240 10% 15%);
-    --secondary-foreground: hsl(240 20% 96%);
-    --muted: hsl(240 10% 14%);
-    --muted-foreground: hsl(240 8% 64%);
-    --accent: hsl(246 40% 18%);
-    --accent-foreground: hsl(246 95% 85%);
-    --destructive: hsl(0 75% 60%);
-    --destructive-foreground: hsl(0 0% 100%);
-    --success: hsl(142 65% 48%);
-    --success-foreground: hsl(150 40% 8%);
-    --success-soft: hsl(142 40% 14%);
-    --warning: hsl(38 95% 58%);
-    --warning-foreground: hsl(30 80% 10%);
-    --warning-soft: hsl(38 50% 15%);
-    --border: hsl(240 10% 17%);
-    --input: hsl(240 10% 20%);
-    --ring: hsl(246 95% 72%);
-    --chart-1: hsl(246 95% 72%);
-    --chart-2: hsl(142 65% 50%);
-    --chart-3: hsl(38 95% 60%);
-    --chart-4: hsl(330 80% 66%);
-    --chart-5: hsl(190 85% 52%);
-    --sidebar-background: hsl(240 14% 6%);
-    --sidebar-foreground: hsl(240 10% 80%);
-    --sidebar-primary: hsl(246 95% 72%);
-    --sidebar-primary-foreground: hsl(240 30% 8%);
-    --sidebar-accent: hsl(246 40% 18%);
-    --sidebar-accent-foreground: hsl(246 95% 85%);
-    --sidebar-border: hsl(240 10% 14%);
-    --sidebar-ring: hsl(246 95% 72%);
-    --sidebar: hsl(240 14% 6%);
+    --ink: #ecebe5;
+    --ink-rule: rgb(236 235 229 / 0.18);
+    --night: #0e0926;
+
+    --background: #0e0926;
+    --foreground: #ecebe5;
+    --card: #17103a;
+    --card-foreground: #ecebe5;
+    --popover: #17103a;
+    --popover-foreground: #ecebe5;
+    --primary: #9d86ff;
+    --primary-foreground: #0e0926;
+    --primary-soft: #2a1f63;
+    --secondary: #221a4d;
+    --secondary-foreground: #ecebe5;
+    --muted: #221a4d;
+    --muted-foreground: #a9a3c7;
+    --accent: #2a1f63;
+    --accent-foreground: #d9ccff;
+    --destructive: #ff6369;
+    --destructive-foreground: #ffffff;
+    --cta: #c8ff1a;
+    --cta-foreground: #0e0926;
+    --success: #c8ff1a;
+    --success-foreground: #0e0926;
+    --success-soft: #2c3a0a;
+    --success-ink: #c8ff1a;
+    --warning: #f7b54a;
+    --warning-foreground: #2a1800;
+    --warning-soft: #3d2c10;
+    --border: rgb(236 235 229 / 0.14);
+    --input: rgb(236 235 229 / 0.28);
+    --ring: #9d86ff;
+    --chart-1: #9d86ff;
+    --chart-2: #c8ff1a;
+    --chart-3: #f7b54a;
+    --chart-4: #e4d0f7;
+    --chart-5: #ecebe5;
+    --sidebar-background: #0e0926;
+    --sidebar-foreground: #ecebe5;
+    --sidebar-primary: #9d86ff;
+    --sidebar-primary-foreground: #0e0926;
+    --sidebar-accent: #2a1f63;
+    --sidebar-accent-foreground: #d9ccff;
+    --sidebar-border: rgb(236 235 229 / 0.12);
+    --sidebar-ring: #9d86ff;
+    --sidebar: #0e0926;
 }
 
 @layer base {
@@ -213,6 +258,7 @@
     h1,
     h2,
     h3 {
+        font-family: var(--font-display);
         letter-spacing: -0.02em;
     }
 }

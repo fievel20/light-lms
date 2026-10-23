@@ -57,7 +57,7 @@
         </nav>
     </div>
     <div>
-        <h1 class="text-2xl font-extrabold tracking-tight">{title}</h1>
+        <h1 class="display-title text-2xl break-words sm:text-3xl">{title}</h1>
         {@render children?.()}
     </div>
 </header>

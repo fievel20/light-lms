@@ -9,15 +9,18 @@
     }: {
         title: string;
         subtitle?: string;
-        eyebrow?: Snippet;
+        /** Small monospace label shown as "// LABEL" above the title. */
+        eyebrow?: string;
         actions?: Snippet;
     } = $props();
 </script>
 
 <header class="flex flex-wrap items-end justify-between gap-4">
-    <div class="min-w-0 space-y-1">
-        {@render eyebrow?.()}
-        <h1 class="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h1>
+    <div class="min-w-0 space-y-2">
+        {#if eyebrow}
+            <p class="eyebrow">// {eyebrow}</p>
+        {/if}
+        <h1 class="display-title text-3xl break-words sm:text-4xl">{title}</h1>
         {#if subtitle}
             <p class="text-sm text-muted-foreground">{subtitle}</p>
         {/if}

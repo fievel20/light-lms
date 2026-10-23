@@ -51,7 +51,7 @@
         </p>
         <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
             {#each competencyOptions(competency) as option (option.value)}
-                <span class={option.value === threshold ? 'font-semibold text-success' : ''}>
+                <span class={option.value === threshold ? 'font-semibold text-success-ink' : ''}>
                     {competency.type === 'binary' ? (option.value === 1 ? 'Oui' : 'Non') : option.value} = {option.label}{option.value ===
                     threshold
                         ? ' 🏁'

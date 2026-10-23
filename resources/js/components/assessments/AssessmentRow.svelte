@@ -108,7 +108,7 @@
 
         <div class="flex items-center gap-2">
             <div
-                class="inline-flex flex-1 rounded-xl bg-muted p-0.5 sm:flex-none"
+                class="inline-flex flex-1 rounded-xl border border-ink/25 bg-card p-0.5 sm:flex-none"
                 role="radiogroup"
                 aria-label={`Validation pour ${title}`}
             >
@@ -122,11 +122,11 @@
                         {disabled}
                         onclick={() => choose(option.value)}
                         class={cn(
-                            'h-10 min-w-10 flex-1 rounded-[10px] px-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed sm:h-9 sm:flex-none',
+                            'h-10 min-w-10 flex-1 rounded-md px-2 font-mono text-sm font-semibold transition-colors disabled:cursor-not-allowed sm:h-9 sm:flex-none',
                             selected
                                 ? isAcquiring(option.value)
-                                    ? 'bg-success text-success-foreground shadow-sm'
-                                    : 'bg-card text-foreground shadow-sm'
+                                    ? 'bg-success text-success-foreground'
+                                    : 'bg-ink text-background'
                                 : 'text-muted-foreground enabled:hover:text-foreground',
                         )}
                     >
@@ -157,7 +157,7 @@
                 {#if status === 'saving'}
                     <LoaderCircle class="size-4 animate-spin text-muted-foreground" aria-label="Enregistrement" />
                 {:else if status === 'saved'}
-                    <Check class="size-4 text-success" aria-label="Enregistré" />
+                    <Check class="size-4 text-success-ink" aria-label="Enregistré" />
                 {:else if status === 'error'}
                     <CircleAlert class="size-4 text-destructive" aria-label="Erreur" />
                 {:else if acquired}

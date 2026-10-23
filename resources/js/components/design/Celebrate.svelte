@@ -75,7 +75,7 @@
             onkeydown={(event) => event.stopPropagation()}
         >
             <span
-                class="mx-auto mb-4 grid size-16 place-items-center rounded-2xl bg-success-soft text-success"
+                class="mx-auto mb-4 grid size-16 place-items-center rounded-2xl bg-success-soft text-success-ink"
             >
                 <PartyPopper class="size-8" />
             </span>
@@ -91,7 +91,7 @@
                 <ul class="mt-4 grid max-h-48 gap-2 overflow-y-auto text-left">
                     {#each celebrations as celebration (celebration.promotion + celebration.code)}
                         <li class="flex items-center gap-3 rounded-xl bg-success-soft px-3 py-2">
-                            <span class="font-mono text-xs font-bold text-success">{celebration.code}</span>
+                            <span class="font-mono text-xs font-bold text-success-ink">{celebration.code}</span>
                             <span class="min-w-0 truncate text-sm font-medium">{celebration.name}</span>
                         </li>
                     {/each}

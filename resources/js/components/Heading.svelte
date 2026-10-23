@@ -14,7 +14,7 @@
     <h2
         class={variant === 'small'
             ? 'mb-0.5 text-base font-semibold'
-            : 'text-2xl font-extrabold tracking-tight sm:text-3xl'}
+            : 'display-title text-3xl sm:text-4xl'}
     >
         {title}
     </h2>

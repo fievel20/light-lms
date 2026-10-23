@@ -21,7 +21,7 @@
     const toneClass: Record<Tone, string> = {
         default: 'bg-muted text-muted-foreground',
         primary: 'bg-primary-soft text-primary',
-        success: 'bg-success-soft text-success',
+        success: 'bg-success-soft text-success-ink',
         warning: 'bg-warning-soft text-warning-foreground dark:text-warning',
     };
 </script>
@@ -33,8 +33,8 @@
         </span>
     {/if}
     <div>
-        <p class="figures text-2xl font-extrabold leading-none sm:text-3xl">{value}</p>
-        <p class="mt-1 text-xs font-medium text-muted-foreground">{label}</p>
+        <p class="figures text-2xl leading-none font-semibold sm:text-3xl">{value}</p>
+        <p class="eyebrow mt-1.5 hyphens-auto [overflow-wrap:anywhere]" lang="fr">{label}</p>
         {#if hint}
             <p class="mt-0.5 text-xs text-muted-foreground/80">{hint}</p>
         {/if}

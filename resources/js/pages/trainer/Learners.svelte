@@ -30,7 +30,7 @@
 <AppHead title="Par apprenant" />
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:p-6">
-    <PageHeader title="Par apprenant" subtitle={`${promotion.name} · ${learners.length} apprenants`} />
+    <PageHeader eyebrow="Promotion" title="Par apprenant" subtitle={`${promotion.name} · ${learners.length} apprenants`} />
 
     {#if learners.length === 0}
         <EmptyState icon={Users} title="Aucun apprenant" description="Inscris des apprenants depuis la fiche de la promotion." />

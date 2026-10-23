@@ -29,7 +29,7 @@
         <div class="flex min-w-0 flex-1 items-center gap-2 pr-3">
             <Link
                 href={toUrl(dashboard())}
-                class="grid size-8 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground"
+                class="grid size-8 shrink-0 place-items-center rounded-md bg-ink text-cta dark:bg-cta dark:text-night"
                 aria-label="Accueil"
             >
                 <AppLogoIcon class="size-5" />

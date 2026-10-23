@@ -21,6 +21,7 @@
     import type { Component } from 'svelte';
     import AppHead from '@/components/AppHead.svelte';
     import EmptyState from '@/components/design/EmptyState.svelte';
+    import NightBand from '@/components/design/NightBand.svelte';
     import PageHeader from '@/components/design/PageHeader.svelte';
     import StatTile from '@/components/design/StatTile.svelte';
     import { Button } from '@/components/ui/button';
@@ -111,7 +112,9 @@
             {/snippet}
         </EmptyState>
     {:else}
+        <NightBand class="flex flex-col gap-6 p-5 sm:p-6">
         <PageHeader
+            eyebrow="Promotion active"
             title={promotion.name}
             subtitle={`${promotion.framework ?? 'Aucun référentiel'} · ${formatDate(promotion.starts_on)} → ${formatDate(promotion.ends_on)}${promotion.archived_at ? ' · archivée' : ''}`}
         />
@@ -127,6 +130,7 @@
             />
             <StatTile label="Invitations en attente" value={pendingInvitations} icon={Mail} />
         </div>
+        </NightBand>
 
         {#if !promotion.framework}
             <EmptyState

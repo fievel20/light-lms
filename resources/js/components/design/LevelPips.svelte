@@ -39,8 +39,8 @@
             class={cn(
                 'relative flex min-h-11 flex-1 basis-20 items-center justify-center gap-1 rounded-xl px-3 text-sm font-semibold transition-all sm:min-h-9 sm:flex-none',
                 isSelected
-                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/25'
-                    : 'bg-muted text-muted-foreground enabled:hover:bg-primary-soft enabled:hover:text-primary',
+                    ? 'bg-ink text-background'
+                    : 'border border-ink/25 bg-card text-foreground enabled:hover:bg-primary-soft',
                 'enabled:active:scale-95 disabled:cursor-default',
             )}
         >

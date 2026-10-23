@@ -16,6 +16,7 @@
     import AppHead from '@/components/AppHead.svelte';
     import Celebrate from '@/components/design/Celebrate.svelte';
     import EmptyState from '@/components/design/EmptyState.svelte';
+    import NightBand from '@/components/design/NightBand.svelte';
     import PageHeader from '@/components/design/PageHeader.svelte';
     import ProgressRing from '@/components/design/ProgressRing.svelte';
     import StatTile from '@/components/design/StatTile.svelte';
@@ -72,7 +73,8 @@
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-6 p-4 sm:p-6">
     <PageHeader
-        title={`Salut ${firstName} 👋`}
+        eyebrow="Mon parcours"
+        title={`Salut ${firstName}`}
         subtitle="Voici où tu en es dans tes compétences."
     />
 
@@ -86,7 +88,7 @@
 
     {#each current as promotion (promotion.id)}
         {@const toDo = promotion.total - promotion.self_assessed}
-        <section class="surface flex flex-col gap-6 p-5 sm:p-6" aria-label={promotion.name}>
+        <NightBand class="flex flex-col gap-6 p-5 sm:p-6">
             <div class="flex items-center gap-5">
                 <ProgressRing
                     percent={promotion.framework ? promotion.percent : 0}
@@ -149,7 +151,7 @@
                     {/snippet}
                 </Button>
             {/if}
-        </section>
+        </NightBand>
     {/each}
 
     {#if activity.length > 0}

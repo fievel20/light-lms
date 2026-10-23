@@ -36,7 +36,7 @@
                 <div class="min-w-0 pt-0.5">
                     <p class="text-sm">
                         Ton formateur a validé <span class="font-bold">{item.code}</span> :
-                        <span class={cn('font-semibold', item.acquired ? 'text-success' : 'text-primary')}
+                        <span class={cn('font-semibold', item.acquired ? 'text-success-ink' : 'text-primary')}
                             >{item.level}</span
                         >
                     </p>

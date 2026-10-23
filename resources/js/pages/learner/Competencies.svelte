@@ -86,7 +86,7 @@
 
     function status(competency: AssessedCompetency): { label: string; class: string } {
         if (competency.acquired) {
-            return { label: 'Acquise', class: 'bg-success-soft text-success' };
+            return { label: 'Acquise', class: 'bg-success-soft text-success-ink' };
         }
         if (competency.to_review) {
             return {
@@ -111,6 +111,7 @@
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:p-6">
     <PageHeader
+        eyebrow="Compétences"
         title="Mes compétences"
         subtitle={framework ? `${promotion?.name} · ${framework.name}` : undefined}
     />

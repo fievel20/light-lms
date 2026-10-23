@@ -24,7 +24,7 @@
 <AppHead title="Par compétence" />
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:p-6">
-    <PageHeader title="Par compétence" subtitle={`${promotion.name} · ${learnersCount} apprenants`} />
+    <PageHeader eyebrow="Promotion" title="Par compétence" subtitle={`${promotion.name} · ${learnersCount} apprenants`} />
 
     {#if competencies.length === 0}
         <EmptyState icon={Library} title="Aucune compétence" description="Affecte un référentiel à cette promotion." />

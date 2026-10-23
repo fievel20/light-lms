@@ -29,7 +29,7 @@
 {#each groups as group, index (group.label ?? index)}
     <SidebarGroup class="px-2 py-2">
         {#if group.label}
-            <SidebarGroupLabel class="text-[11px] font-semibold tracking-wide uppercase">{group.label}</SidebarGroupLabel>
+            <SidebarGroupLabel class="eyebrow">// {group.label}</SidebarGroupLabel>
         {/if}
         <SidebarMenu class="gap-1">
             {#each group.items as item (toUrl(item.href))}

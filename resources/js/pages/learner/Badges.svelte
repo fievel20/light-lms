@@ -24,6 +24,7 @@
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:p-6">
     <PageHeader
+        eyebrow="Récompenses"
         title="Mes badges"
         subtitle="Débloque-les en avançant dans tes compétences."
     />
@@ -52,7 +53,7 @@
                     class={cn(
                         'mt-auto rounded-full px-2.5 py-0.5 text-[11px] font-semibold',
                         badge.earned
-                            ? 'bg-success-soft text-success'
+                            ? 'bg-success-soft text-success-ink'
                             : 'bg-muted text-muted-foreground',
                     )}
                 >
