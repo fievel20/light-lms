@@ -13,6 +13,8 @@ use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
+use App\Http\Controllers\TrainerCompetencyController;
+use App\Http\Controllers\TrainerLearnerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => to_route(auth()->check() ? 'dashboard' : 'login'))->name('home');
@@ -31,13 +33,16 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('promotions', PromotionController::class)->except(['destroy']);
     Route::get('promotions/{promotion}/suivi', [PromotionController::class, 'progress'])->name('promotions.progress');
     Route::put('promotion-active', [CurrentPromotionController::class, 'update'])->name('current-promotion.update');
+    Route::get('promotions/{promotion}/competences', [TrainerCompetencyController::class, 'index'])->name('promotions.competencies.index');
+    Route::get('promotions/{promotion}/competences/{competency}', [TrainerCompetencyController::class, 'show'])->name('promotions.competencies.show');
+    Route::get('promotions/{promotion}/apprenants', [TrainerLearnerController::class, 'index'])->name('promotions.learners.index');
     Route::patch('promotions/{promotion}/archive', [PromotionController::class, 'archive'])->name('promotions.archive');
     Route::patch('promotions/{promotion}/unarchive', [PromotionController::class, 'unarchive'])->name('promotions.unarchive');
 
     Route::post('promotions/{promotion}/learners', [PromotionLearnerController::class, 'store'])->name('promotions.learners.store');
     Route::post('promotions/{promotion}/learners/import', [PromotionLearnerImportController::class, 'store'])->name('promotions.learners.import');
     Route::delete('promotions/{promotion}/learners/{learner}', [PromotionLearnerController::class, 'destroy'])->name('promotions.learners.destroy');
-    Route::get('promotions/{promotion}/learners/{learner}', [LearnerAssessmentController::class, 'show'])->name('promotions.learners.show');
+    Route::get('promotions/{promotion}/apprenants/{learner}', [LearnerAssessmentController::class, 'show'])->name('promotions.learners.show');
     Route::post('promotions/{promotion}/learners/{learner}/assessments/{competency}', [LearnerAssessmentController::class, 'store'])->name('promotions.learners.assessments.store');
 
     Route::post('learners/{learner}/invitation', [LearnerInvitationController::class, 'store'])->name('learners.invitation.resend');

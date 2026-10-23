@@ -30,7 +30,7 @@ describe('fiche de l\'apprenant', function () {
             ->get(route('promotions.learners.show', [$this->promotion, $this->learner]))
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
-                ->component('promotions/Learner')
+                ->component('trainer/Learner')
                 ->where('learner.name', 'Marie Dupont')
                 ->where('promotion.id', $this->promotion->id)
                 ->has('competencies', 2)

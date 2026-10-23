@@ -10,6 +10,7 @@
     import { Form, Link } from '@inertiajs/svelte';
     import Archive from '@lucide/svelte/icons/archive';
     import ArchiveRestore from '@lucide/svelte/icons/archive-restore';
+    import Library from '@lucide/svelte/icons/library';
     import Pencil from '@lucide/svelte/icons/pencil';
     import Plus from '@lucide/svelte/icons/plus';
     import PromotionController from '@/actions/App/Http/Controllers/PromotionController';
@@ -18,6 +19,7 @@
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
     import { cn, toUrl } from '@/lib/utils';
+    import * as frameworks from '@/routes/frameworks';
     import { create, edit, show } from '@/routes/promotions';
     import type { Promotion } from '@/types/promotion';
 
@@ -39,10 +41,20 @@
 
 <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
     <div class="flex flex-wrap items-start justify-between gap-4">
-        <Heading
-            title="Promotions"
-            description="Gère tes promotions d'apprenants."
-        />
+        <div>
+            <Heading
+                title="Promotions"
+                description="Gère tes promotions d'apprenants."
+            />
+            <!-- On phones the frameworks have no tab of their own. -->
+            <Link
+                href={toUrl(frameworks.index())}
+                class="-mt-4 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary md:hidden"
+            >
+                <Library class="size-4" />
+                Référentiels de compétences
+            </Link>
+        </div>
 
         <Button asChild class="w-full sm:w-auto">
             {#snippet children(props)}

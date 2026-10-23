@@ -15,6 +15,8 @@
     import Mail from '@lucide/svelte/icons/mail';
     import Plus from '@lucide/svelte/icons/plus';
     import Users from '@lucide/svelte/icons/users';
+    import Target from '@lucide/svelte/icons/target';
+    import UserPlus from '@lucide/svelte/icons/user-plus';
     import UsersRound from '@lucide/svelte/icons/users-round';
     import type { Component } from 'svelte';
     import AppHead from '@/components/AppHead.svelte';
@@ -25,6 +27,8 @@
     import { formatDate } from '@/lib/dates';
     import { toUrl } from '@/lib/utils';
     import { create, edit, progress, show } from '@/routes/promotions';
+    import * as promotionCompetencies from '@/routes/promotions/competencies';
+    import * as promotionLearners from '@/routes/promotions/learners';
 
     type Promotion = {
         id: number;
@@ -61,16 +65,28 @@
         promotion
             ? [
                   {
+                      title: 'Par compétence',
+                      description: 'Tous les apprenants pour une compétence.',
+                      href: toUrl(promotionCompetencies.index(promotion.id)),
+                      icon: Target,
+                  },
+                  {
+                      title: 'Par apprenant',
+                      description: 'Toutes les compétences d’un apprenant.',
+                      href: toUrl(promotionLearners.index(promotion.id)),
+                      icon: UsersRound,
+                  },
+                  {
                       title: 'Suivi',
                       description: 'Carte de chaleur des compétences de la promotion.',
                       href: toUrl(progress(promotion.id)),
                       icon: ChartColumn,
                   },
                   {
-                      title: 'Apprenants',
-                      description: 'Inscriptions, invitations et fiches des apprenants.',
+                      title: 'Inscriptions',
+                      description: 'Ajouter, importer et inviter des apprenants.',
                       href: toUrl(show(promotion.id)),
-                      icon: UsersRound,
+                      icon: UserPlus,
                   },
               ]
             : [],

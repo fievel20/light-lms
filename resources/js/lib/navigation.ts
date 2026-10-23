@@ -13,6 +13,8 @@ import * as myBadges from '@/routes/my-badges';
 import * as myCompetencies from '@/routes/my-competencies';
 import { edit as profile } from '@/routes/profile';
 import * as promotions from '@/routes/promotions';
+import * as promotionCompetencies from '@/routes/promotions/competencies';
+import * as promotionLearners from '@/routes/promotions/learners';
 import type { NavItem, User } from '@/types';
 
 export type NavGroup = { label?: string; items: NavItem[] };
@@ -55,14 +57,21 @@ export function navGroups(
                 ...(currentPromotionId
                     ? [
                           {
+                              title: 'Par compétence',
+                              href: promotionCompetencies.index(
+                                  currentPromotionId,
+                              ),
+                              icon: Target,
+                          },
+                          {
+                              title: 'Par apprenant',
+                              href: promotionLearners.index(currentPromotionId),
+                              icon: UsersRound,
+                          },
+                          {
                               title: 'Suivi',
                               href: promotions.progress(currentPromotionId),
                               icon: ChartColumn,
-                          },
-                          {
-                              title: 'Apprenants',
-                              href: promotions.show(currentPromotionId),
-                              icon: UsersRound,
                           },
                       ]
                     : []),
@@ -94,9 +103,23 @@ export function mobileNavItems(
         (group) => group.items,
     );
 
-    return user?.role === 'trainer'
-        ? items
-        : [...items, { title: 'Profil', href: profile(), icon: UserRound }];
+    if (user?.role !== 'trainer') {
+        return [
+            ...items,
+            { title: 'Profil', href: profile(), icon: UserRound },
+        ];
+    }
+
+    // Five tabs at most on a phone: short titles, administration grouped.
+    const short: Record<string, string> = {
+        'Par compétence': 'Compétences',
+        'Par apprenant': 'Apprenants',
+        Promotions: 'Gestion',
+    };
+
+    return items
+        .filter((item) => item.title !== 'Référentiels')
+        .map((item) => ({ ...item, title: short[item.title] ?? item.title }));
 }
 
 /**

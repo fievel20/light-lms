@@ -63,11 +63,14 @@ Sur la fiche promotion, chaque apprenant porte le badge **Activé** ou **Invité
 
 ### 5. Valider les compétences
 
-Depuis la fiche promotion ou le suivi, cliquez sur un apprenant. Sa fiche montre :
+Deux points d'entrée, dans le menu de la promotion active :
 
-- un résumé : compétences acquises, autoévaluées, **à examiner**, **écarts** ;
-- pour chaque compétence, l'autoévaluation de l'apprenant et votre dernière validation (avec date et commentaire) ;
-- un formulaire de validation : choix du niveau, commentaire facultatif.
+- **Par compétence** : la liste des compétences (dans l'ordre du référentiel, avec « acquis / apprenants » et le nombre d'autoévaluations à examiner), puis, pour une compétence, **tous les apprenants** ;
+- **Par apprenant** : la liste des apprenants (progression, à examiner), puis, pour un apprenant, **toutes ses compétences dans l'ordre**.
+
+Les flèches ‹ › en haut à droite passent à la compétence ou à l'apprenant précédent / suivant.
+
+Chaque ligne montre l'autoévaluation (« s'estime : … », point ambre si elle n'a pas encore été examinée) et un sélecteur de niveau : **un appui enregistre la validation** (pas de bouton, pas de confirmation ; une coche apparaît sur la ligne, en vert si le niveau atteint le seuil). L'icône 💬 ouvre un commentaire, enregistré en quittant le champ (il faut d'abord avoir choisi un niveau). Le libellé de chaque niveau s'affiche au survol et dans la légende en tête de la vue par compétence.
 
 Chaque validation est conservée dans l'historique ; c'est **la plus récente** qui compte.
 

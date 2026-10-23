@@ -23,8 +23,17 @@ class LearnerAssessmentController extends Controller
         $this->ensureEnrolled($promotion, $learner);
 
         $rows = $competencies->get($promotion, $learner);
+        $ids = $promotion->learners()->orderByName()->pluck('users.id')->all();
+        $position = (int) array_search($learner->id, $ids, true);
+        $neighbour = function (int $index) use ($ids): ?array {
+            $user = isset($ids[$index]) ? User::query()->find((int) $ids[$index]) : null;
 
-        return Inertia::render('promotions/Learner', [
+            return $user ? ['id' => $user->id, 'name' => $user->name] : null;
+        };
+
+        return Inertia::render('trainer/Learner', [
+            'previous' => $neighbour($position - 1),
+            'next' => $neighbour($position + 1),
             'promotion' => $promotion->only(['id', 'name', 'archived_at']),
             'learner' => $learner->only(['id', 'first_name', 'last_name', 'name', 'email', 'activated_at']),
             'framework' => $promotion->framework()->first(['id', 'name'])?->only(['id', 'name']),
@@ -56,7 +65,10 @@ class LearnerAssessmentController extends Controller
             $validated['comment'] ?? null,
         );
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => "Validation de {$competency->code} enregistrée."]);
+        // Auto-saving rows confirm on the row itself, without a toast.
+        if (! $request->boolean('quiet')) {
+            Inertia::flash('toast', ['type' => 'success', 'message' => "Validation de {$competency->code} enregistrée."]);
+        }
 
         return back();
     }
