@@ -3,7 +3,7 @@
 Principe : GitHub Actions construit l'application (dépendances PHP de production, assets Vite) après la CI, l'envoie par SSH sur le VPS et l'active **sans interruption** : chaque version a son dossier dans `releases/`, et un lien `current` pointe vers la version en ligne. Le VPS n'a besoin ni de Node ni de Composer.
 
 ```
-/var/www/light-lms/
+/var/www/html/light-lms/
 ├── releases/20261023101500-a1b2c3d/   une version par déploiement (5 conservées)
 ├── shared/.env                        réglages de production (jamais dans Git)
 ├── shared/storage/                    journaux, sessions, cache, fichiers
@@ -86,12 +86,12 @@ GRANT ALL PRIVILEGES ON light_lms.* TO 'light_lms'@'localhost';"
 ### Dossiers et `.env`
 
 ```bash
-sudo mkdir -p /var/www/light-lms/releases /var/www/light-lms/shared/storage/logs
-sudo chown -R deploy:www-data /var/www/light-lms
-sudo chmod -R 2775 /var/www/light-lms/shared
+sudo mkdir -p /var/www/html/light-lms/releases /var/www/html/light-lms/shared/storage/logs
+sudo chown -R deploy:www-data /var/www/html/light-lms
+sudo chmod -R 2775 /var/www/html/light-lms/shared
 ```
 
-Copier `deploy/env.production.example` vers `/var/www/light-lms/shared/.env` et le compléter : mot de passe MariaDB (`DB_PASSWORD`), boîte d'envoi Ionos (`MAIL_USERNAME` et `MAIL_FROM_ADDRESS` identiques, `MAIL_PASSWORD`). Générer la clé de l'application :
+Copier `deploy/env.production.example` vers `/var/www/html/light-lms/shared/.env` et le compléter : mot de passe MariaDB (`DB_PASSWORD`), boîte d'envoi Ionos (`MAIL_USERNAME` et `MAIL_FROM_ADDRESS` identiques, `MAIL_PASSWORD`). Générer la clé de l'application :
 
 ```bash
 php8.4 -r "echo 'base64:'.base64_encode(random_bytes(32)).PHP_EOL;"
@@ -100,8 +100,8 @@ php8.4 -r "echo 'base64:'.base64_encode(random_bytes(32)).PHP_EOL;"
 et la coller dans `APP_KEY=`. Puis :
 
 ```bash
-sudo chown deploy:www-data /var/www/light-lms/shared/.env
-sudo chmod 640 /var/www/light-lms/shared/.env
+sudo chown deploy:www-data /var/www/html/light-lms/shared/.env
+sudo chmod 640 /var/www/html/light-lms/shared/.env
 ```
 
 ### Apache et HTTPS
@@ -116,6 +116,8 @@ sudo certbot --apache -d lms.example.fr
 ```
 
 `configtest` doit répondre `Syntax OK`. **Ne pas lancer `a2enconf php8.4-fpm`** : cela ferait passer tous les sites en PHP 8.4.
+
+Le dossier est sous `/var/www/html`, servi aussi par les autres sites : `apache.conf` le ferme à tous (sinon `shared/.env` serait téléchargeable) et ne rouvre que `current/public` pour `lms.example.fr`. Vérifier après le premier déploiement que `curl -I http://<adresse du VPS>/light-lms/shared/.env` répond `403` ou `404`.
 
 ### Worker de file d'attente
 
@@ -165,7 +167,7 @@ Supprimer ensuite `deploy_key` et `deploy_key.pub` de ton poste (la clé n'est p
 2. Sur le VPS, créer le compte formateur :
 
 ```bash
-cd /var/www/light-lms/current && sudo -u deploy php8.4 artisan lms:create-trainer
+cd /var/www/html/light-lms/current && sudo -u deploy php8.4 artisan lms:create-trainer
 ```
 
 3. Vérifier le worker : `sudo supervisorctl status light-lms-worker` doit afficher `RUNNING`.
@@ -185,12 +187,12 @@ crontab -e
 
 (Renseigner l'utilisateur `light_lms` et son mot de passe dans `~/.my.cnf`, section `[client]`, `chmod 600`.)
 
-| Besoin                          | Commande / emplacement                                                                                                                                                       |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Journaux de l'application       | `/var/www/light-lms/shared/storage/logs/laravel-*.log`                                                                                                                       |
-| Journaux Apache du site         | `/var/log/apache2/light-lms-error.log`                                                                                                                                       |
-| Journal du worker               | `/var/www/light-lms/shared/storage/logs/worker.log`                                                                                                                          |
-| État du worker                  | `sudo supervisorctl status light-lms-worker`                                                                                                                                 |
-| Emails en échec                 | `php8.4 artisan queue:failed`, puis `php8.4 artisan queue:retry all`                                                                                                         |
-| Revenir à la version précédente | `ln -sfn /var/www/light-lms/releases/<précédente> /var/www/light-lms/current && sudo systemctl reload php8.4-fpm && php8.4 /var/www/light-lms/current/artisan queue:restart` |
-| Mode maintenance                | `php8.4 artisan down` / `php8.4 artisan up` (dans `current`)                                                                                                                 |
+| Besoin                          | Commande / emplacement                                                                                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Journaux de l'application       | `/var/www/html/light-lms/shared/storage/logs/laravel-*.log`                                                                                                                                 |
+| Journaux Apache du site         | `/var/log/apache2/light-lms-error.log`                                                                                                                                                      |
+| Journal du worker               | `/var/www/html/light-lms/shared/storage/logs/worker.log`                                                                                                                                    |
+| État du worker                  | `sudo supervisorctl status light-lms-worker`                                                                                                                                                |
+| Emails en échec                 | `php8.4 artisan queue:failed`, puis `php8.4 artisan queue:retry all`                                                                                                                        |
+| Revenir à la version précédente | `ln -sfn /var/www/html/light-lms/releases/<précédente> /var/www/html/light-lms/current && sudo systemctl reload php8.4-fpm && php8.4 /var/www/html/light-lms/current/artisan queue:restart` |
+| Mode maintenance                | `php8.4 artisan down` / `php8.4 artisan up` (dans `current`)                                                                                                                                |

@@ -80,7 +80,7 @@ jobs:
           SSH="ssh -i ~/.ssh/deploy_key -p $PORT $USER@$HOST"
           scp -i ~/.ssh/deploy_key -P "$PORT" "$RUNNER_TEMP/release.tgz" "$USER@$HOST:/tmp/light-lms-$RELEASE.tgz"
           $SSH "set -e
-            mkdir -p /var/www/light-lms/releases/$RELEASE
-            tar -xzf /tmp/light-lms-$RELEASE.tgz -C /var/www/light-lms/releases/$RELEASE
+            mkdir -p /var/www/html/light-lms/releases/$RELEASE
+            tar -xzf /tmp/light-lms-$RELEASE.tgz -C /var/www/html/light-lms/releases/$RELEASE
             rm /tmp/light-lms-$RELEASE.tgz
-            bash /var/www/light-lms/releases/$RELEASE/deploy/activate.sh $RELEASE"
+            bash /var/www/html/light-lms/releases/$RELEASE/deploy/activate.sh $RELEASE"

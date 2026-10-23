@@ -2,17 +2,17 @@
 # Light LMS — activate an uploaded release on the server.
 #
 # Usage (run by the deploy workflow, or by hand):
-#   bash /var/www/light-lms/releases/<release>/deploy/activate.sh <release>
+#   bash /var/www/html/light-lms/releases/<release>/deploy/activate.sh <release>
 #
 # Layout:
-#   /var/www/light-lms/
+#   /var/www/html/light-lms/
 #   ├── releases/<release>/   one directory per deployment
 #   ├── shared/.env           production settings (never in Git)
 #   ├── shared/storage/       logs, sessions files, uploads…
 #   └── current -> releases/<release>   what Nginx and the worker serve
 set -euo pipefail
 
-APP_DIR="${APP_DIR:-/var/www/light-lms}"
+APP_DIR="${APP_DIR:-/var/www/html/light-lms}"
 KEEP_RELEASES="${KEEP_RELEASES:-5}"
 RELEASE="${1:?Usage: activate.sh <release>}"
 RELEASE_DIR="$APP_DIR/releases/$RELEASE"
