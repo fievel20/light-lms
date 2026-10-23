@@ -77,12 +77,15 @@ Chaque validation est conservée dans l'historique ; c'est **la plus récente** 
 | **Écart**      | Autoévaluation et validation diffèrent                                             |
 | **Acquise**    | Votre dernière validation atteint le seuil (ou vaut 1 pour une compétence binaire) |
 
+**Validation rapide** : quand des autoévaluations attendent, le bouton **Validation rapide (N)** de la fiche apprenant (ou **Examiner** depuis l'accueil et le suivi) les présente une par une : le niveau est pré-rempli avec l'autoévaluation, un commentaire est possible, puis **Valider et suivant** ou **Passer**. À la fin, un bouton ouvre directement l'apprenant suivant qui a des autoévaluations à examiner.
+
 ### 6. Suivre les promotions
 
-- **Tableau de bord** (accueil) : promotions en cours, progression moyenne, nombre d'autoévaluations à examiner et d'invitations en attente.
+- **Tableau de bord** (accueil) : promotions en cours, progression moyenne, nombre d'autoévaluations à examiner (cliquable pour lancer la validation rapide) et d'invitations en attente.
 - **Suivi de la promotion** (bouton « Suivi » sur la fiche promotion) :
-    - sur mobile, une carte par apprenant avec sa progression ;
-    - sur grand écran, une **matrice apprenants × compétences** : ✓ = acquise, nombre = niveau validé (ou autoévalué si pas encore validé), point orange = à examiner ; la dernière ligne compte les apprenants ayant acquis chaque compétence.
+    - tri des apprenants par nom ou par progression, filtre « À examiner seulement », bouton **Examiner (N)** ;
+    - sur mobile, une carte par apprenant avec sa progression et une bande de couleurs (une par compétence) ;
+    - sur grand écran, une **carte de chaleur apprenants × compétences** : vert = acquise, ambre plus ou moins soutenu = niveau validé plus ou moins proche du seuil, violet clair = autoévaluée seulement, pointillés = pas encore évaluée, point orange = à examiner ; la dernière ligne compte les apprenants ayant acquis chaque compétence.
 
 La progression d'un apprenant est le pourcentage de compétences acquises ; celle de la promotion est la moyenne de ses apprenants.
 

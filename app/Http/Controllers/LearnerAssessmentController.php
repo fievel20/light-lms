@@ -8,6 +8,7 @@ use App\Models\Competency;
 use App\Models\Promotion;
 use App\Models\User;
 use App\Queries\LearnerCompetencies;
+use App\Queries\ReviewQueue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,7 +19,7 @@ use Inertia\Response;
  */
 class LearnerAssessmentController extends Controller
 {
-    public function show(Promotion $promotion, User $learner, LearnerCompetencies $competencies): Response
+    public function show(Promotion $promotion, User $learner, LearnerCompetencies $competencies, ReviewQueue $queue): Response
     {
         $this->ensureEnrolled($promotion, $learner);
 
@@ -30,6 +31,8 @@ class LearnerAssessmentController extends Controller
             'framework' => $promotion->framework()->first(['id', 'name'])?->only(['id', 'name']),
             'competencies' => $rows,
             'summary' => LearnerCompetencies::totals($rows),
+            // Lazy: only needed for the "next learner" button of the quick review.
+            'nextToReview' => fn () => $queue->nextAfter($promotion, $learner->id),
         ]);
     }
 

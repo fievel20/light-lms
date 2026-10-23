@@ -17,11 +17,11 @@
     import AppHead from '@/components/AppHead.svelte';
     import Heading from '@/components/Heading.svelte';
     import ProgressBar from '@/components/progress/ProgressBar.svelte';
-    import { Badge } from '@/components/ui/badge';
+    import Zap from '@lucide/svelte/icons/zap';
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
     import { toUrl } from '@/lib/utils';
-    import { create, progress, show } from '@/routes/promotions';
+    import { create, progress, review, show } from '@/routes/promotions';
 
     type PromotionSummary = {
         id: number;
@@ -105,7 +105,13 @@
                             </p>
                         </div>
                         {#if promotion.to_review > 0}
-                            <Badge>{promotion.to_review} à examiner</Badge>
+                            <Link
+                                href={toUrl(review(promotion.id))}
+                                class="inline-flex shrink-0 items-center gap-1 rounded-full bg-warning-soft px-2.5 py-1 text-xs font-semibold text-warning-foreground transition-colors hover:bg-warning/30 dark:text-warning"
+                            >
+                                <Zap class="size-3" />
+                                {promotion.to_review} à examiner
+                            </Link>
                         {/if}
                     </div>
 
