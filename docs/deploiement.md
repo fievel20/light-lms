@@ -86,7 +86,7 @@ GRANT ALL PRIVILEGES ON light_lms.* TO 'light_lms'@'localhost';"
 ### Dossiers et `.env`
 
 ```bash
-sudo mkdir -p /var/www/light-lms/releases /var/www/light-lms/shared/storage
+sudo mkdir -p /var/www/light-lms/releases /var/www/light-lms/shared/storage/logs
 sudo chown -R deploy:www-data /var/www/light-lms
 sudo chmod -R 2775 /var/www/light-lms/shared
 ```
