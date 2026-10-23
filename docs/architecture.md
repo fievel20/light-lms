@@ -7,7 +7,7 @@
 | Backend       | Laravel 13, PHP 8.4+ ; authentification Fortify (connexion, mot de passe oublié, 2FA, passkeys) |
 | Front         | Inertia 3 + Svelte 5 (runes) + TypeScript, Tailwind 4, composants shadcn-svelte                 |
 | Routes typées | Laravel Wayfinder : `resources/js/actions` et `resources/js/routes`, générés (non versionnés)   |
-| Base          | SQLite en local et en tests, MySQL 8 prévu en production                                        |
+| Base          | SQLite en local et en tests, MariaDB en production (VPS partagé avec d’autres sites)            |
 | File          | Driver `database` : les emails d'invitation partent en file d'attente                           |
 | Tests         | Pest 5 (tests de fonctionnalité sur base SQLite en mémoire)                                     |
 

@@ -29,8 +29,8 @@ Environ 240 tests Pest, Larastan niveau 7, CI GitHub Actions.
 
 Voir le [guide de déploiement](deploiement.md). À faire :
 
-- [ ] Préparer le serveur (Nginx, PHP 8.4-FPM, MySQL 8, Supervisor, certificat Let's Encrypt, pare-feu).
-- [ ] Créer la base et l'utilisateur MySQL, le `.env` de production.
+- [ ] Préparer le serveur (hôte virtuel Apache, PHP 8.4-FPM, Supervisor, certificat Let's Encrypt).
+- [ ] Créer la base et l'utilisateur MariaDB, le `.env` de production.
 - [ ] Configurer le SMTP Ionos et tester l'envoi réel d'une invitation.
 - [ ] Lancer le worker de file d'attente (Supervisor).
 - [ ] Brancher le déploiement automatique (GitHub Actions, secrets SSH).
