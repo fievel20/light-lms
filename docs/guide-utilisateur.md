@@ -59,7 +59,7 @@ Cliquez sur le nom d'une promotion pour ouvrir sa fiche.
 
 Pour chaque **nouvel** apprenant, un email d'invitation part automatiquement. Il contient un lien personnel valable **7 jours** pour choisir son mot de passe. Un apprenant déjà existant (même email) est simplement ajouté à la promotion, sans nouvelle invitation : un apprenant peut appartenir à plusieurs promotions.
 
-Sur la fiche promotion, chaque apprenant porte le badge **Activé** ou **Invité le …**. Le bouton **Renvoyer l'invitation** génère un nouveau lien. **Retirer** enlève l'apprenant de la promotion sans supprimer son compte.
+Sur la fiche promotion, chaque apprenant porte l’étiquette **Activé** ou **Invité le …**. Le bouton **Renvoyer l'invitation** génère un nouveau lien. **Retirer** enlève l'apprenant de la promotion sans supprimer son compte.
 
 ### 5. Valider les compétences
 

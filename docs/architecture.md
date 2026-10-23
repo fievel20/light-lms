@@ -126,7 +126,10 @@ Verrous :
 | ------------ | ----------------------------------------------------------------------------------------------------- |
 | Tous         | `GET /dashboard` (accueil formateur ou apprenant selon le rôle)                                       |
 | Formateur    | `promotions.*` (CRUD sans suppression, `archive`, `unarchive`, `progress` = `/promotions/{id}/suivi`) |
-| Formateur    | `promotions.learners.store / import / destroy / show`, `promotions.learners.assessments.store`        |
+| Formateur    | `current-promotion.update` (`PUT /promotion-active`) : promotion active mémorisée                     |
+| Formateur    | `promotions.competencies.index / show` (`/promotions/{id}/competences[/{competence}]`)                |
+| Formateur    | `promotions.learners.index / show` (`/promotions/{id}/apprenants[/{apprenant}]`)                      |
+| Formateur    | `promotions.learners.store / import / destroy`, `promotions.learners.assessments.store` (`quiet`)     |
 | Formateur    | `learners.invitation.resend`                                                                          |
 | Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                |
 | Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                 |
