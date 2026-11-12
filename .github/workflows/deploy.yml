@@ -2,7 +2,8 @@ name: deploy
 
 # Deploys main to the VPS once the "tests" workflow has passed, checks that
 # the site answers, and puts the previous release back online if it does not.
-# Disabled until the repository variable DEPLOY_ENABLED is set to "true"
+# Disabled until the repository variable DEPLOY_ENABLED is set to "true";
+# SITE_URL holds the site address, e.g. https://lms.example.fr
 # (Settings → Secrets and variables → Actions → Variables).
 on:
   workflow_run:
@@ -26,12 +27,15 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://lms.example.fr
+      url: ${{ vars.SITE_URL }}
     env:
       APP_DIR: /var/www/html/light-lms
-      SITE_URL: https://lms.example.fr
+      SITE_URL: ${{ vars.SITE_URL }}
 
     steps:
+      - name: Check settings
+        run: '[ -n "$SITE_URL" ] || { echo "::error::Variable SITE_URL manquante (Settings → Secrets and variables → Actions → Variables)"; exit 1; }'
+
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

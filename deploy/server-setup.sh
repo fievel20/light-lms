@@ -8,7 +8,7 @@
 #   sudo bash light-lms-setup.sh reset    # remove what this script installed
 set -euo pipefail
 
-DOMAIN="${DOMAIN:-lms.example.fr}"
+DOMAIN="${DOMAIN:-}"
 APP_DIR="${APP_DIR:-/var/www/html/light-lms}"
 RAW="https://raw.githubusercontent.com/fievel20/light-lms/${REF:-main}/deploy"
 ENV_FILE="$APP_DIR/shared/.env"
@@ -35,6 +35,8 @@ preflight() {
     systemctl is-active --quiet mariadb || fail "MariaDB ne tourne pas."
     mysql -e 'SELECT 1' > /dev/null 2>&1 \
         || fail "« sudo mysql » demande un mot de passe : voir l'annexe « Mot de passe root MariaDB » du guide."
+    [ -n "$DOMAIN" ] || read -r -p "  Domaine du site (ex. lms.example.fr) : " DOMAIN
+    [[ $DOMAIN =~ ^[a-z0-9.-]+\.[a-z]+$ ]] || fail "Domaine invalide : « $DOMAIN »."
 }
 
 install() {
@@ -142,7 +144,7 @@ SQL
     if [ -f "$SITE" ]; then
         info "Déjà présent, conservé (certbot y a peut-être ajouté la redirection HTTPS)."
     else
-        curl -fsSL "$RAW/apache.conf" | sed "s#lms.example.fr#$DOMAIN#g; s#/var/www/html/light-lms#$APP_DIR#g" > "$SITE"
+        curl -fsSL "$RAW/apache.conf" | sed "s#lms\.example\.fr#$DOMAIN#g; s#/var/www/html/light-lms#$APP_DIR#g" > "$SITE"
     fi
     a2enmod -q proxy_fcgi setenvif rewrite headers expires
     a2ensite -q light-lms
