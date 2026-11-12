@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('competency_id')->constrained()->cascadeOnDelete();
             $table->timestamp('celebrated_at');
 
-            $table->unique(['learner_id', 'promotion_id', 'competency_id']);
+            $table->unique(['learner_id', 'promotion_id', 'competency_id'], 'competency_celebrations_once_unique');
         });
     }
 

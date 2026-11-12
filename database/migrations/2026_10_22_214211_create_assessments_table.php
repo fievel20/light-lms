@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->timestamps();
 
-            $table->index(['promotion_id', 'learner_id', 'competency_id', 'created_at']);
+            $table->index(['promotion_id', 'learner_id', 'competency_id', 'created_at'], 'assessments_history_index');
         });
     }
 
