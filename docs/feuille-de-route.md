@@ -34,6 +34,10 @@ Voir le [guide de déploiement](deploiement.md). À faire :
 - [ ] Premier déploiement, compte formateur (`php8.4 artisan lms:create-trainer`), test réel d'une invitation.
 - [ ] Mettre en place la sauvegarde quotidienne de la base.
 
+## Phase 2 : séquences pédagogiques et parcours
+
+Voir le [brief de la phase 2](brief-phase-2.md) : séquences en Markdown avec images et icônes, parcours, affectation à une promotion et ouverture séquence par séquence.
+
 ## Idées pour la suite
 
 - Historique complet des évaluations d'une compétence (déjà stocké, pas encore affiché).
