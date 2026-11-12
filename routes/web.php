@@ -33,7 +33,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sequences/{sequence}/images/{image}', [SequenceImageController::class, 'show'])
         ->scopeBindings()
         ->name('sequences.images.show');
-    Route::get('icons/{icon}', [IconController::class, 'show'])->name('icons.show');
+    // Not /icons/: Apache serves its own images there (Alias /icons/ in mods-enabled/alias.conf).
+    Route::get('icones/{icon}', [IconController::class, 'show'])->name('icons.show');
 });
 
 Route::middleware(['auth', 'verified', 'learner'])->group(function () {
@@ -78,7 +79,10 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('sequences', SequenceController::class);
 
     Route::resource('learning-paths', LearningPathController::class);
-    Route::resource('icons', IconController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('icones', IconController::class)
+        ->parameters(['icones' => 'icon'])
+        ->names('icons')
+        ->only(['index', 'store', 'update', 'destroy']);
     Route::get('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'index'])->name('promotions.learning-paths.index');
     Route::post('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'store'])->name('promotions.learning-paths.store');
     Route::delete('promotions/{promotion}/parcours/{learning_path}', [PromotionLearningPathController::class, 'destroy'])->name('promotions.learning-paths.destroy');
