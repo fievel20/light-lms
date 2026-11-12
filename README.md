@@ -35,15 +35,15 @@ php artisan lms:create-trainer
 
 ## Documentation
 
-| Document                                       | Contenu                                                   |
-| ---------------------------------------------- | --------------------------------------------------------- |
-| [Guide utilisateur](docs/guide-utilisateur.md) | Parcours du formateur et de l'apprenant, écran par écran  |
-| [Formats d'import](docs/formats-import.md)     | Fichier CSV des apprenants, fichier JSON des référentiels |
-| [Architecture](docs/architecture.md)           | Modèle de données, règles métier, organisation du code    |
-| [Développement](docs/developpement.md)         | Installation, commandes, TDD, CI, conventions             |
-| [Déploiement](docs/deploiement.md)             | Mise en production sur le VPS Ionos, exploitation         |
-| [Feuille de route](docs/feuille-de-route.md)   | Ce qui est fait, ce qui reste                             |
-| [Brief initial](docs/brief.md)                 | Cahier des charges du MVP                                 |
+| Document                                       | Contenu                                                          |
+| ---------------------------------------------- | ---------------------------------------------------------------- |
+| [Guide utilisateur](docs/guide-utilisateur.md) | Parcours du formateur et de l'apprenant, écran par écran         |
+| [Formats d'import](docs/formats-import.md)     | Fichier CSV des apprenants, fichier JSON des référentiels        |
+| [Architecture](docs/architecture.md)           | Modèle de données, règles métier, organisation du code           |
+| [Développement](docs/developpement.md)         | Installation, commandes, TDD, CI, conventions                    |
+| [Déploiement](docs/deploiement.md)             | Déploiement continu sur le VPS Ionos, installation, exploitation |
+| [Feuille de route](docs/feuille-de-route.md)   | Ce qui est fait, ce qui reste                                    |
+| [Brief initial](docs/brief.md)                 | Cahier des charges du MVP                                        |
 
 ## Qualité
 

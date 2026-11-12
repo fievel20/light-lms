@@ -29,13 +29,10 @@ Environ 240 tests Pest, Larastan niveau 7, CI GitHub Actions.
 
 Voir le [guide de déploiement](deploiement.md). À faire :
 
-- [ ] Préparer le serveur (hôte virtuel Apache, PHP 8.4-FPM, Supervisor, certificat Let's Encrypt).
-- [ ] Créer la base et l'utilisateur MariaDB, le `.env` de production.
-- [ ] Configurer le SMTP Ionos et tester l'envoi réel d'une invitation.
-- [ ] Lancer le worker de file d'attente (Supervisor).
-- [ ] Brancher le déploiement automatique (GitHub Actions, secrets SSH).
+- [ ] Préparer le serveur : `deploy/server-setup.sh` (Apache, PHP-FPM 8.4, MariaDB, `.env`, worker, HTTPS).
+- [ ] Brancher le déploiement continu (secrets GitHub, `DEPLOY_ENABLED`).
+- [ ] Premier déploiement, compte formateur (`php8.4 artisan lms:create-trainer`), test réel d'une invitation.
 - [ ] Mettre en place la sauvegarde quotidienne de la base.
-- [ ] Créer le compte formateur : `php artisan lms:create-trainer`.
 
 ## Idées pour la suite
 
