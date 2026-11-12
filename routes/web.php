@@ -18,6 +18,7 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
 use App\Http\Controllers\PromotionLearningPathController;
+use App\Http\Controllers\PromotionSequenceCompletionController;
 use App\Http\Controllers\SequenceController;
 use App\Http\Controllers\SequenceImageController;
 use App\Http\Controllers\SequenceReleaseController;
@@ -42,6 +43,7 @@ Route::middleware(['auth', 'verified', 'learner'])->group(function () {
     Route::post('mes-competences/{promotion}/{competency}', [MyCompetencyController::class, 'store'])->name('my-competencies.store');
     Route::get('mes-parcours', [MyLearningPathController::class, 'index'])->name('my-learning-paths.index');
     Route::get('mes-parcours/{promotion}/{learning_path}/{sequence}', [MyLearningPathController::class, 'show'])->name('my-learning-paths.show');
+    Route::put('mes-parcours/{promotion}/{learning_path}/{sequence}/terminee', [MyLearningPathController::class, 'complete'])->name('my-learning-paths.complete');
 });
 
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
@@ -86,6 +88,7 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::get('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'index'])->name('promotions.learning-paths.index');
     Route::post('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'store'])->name('promotions.learning-paths.store');
     Route::delete('promotions/{promotion}/parcours/{learning_path}', [PromotionLearningPathController::class, 'destroy'])->name('promotions.learning-paths.destroy');
+    Route::get('promotions/{promotion}/sequences-realisees', [PromotionSequenceCompletionController::class, 'index'])->name('promotions.sequence-completions.index');
     Route::put('promotions/{promotion}/sequences/{sequence}/release', [SequenceReleaseController::class, 'update'])->name('promotions.sequences.release');
     Route::post('learning-paths/{learning_path}/sequences', [LearningPathSequenceController::class, 'store'])->name('learning-paths.sequences.store');
     Route::put('learning-paths/{learning_path}/sequences', [LearningPathSequenceController::class, 'reorder'])->name('learning-paths.sequences.reorder');

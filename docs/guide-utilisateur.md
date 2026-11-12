@@ -131,6 +131,13 @@ Menu **Séquences ouvertes** (promotion active), ou bouton **Parcours** sur la f
 - Retirer un parcours de la promotion masque à nouveau ses séquences. Un parcours affecté ne peut pas être supprimé.
 - Promotion archivée : les séquences ouvertes restent lisibles, plus rien ne s'ouvre.
 
+**Séquences réalisées.** Menu **Séquences réalisées** (promotion active), ou bouton **Réalisées** sur la fiche d'une promotion. Les apprenants valident eux-mêmes chaque séquence qu'ils terminent ; cette page montre où en est la promotion, sur les séquences ouvertes :
+
+- **Par séquence** : combien d'apprenants l'ont terminée ; touche la séquence pour voir qui l'a validée (avec la date) et qui pas encore.
+- **Par apprenant** : combien de séquences chacun a terminées, et lesquelles.
+
+Une séquence présente dans deux parcours ne compte qu'une fois. Une séquence masquée à nouveau disparaît du suivi, mais les validations sont conservées.
+
 ---
 
 ## Parcours de l'apprenant
@@ -166,3 +173,4 @@ Onglet **Parcours** (choix de la promotion s'il y en a plusieurs).
 - Chaque parcours de la promotion liste ses **séquences ouvertes**, dans l'ordre ; celles ouvertes depuis moins de 7 jours portent la mention **Nouveau**.
 - Une séquence masquée par le formateur n'apparaît pas, même avec son adresse.
 - La page d'une séquence se lit sur téléphone : toucher une image l'agrandit, les liens s'ouvrent dans un nouvel onglet, et les boutons **Précédente / Suivante** passent d'une séquence ouverte à l'autre.
+- À la fin d'une séquence, le bouton **J'ai terminé** la valide : le formateur le voit, et la séquence porte une coche dans la liste (avec le compte « 2 / 5 terminées » par parcours). **Annuler** retire la validation en cas d'erreur. Dans une promotion archivée, on ne valide plus.

@@ -12,6 +12,7 @@
     import ChartColumn from '@lucide/svelte/icons/chart-column';
     import Eye from '@lucide/svelte/icons/eye';
     import FileUp from '@lucide/svelte/icons/file-up';
+    import ListChecks from '@lucide/svelte/icons/list-checks';
     import Mail from '@lucide/svelte/icons/mail';
     import Pencil from '@lucide/svelte/icons/pencil';
     import UserMinus from '@lucide/svelte/icons/user-minus';
@@ -29,6 +30,7 @@
     import { edit, progress } from '@/routes/promotions';
     import * as promotionLearningPaths from '@/routes/promotions/learning-paths';
     import { show as learnerPage } from '@/routes/promotions/learners';
+    import * as sequenceCompletions from '@/routes/promotions/sequence-completions';
     import type { ImportReport, Learner } from '@/types/learner';
     import type { Promotion } from '@/types/promotion';
 
@@ -93,6 +95,17 @@
                     >
                         <Eye class="size-4" />
                         Parcours
+                    </Link>
+                {/snippet}
+            </Button>
+            <Button variant="outline" size="sm" asChild class="h-11 flex-1 sm:h-9">
+                {#snippet children(props)}
+                    <Link
+                        {...props}
+                        href={toUrl(sequenceCompletions.index(promotion.id))}
+                    >
+                        <ListChecks class="size-4" />
+                        Réalisées
                     </Link>
                 {/snippet}
             </Button>

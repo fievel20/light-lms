@@ -21,6 +21,7 @@
 | Espace formateur       | Promotion active dans le menu, vues **par compétence** et **par apprenant**, validation en un geste avec enregistrement automatique, carte de chaleur |
 | Charte « labo »        | Papier, encre indigo, vert acide, filets fins, Space Grotesk / Inter / JetBrains Mono                                                                 |
 | Retraits               | Validation rapide, système de badges, suppression de compte depuis le profil                                                                          |
+| Séquences réalisées    | L'apprenant valide chaque séquence terminée ; le formateur suit la promotion par séquence ou par apprenant                                            |
 | Comptes apprenants     | Le formateur corrige l'email d'un apprenant, lui envoie un lien de réinitialisation ou lui donne un mot de passe provisoire                           |
 | Finitions et nettoyage | Favicon, composants et layouts du kit inutilisés supprimés                                                                                            |
 

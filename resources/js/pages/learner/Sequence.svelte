@@ -7,11 +7,16 @@
 </script>
 
 <script lang="ts">
-    import { Link } from '@inertiajs/svelte';
+    import { Form, Link } from '@inertiajs/svelte';
     import ArrowLeft from '@lucide/svelte/icons/arrow-left';
     import ArrowRight from '@lucide/svelte/icons/arrow-right';
+    import CircleCheck from '@lucide/svelte/icons/circle-check';
     import X from '@lucide/svelte/icons/x';
+    import MyLearningPathController from '@/actions/App/Http/Controllers/MyLearningPathController';
     import AppHead from '@/components/AppHead.svelte';
+    import { Button } from '@/components/ui/button';
+    import { Spinner } from '@/components/ui/spinner';
+    import { formatDate } from '@/lib/dates';
     import { cn, toUrl } from '@/lib/utils';
     import { show } from '@/routes/my-learning-paths';
 
@@ -26,13 +31,14 @@
         position,
         count,
     }: {
-        promotion: { id: number; name: string };
+        promotion: { id: number; name: string; archived: boolean };
         learningPath: { id: number; name: string };
         sequence: {
             id: number;
             title: string;
             summary: string | null;
             html: string;
+            completed_at: string | null;
         };
         previous: Neighbour;
         next: Neighbour;
@@ -85,6 +91,73 @@
     >
         {@html sequence.html}
     </article>
+
+    <!-- The learner validates the sequence themself when they finish it. -->
+    <Form
+        {...MyLearningPathController.complete.form([
+            promotion.id,
+            learningPath.id,
+            sequence.id,
+        ])}
+        options={{ preserveScroll: true }}
+        class={cn(
+            'flex flex-col items-center gap-3 surface p-4 text-center sm:flex-row sm:text-left',
+            sequence.completed_at && 'border-success bg-success-soft',
+        )}
+    >
+        {#snippet children({ errors, processing })}
+            <input
+                type="hidden"
+                name="completed"
+                value={sequence.completed_at ? '0' : '1'}
+            />
+            {#if sequence.completed_at}
+                <CircleCheck class="size-8 shrink-0 text-success-ink" />
+                <p class="flex-1">
+                    <span class="block font-semibold">Séquence terminée</span>
+                    <span class="block text-sm text-muted-foreground"
+                        >Validée le {formatDate(sequence.completed_at)}</span
+                    >
+                </p>
+                {#if !promotion.archived}
+                    <Button
+                        type="submit"
+                        variant="ghost"
+                        disabled={processing}
+                        class="h-11 text-muted-foreground sm:h-9"
+                    >
+                        {#if processing}<Spinner />{/if}
+                        Annuler
+                    </Button>
+                {/if}
+            {:else if promotion.archived}
+                <p class="flex-1 text-sm text-muted-foreground">
+                    Cette promotion est archivée : les séquences ne peuvent plus
+                    être validées.
+                </p>
+            {:else}
+                <p class="flex-1">
+                    <span class="block font-semibold">Tu as fini ?</span>
+                    <span class="block text-sm text-muted-foreground"
+                        >Valide la séquence : ton formateur le verra.</span
+                    >
+                </p>
+                <Button
+                    type="submit"
+                    disabled={processing}
+                    class="h-12 w-full sm:h-10 sm:w-auto"
+                >
+                    {#if processing}<Spinner />{:else}<CircleCheck
+                            class="size-4"
+                        />{/if}
+                    J'ai terminé
+                </Button>
+            {/if}
+            {#if errors.completed}
+                <p class="text-sm text-destructive">{errors.completed}</p>
+            {/if}
+        {/snippet}
+    </Form>
 
     <nav class="grid grid-cols-2 gap-3" aria-label="Séquences du parcours">
         {#if previous}

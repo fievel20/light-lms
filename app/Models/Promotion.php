@@ -69,6 +69,16 @@ class Promotion extends Model
     }
 
     /**
+     * Sequences its learners marked as finished.
+     *
+     * @return HasMany<SequenceCompletion, $this>
+     */
+    public function sequenceCompletions(): HasMany
+    {
+        return $this->hasMany(SequenceCompletion::class);
+    }
+
+    /**
      * Ids of the sequences of the paths assigned to this promotion.
      *
      * @return list<int>

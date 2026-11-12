@@ -8,6 +8,7 @@
 
 <script lang="ts">
     import { Link } from '@inertiajs/svelte';
+    import Check from '@lucide/svelte/icons/check';
     import ChevronRight from '@lucide/svelte/icons/chevron-right';
     import Route from '@lucide/svelte/icons/route';
     import AppHead from '@/components/AppHead.svelte';
@@ -25,6 +26,7 @@
         summary: string | null;
         released_at: string;
         is_new: boolean;
+        completed_at: string | null;
     };
 
     let {
@@ -41,6 +43,9 @@
             sequences: OpenedSequence[];
         }[];
     } = $props();
+
+    const done = (sequences: OpenedSequence[]) =>
+        sequences.filter((sequence) => sequence.completed_at).length;
 </script>
 
 <AppHead title="Mes parcours" />
@@ -93,6 +98,13 @@
             <section class="flex flex-col gap-3">
                 <div>
                     <h2 class="font-display text-xl font-bold">{path.name}</h2>
+                    <p class="eyebrow">
+                        {done(path.sequences)} / {path.sequences.length} terminée{done(
+                            path.sequences,
+                        ) > 1
+                            ? 's'
+                            : ''}
+                    </p>
                     {#if path.description}
                         <p class="text-sm text-muted-foreground">
                             {path.description}
@@ -109,10 +121,20 @@
                                 )}
                                 class="flex min-h-16 items-center gap-3 surface p-3 transition-colors hover:bg-muted/50"
                             >
-                                <span
-                                    class="grid size-9 shrink-0 place-items-center rounded-md bg-primary-soft figures font-semibold text-primary"
-                                    >{i + 1}</span
-                                >
+                                {#if sequence.completed_at}
+                                    <span
+                                        class="grid size-9 shrink-0 place-items-center rounded-md bg-success text-success-foreground"
+                                        title="Terminée"
+                                    >
+                                        <Check class="size-5" />
+                                        <span class="sr-only">Terminée :</span>
+                                    </span>
+                                {:else}
+                                    <span
+                                        class="grid size-9 shrink-0 place-items-center rounded-md bg-primary-soft figures font-semibold text-primary"
+                                        >{i + 1}</span
+                                    >
+                                {/if}
                                 <span class="min-w-0 flex-1">
                                     <span
                                         class="flex flex-wrap items-center gap-2"
