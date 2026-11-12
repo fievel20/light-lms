@@ -52,6 +52,48 @@ class Promotion extends Model
         return $this->hasMany(Assessment::class);
     }
 
+    /**
+     * @return BelongsToMany<LearningPath, $this>
+     */
+    public function learningPaths(): BelongsToMany
+    {
+        return $this->belongsToMany(LearningPath::class)->withTimestamps()->orderBy('name');
+    }
+
+    /**
+     * @return HasMany<SequenceRelease, $this>
+     */
+    public function sequenceReleases(): HasMany
+    {
+        return $this->hasMany(SequenceRelease::class);
+    }
+
+    /**
+     * Ids of the sequences of the paths assigned to this promotion.
+     *
+     * @return list<int>
+     */
+    public function pathSequenceIds(): array
+    {
+        $ids = Sequence::query()
+            ->whereHas('learningPaths.promotions', fn (Builder $query) => $query->whereKey($this->id))
+            ->orderBy('id')
+            ->pluck('id')
+            ->all();
+
+        return array_values(array_map(intval(...), $ids));
+    }
+
+    /**
+     * Ids of the sequences opened to this promotion.
+     *
+     * @return list<int>
+     */
+    public function releasedSequenceIds(): array
+    {
+        return array_values(array_map(intval(...), $this->sequenceReleases()->orderBy('sequence_id')->pluck('sequence_id')->all()));
+    }
+
     public function isArchived(): bool
     {
         return $this->archived_at !== null;

@@ -22,6 +22,7 @@
     import { nativeFieldClass } from '@/lib/form';
     import { cn, toUrl } from '@/lib/utils';
     import { edit } from '@/routes/learning-paths';
+    import * as promotionLearningPaths from '@/routes/promotions/learning-paths';
     import * as sequenceRoutes from '@/routes/sequences';
     import type { LearningPath } from '@/types/learning-path';
     import type { Sequence } from '@/types/sequence';
@@ -29,10 +30,12 @@
     let {
         learningPath,
         sequences,
+        promotions,
         availableSequences,
     }: {
         learningPath: LearningPath;
         sequences: Sequence[];
+        promotions: { id: number; name: string }[];
         availableSequences: { id: number; title: string }[];
     } = $props();
 
@@ -80,6 +83,22 @@
                     {learningPath.description}
                 </p>
             {/if}
+            <p class="mt-1 text-sm text-muted-foreground">
+                {#if promotions.length === 0}
+                    Affecté à aucune promotion.
+                {:else}
+                    Promotion{promotions.length > 1 ? 's' : ''} :
+                    {#each promotions as promotion, i (promotion.id)}
+                        <Link
+                            href={toUrl(
+                                promotionLearningPaths.index(promotion.id),
+                            )}
+                            class="underline underline-offset-4"
+                            >{promotion.name}</Link
+                        >{i < promotions.length - 1 ? ', ' : ''}
+                    {/each}
+                {/if}
+            </p>
         </div>
 
         <Button variant="outline" asChild class="h-11 w-full sm:h-9 sm:w-auto">

@@ -14,8 +14,10 @@ use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
+use App\Http\Controllers\PromotionLearningPathController;
 use App\Http\Controllers\SequenceController;
 use App\Http\Controllers\SequenceImageController;
+use App\Http\Controllers\SequenceReleaseController;
 use App\Http\Controllers\TrainerCompetencyController;
 use App\Http\Controllers\TrainerLearnerController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +66,10 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('sequences', SequenceController::class);
 
     Route::resource('learning-paths', LearningPathController::class);
+    Route::get('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'index'])->name('promotions.learning-paths.index');
+    Route::post('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'store'])->name('promotions.learning-paths.store');
+    Route::delete('promotions/{promotion}/parcours/{learning_path}', [PromotionLearningPathController::class, 'destroy'])->name('promotions.learning-paths.destroy');
+    Route::put('promotions/{promotion}/sequences/{sequence}/release', [SequenceReleaseController::class, 'update'])->name('promotions.sequences.release');
     Route::post('learning-paths/{learning_path}/sequences', [LearningPathSequenceController::class, 'store'])->name('learning-paths.sequences.store');
     Route::put('learning-paths/{learning_path}/sequences', [LearningPathSequenceController::class, 'reorder'])->name('learning-paths.sequences.reorder');
     Route::delete('learning-paths/{learning_path}/sequences/{sequence}', [LearningPathSequenceController::class, 'destroy'])->name('learning-paths.sequences.destroy');
