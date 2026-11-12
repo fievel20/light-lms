@@ -15,6 +15,7 @@
     import Pencil from '@lucide/svelte/icons/pencil';
     import Route from '@lucide/svelte/icons/route';
     import Shapes from '@lucide/svelte/icons/shapes';
+    import UserCog from '@lucide/svelte/icons/user-cog';
     import Plus from '@lucide/svelte/icons/plus';
     import PromotionController from '@/actions/App/Http/Controllers/PromotionController';
     import AppHead from '@/components/AppHead.svelte';
@@ -24,6 +25,7 @@
     import { cn, toUrl } from '@/lib/utils';
     import * as frameworks from '@/routes/frameworks';
     import * as icons from '@/routes/icons';
+    import * as learners from '@/routes/learners';
     import * as learningPaths from '@/routes/learning-paths';
     import { create, edit, show } from '@/routes/promotions';
     import * as sequences from '@/routes/sequences';
@@ -54,6 +56,13 @@
             />
             <!-- On phones these have no tab of their own. -->
             <div class="-mt-4 flex flex-wrap gap-x-4 md:hidden">
+                <Link
+                    href={toUrl(learners.index())}
+                    class="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
+                >
+                    <UserCog class="size-4" />
+                    Comptes apprenants
+                </Link>
                 <Link
                     href={toUrl(frameworks.index())}
                     class="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
