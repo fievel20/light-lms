@@ -42,7 +42,7 @@ Voir le [brief de la phase 2](brief-phase-2.md) : séquences en Markdown avec im
 | ----- | ---------------------------------------------------------------------------------------------------------- | ---- |
 | 8     | Séquences : création, modification, suppression, éditeur Markdown avec barre d'outils et aperçu, rendu sûr | ✅   |
 | 9     | Images, palette d'icônes, duplication                                                                      | ✅   |
-| 10    | Parcours                                                                                                   |      |
+| 10    | Parcours                                                                                                   | ✅   |
 | 11    | Affectation à une promotion, ouverture séquence par séquence                                               |      |
 | 12    | Espace apprenant : parcours et lecture                                                                     |      |
 | 13    | Déploiement : limites d'envoi, sauvegarde des images                                                       |      |

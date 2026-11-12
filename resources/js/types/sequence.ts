@@ -5,4 +5,5 @@ export type Sequence = {
     content?: string;
     html?: string;
     updated_at?: string;
+    learning_paths?: string[];
 };

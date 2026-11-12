@@ -18,8 +18,13 @@ class SequenceController extends Controller
     {
         return Inertia::render('sequences/Index', [
             'sequences' => Sequence::query()
+                ->with('learningPaths:id,name')
                 ->orderBy('title')
-                ->get(['id', 'title', 'summary', 'updated_at']),
+                ->get(['id', 'title', 'summary', 'updated_at'])
+                ->map(fn (Sequence $sequence) => [
+                    ...$sequence->only(['id', 'title', 'summary', 'updated_at']),
+                    'learning_paths' => $sequence->learningPaths->pluck('name'),
+                ]),
         ]);
     }
 
@@ -51,6 +56,8 @@ class SequenceController extends Controller
     {
         return Inertia::render('sequences/Edit', [
             'sequence' => $sequence->only(['id', 'title', 'summary', 'content']),
+            // Shown before deleting: the sequence leaves these paths.
+            'learningPaths' => $sequence->learningPaths()->pluck('name'),
         ]);
     }
 

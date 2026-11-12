@@ -8,6 +8,8 @@ use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LearnerAssessmentController;
 use App\Http\Controllers\LearnerInvitationController;
+use App\Http\Controllers\LearningPathController;
+use App\Http\Controllers\LearningPathSequenceController;
 use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
@@ -60,6 +62,11 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
         ->scopeBindings()
         ->name('sequences.images.show');
     Route::resource('sequences', SequenceController::class);
+
+    Route::resource('learning-paths', LearningPathController::class);
+    Route::post('learning-paths/{learning_path}/sequences', [LearningPathSequenceController::class, 'store'])->name('learning-paths.sequences.store');
+    Route::put('learning-paths/{learning_path}/sequences', [LearningPathSequenceController::class, 'reorder'])->name('learning-paths.sequences.reorder');
+    Route::delete('learning-paths/{learning_path}/sequences/{sequence}', [LearningPathSequenceController::class, 'destroy'])->name('learning-paths.sequences.destroy');
 });
 
 Route::middleware(['guest', 'signed'])->group(function () {

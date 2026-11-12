@@ -19,7 +19,16 @@
     import { show } from '@/routes/sequences';
     import type { Sequence } from '@/types/sequence';
 
-    let { sequence }: { sequence: Sequence } = $props();
+    let {
+        sequence,
+        learningPaths,
+    }: { sequence: Sequence; learningPaths: string[] } = $props();
+
+    const pathsNotice = $derived(
+        learningPaths.length === 0
+            ? ''
+            : `Elle sera retirée ${learningPaths.length > 1 ? 'des parcours' : 'du parcours'} : ${learningPaths.join(', ')}.`,
+    );
 </script>
 
 <AppHead title={`Modifier ${sequence.title}`} />
@@ -63,12 +72,15 @@
     >
         <h2 class="font-medium">Supprimer la séquence</h2>
         <p class="text-sm text-muted-foreground">
-            Son contenu sera définitivement perdu.
+            Son contenu et ses images seront définitivement perdus.
+            {pathsNotice}
         </p>
         <Form
             {...SequenceController.destroy.form(sequence.id)}
             onBefore={() =>
-                confirm(`Supprimer définitivement « ${sequence.title} » ?`)}
+                confirm(
+                    `Supprimer définitivement « ${sequence.title} » ?\n\n${pathsNotice}`.trim(),
+                )}
         >
             {#snippet children({ processing })}
                 <Button

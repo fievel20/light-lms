@@ -95,6 +95,13 @@
                                     >{sequence.summary}</span
                                 >
                             {/if}
+                            {#if sequence.learning_paths?.length}
+                                <span class="text-sm text-primary"
+                                    >Parcours : {sequence.learning_paths.join(
+                                        ', ',
+                                    )}</span
+                                >
+                            {/if}
                             {#if sequence.updated_at}
                                 <span class="mt-auto eyebrow pt-2"
                                     >Modifiée le {formatDate(

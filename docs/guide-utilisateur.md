@@ -103,6 +103,15 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 - Les **images** (JPEG, PNG, WebP ou GIF, 5 Mo maximum) s'ajoutent avec le bouton image, par glisser-déposer ou en **collant une capture** (Ctrl+V) dans l'éditeur. Il faut avoir enregistré la séquence une première fois. Elles ne sont visibles que par les personnes connectées.
 - **Dupliquer** (sur la page de la séquence) crée une copie, images comprises, à modifier pour en faire une variante (« Google Lens 2 »…).
 
+### 8. Construire des parcours
+
+Menu **Parcours** (sur mobile : lien sous le titre de la page Promotions). Un parcours est une suite ordonnée de séquences ; une même séquence peut servir dans plusieurs parcours.
+
+- Crée le parcours (nom, description facultative), puis **ajoute ses séquences** depuis la liste en bas de page : chacune s'ajoute à la fin.
+- **Réordonne** avec les flèches, ou par glisser-déposer sur grand écran. L'ordre est enregistré aussitôt.
+- La croix **retire** une séquence du parcours sans la supprimer de la bibliothèque.
+- Supprimer une séquence la retire de tous ses parcours : la page de modification les liste avant confirmation.
+
 ---
 
 ## Parcours de l'apprenant
