@@ -1,4 +1,5 @@
 import { preview } from '@/routes/sequences';
+import { store as storeImage } from '@/routes/sequences/images';
 
 /**
  * Server-side rendering of the editor's content, so the preview is exactly
@@ -6,21 +7,13 @@ import { preview } from '@/routes/sequences';
  */
 export async function renderMarkdown(
     content: string,
+    sequenceId: number | null,
     signal?: AbortSignal,
 ): Promise<string> {
-    const xsrf = document.cookie
-        .split('; ')
-        .find((cookie) => cookie.startsWith('XSRF-TOKEN='))
-        ?.slice('XSRF-TOKEN='.length);
-
     const response = await fetch(preview().url, {
         method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'X-XSRF-TOKEN': decodeURIComponent(xsrf ?? ''),
-        },
-        body: JSON.stringify({ content }),
+        headers: { ...jsonHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, sequence_id: sequenceId }),
         signal,
     });
 
@@ -29,6 +22,51 @@ export async function renderMarkdown(
     }
 
     return ((await response.json()) as { html: string }).html;
+}
+
+/**
+ * Uploads an image to a sequence; resolves with the Markdown to insert, or
+ * rejects with the validation message.
+ */
+export async function uploadImage(
+    sequenceId: number,
+    file: File,
+): Promise<string> {
+    const body = new FormData();
+    body.append('image', file);
+
+    const response = await fetch(storeImage(sequenceId).url, {
+        method: 'POST',
+        headers: jsonHeaders(),
+        body,
+    });
+    const data = (await response.json().catch(() => ({}))) as {
+        markdown?: string;
+        message?: string;
+    };
+
+    if (!response.ok || !data.markdown) {
+        throw new Error(
+            data.message ??
+                (response.status === 413
+                    ? 'Image trop lourde.'
+                    : `Envoi impossible (${response.status}).`),
+        );
+    }
+
+    return data.markdown;
+}
+
+function jsonHeaders(): Record<string, string> {
+    const xsrf = document.cookie
+        .split('; ')
+        .find((cookie) => cookie.startsWith('XSRF-TOKEN='))
+        ?.slice('XSRF-TOKEN='.length);
+
+    return {
+        Accept: 'application/json',
+        'X-XSRF-TOKEN': decodeURIComponent(xsrf ?? ''),
+    };
 }
 
 export type TextEdit = { text: string; start: number; end: number };
@@ -80,3 +118,49 @@ export function prefixLines(
         end: lineStart + replaced.length,
     };
 }
+
+/**
+ * Inserts text at the cursor, replacing the selection; the cursor ends after it.
+ */
+export function insertText(
+    text: string,
+    start: number,
+    end: number,
+    inserted: string,
+): TextEdit {
+    const cursor = start + inserted.length;
+
+    return {
+        text: text.slice(0, start) + inserted + text.slice(end),
+        start: cursor,
+        end: cursor,
+    };
+}
+
+/** Icons of the palette, as in the paper workshops. */
+export const icons: { emoji: string; label: string }[] = [
+    { emoji: '🎯', label: 'Objectif' },
+    { emoji: '🔥', label: 'Difficulté' },
+    { emoji: '💡', label: 'Astuce' },
+    { emoji: '⚠️', label: 'Attention' },
+    { emoji: '✅', label: 'Fait' },
+    { emoji: '❌', label: 'À éviter' },
+    { emoji: '👉', label: 'À faire' },
+    { emoji: '🔗', label: 'Lien' },
+    { emoji: '📎', label: 'Pièce jointe' },
+    { emoji: '📧', label: 'Mail' },
+    { emoji: '🌐', label: 'Internet' },
+    { emoji: '🔍', label: 'Rechercher' },
+    { emoji: '🖱️', label: 'Souris' },
+    { emoji: '⌨️', label: 'Clavier' },
+    { emoji: '💻', label: 'Ordinateur' },
+    { emoji: '📱', label: 'Smartphone' },
+    { emoji: '📄', label: 'Document' },
+    { emoji: '📁', label: 'Dossier' },
+    { emoji: '📅', label: 'Agenda' },
+    { emoji: '🗺️', label: 'Se déplacer' },
+    { emoji: '🏛️', label: 'Démarches' },
+    { emoji: '🤝', label: 'Entraide' },
+    { emoji: '⭐', label: 'Étoile' },
+    { emoji: '🏁', label: 'Arrivée' },
+];

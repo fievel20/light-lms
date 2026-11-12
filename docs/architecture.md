@@ -74,6 +74,13 @@ erDiagram
         string summary "nullable"
         mediumtext content "Markdown"
     }
+    sequence_images {
+        bigint sequence_id
+        string path "disque privé local"
+        string original_name
+        string mime_type
+        int size
+    }
 ```
 
 Points clés :
@@ -129,19 +136,19 @@ Verrous :
 
 ## Routes métier
 
-| Accès        | Routes                                                                                                |
-| ------------ | ----------------------------------------------------------------------------------------------------- |
-| Tous         | `GET /dashboard` (accueil formateur ou apprenant selon le rôle)                                       |
-| Formateur    | `promotions.*` (CRUD sans suppression, `archive`, `unarchive`, `progress` = `/promotions/{id}/suivi`) |
-| Formateur    | `current-promotion.update` (`PUT /promotion-active`) : promotion active mémorisée                     |
-| Formateur    | `promotions.competencies.index / show` (`/promotions/{id}/competences[/{competence}]`)                |
-| Formateur    | `promotions.learners.index / show` (`/promotions/{id}/apprenants[/{apprenant}]`)                      |
-| Formateur    | `promotions.learners.store / import / destroy`, `promotions.learners.assessments.store` (`quiet`)     |
-| Formateur    | `learners.invitation.resend`                                                                          |
-| Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                |
-| Formateur    | `sequences.*`, `sequences.preview` (aperçu JSON de l'éditeur)                                         |
-| Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                 |
-| Invité signé | `invitation.show`, `invitation.accept` (`/invitation/{user}`)                                         |
+| Accès        | Routes                                                                                                   |
+| ------------ | -------------------------------------------------------------------------------------------------------- |
+| Tous         | `GET /dashboard` (accueil formateur ou apprenant selon le rôle)                                          |
+| Formateur    | `promotions.*` (CRUD sans suppression, `archive`, `unarchive`, `progress` = `/promotions/{id}/suivi`)    |
+| Formateur    | `current-promotion.update` (`PUT /promotion-active`) : promotion active mémorisée                        |
+| Formateur    | `promotions.competencies.index / show` (`/promotions/{id}/competences[/{competence}]`)                   |
+| Formateur    | `promotions.learners.index / show` (`/promotions/{id}/apprenants[/{apprenant}]`)                         |
+| Formateur    | `promotions.learners.store / import / destroy`, `promotions.learners.assessments.store` (`quiet`)        |
+| Formateur    | `learners.invitation.resend`                                                                             |
+| Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                   |
+| Formateur    | `sequences.*`, `sequences.preview` (aperçu JSON), `sequences.duplicate`, `sequences.images.store / show` |
+| Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                    |
+| Invité signé | `invitation.show`, `invitation.accept` (`/invitation/{user}`)                                            |
 
 Liste complète : `php artisan route:list --except-vendor`.
 
