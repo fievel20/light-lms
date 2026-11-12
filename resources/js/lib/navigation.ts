@@ -1,3 +1,4 @@
+import BookOpen from '@lucide/svelte/icons/book-open';
 import ChartColumn from '@lucide/svelte/icons/chart-column';
 import LayoutGrid from '@lucide/svelte/icons/layout-grid';
 import Library from '@lucide/svelte/icons/library';
@@ -13,6 +14,7 @@ import { edit as profile } from '@/routes/profile';
 import * as promotions from '@/routes/promotions';
 import * as promotionCompetencies from '@/routes/promotions/competencies';
 import * as promotionLearners from '@/routes/promotions/learners';
+import * as sequences from '@/routes/sequences';
 import type { NavItem, User } from '@/types';
 
 export type NavGroup = { label?: string; items: NavItem[] };
@@ -83,6 +85,11 @@ export function navGroups(
                     href: frameworks.index(),
                     icon: Library,
                 },
+                {
+                    title: 'Séquences',
+                    href: sequences.index(),
+                    icon: BookOpen,
+                },
             ],
         },
     ];
@@ -115,7 +122,7 @@ export function mobileNavItems(
     };
 
     return items
-        .filter((item) => item.title !== 'Référentiels')
+        .filter((item) => !['Référentiels', 'Séquences'].includes(item.title))
         .map((item) => ({ ...item, title: short[item.title] ?? item.title }));
 }
 

@@ -69,6 +69,11 @@ erDiagram
         text comment
         timestamp created_at
     }
+    sequences {
+        string title
+        string summary "nullable"
+        mediumtext content "Markdown"
+    }
 ```
 
 Points clés :
@@ -76,6 +81,7 @@ Points clés :
 - **`users.name`** n'existe plus en base : c'est un attribut calculé (`Prénom Nom`), ajouté à la sérialisation pour les composants du kit.
 - **`role`** n'est pas assignable en masse ; il se fixe explicitement (commande `lms:create-trainer`, factory).
 - **`assessments`** est en ajout seul : chaque autoévaluation ou validation crée une ligne. L'état courant est la ligne la plus récente par (apprenant, compétence, source). Les évaluations sont rattachées à la promotion : un apprenant inscrit dans deux promotions a deux historiques distincts.
+- **`sequences`** (phase 2) : ateliers en Markdown, pas encore reliés aux promotions ; les parcours viennent ensuite (voir le [brief de la phase 2](brief-phase-2.md)).
 - Clés étrangères : supprimer une compétence évaluée est bloqué en base (`restrictOnDelete`), tout comme supprimer un référentiel affecté à une promotion.
 
 ## Règles métier
@@ -93,6 +99,7 @@ Points clés :
 | Enregistrement d'une évaluation                    | `App\Actions\Assessments\RecordAssessment`                                  |
 | Progression                                        | `App\Queries\PromotionProgress`, `LearnerCompetencies`, `LatestAssessments` |
 | Compétences nouvellement acquises à fêter          | `App\Actions\Progress\PullCelebrations`                                     |
+| Rendu Markdown sûr (HTML échappé, liens externes)  | `App\Support\MarkdownRenderer`                                              |
 | Fil d'activité de l'apprenant                      | `App\Queries\LearnerActivity`                                               |
 
 Détail des définitions :
@@ -132,6 +139,7 @@ Verrous :
 | Formateur    | `promotions.learners.store / import / destroy`, `promotions.learners.assessments.store` (`quiet`)     |
 | Formateur    | `learners.invitation.resend`                                                                          |
 | Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                |
+| Formateur    | `sequences.*`, `sequences.preview` (aperçu JSON de l'éditeur)                                         |
 | Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                 |
 | Invité signé | `invitation.show`, `invitation.accept` (`/invitation/{user}`)                                         |
 
@@ -148,10 +156,10 @@ app/
 │   ├── Controllers/  # contrôleurs fins : validation → action → redirection / page
 │   ├── Middleware/   # trainer, learner
 │   └── Requests/     # FormRequest (promotion, référentiel, compétence, apprenant)
-├── Models/           # User, Promotion, Framework, Competency, ScaleLevel, Assessment
+├── Models/           # User, Promotion, Framework, Competency, ScaleLevel, Assessment, Sequence
 ├── Notifications/    # LearnerInvitation (email, en file d'attente)
 ├── Queries/          # lectures complexes (progression, dernières évaluations)
-├── Support/          # CompetencyCell
+├── Support/          # CompetencyCell, MarkdownRenderer
 └── Validation/       # CompetencyRules (partagé formulaire / import JSON)
 
 resources/js/

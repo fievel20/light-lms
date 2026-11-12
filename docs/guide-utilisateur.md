@@ -91,6 +91,15 @@ Chaque validation est conservée dans l'historique ; c'est **la plus récente** 
 
 La progression d'un apprenant est le pourcentage de compétences acquises ; celle de la promotion est la moyenne de ses apprenants.
 
+### 7. Écrire des séquences pédagogiques
+
+Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une séquence est un atelier écrit en Markdown : un titre, un résumé facultatif et le contenu.
+
+- La **barre d'outils** met en forme la sélection : titre, gras, italique, **étapes numérotées**, liste à puces, lien, encadré (pour un « Cadre commun », par exemple).
+- Les **emojis** (🎯 objectif, 🔥 difficulté…) se tapent directement dans le texte.
+- L'**aperçu** montre le rendu final pendant l'écriture : à côté de l'éditeur sur grand écran, dans l'onglet « Aperçu » sur mobile.
+- Les adresses web deviennent des liens, ouverts dans un nouvel onglet.
+
 ---
 
 ## Parcours de l'apprenant

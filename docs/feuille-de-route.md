@@ -23,20 +23,29 @@
 | Retraits               | Validation rapide, système de badges, suppression de compte depuis le profil                                                                          |
 | Finitions et nettoyage | Favicon, composants et layouts du kit inutilisés supprimés                                                                                            |
 
-Environ 240 tests Pest, Larastan niveau 7, CI GitHub Actions.
+Environ 260 tests Pest, Larastan niveau 7, CI GitHub Actions.
 
-## Prochaine étape : mise en production sur le VPS Ionos
+## Mise en production sur le VPS Ionos
 
-Voir le [guide de déploiement](deploiement.md). À faire :
+Voir le [guide de déploiement](deploiement.md). En ligne depuis novembre 2026, avec déploiement continu.
 
-- [ ] Préparer le serveur : `deploy/server-setup.sh` (Apache, PHP-FPM 8.4, MariaDB, `.env`, worker, HTTPS).
-- [ ] Brancher le déploiement continu (secrets GitHub, `DEPLOY_ENABLED`).
-- [ ] Premier déploiement, compte formateur (`php8.4 artisan lms:create-trainer`), test réel d'une invitation.
+- [x] Préparer le serveur : `deploy/server-setup.sh` (Apache, PHP-FPM 8.4, MariaDB, `.env`, worker, HTTPS).
+- [x] Brancher le déploiement continu (secrets GitHub, `DEPLOY_ENABLED`).
+- [x] Premier déploiement, compte formateur (`php8.4 artisan lms:create-trainer`), test réel d'une invitation.
 - [ ] Mettre en place la sauvegarde quotidienne de la base.
 
 ## Phase 2 : séquences pédagogiques et parcours
 
 Voir le [brief de la phase 2](brief-phase-2.md) : séquences en Markdown avec images et icônes, parcours, affectation à une promotion et ouverture séquence par séquence.
+
+| Étape | Contenu                                                                                                    | État |
+| ----- | ---------------------------------------------------------------------------------------------------------- | ---- |
+| 8     | Séquences : création, modification, suppression, éditeur Markdown avec barre d'outils et aperçu, rendu sûr | ✅   |
+| 9     | Images, palette d'icônes, duplication                                                                      |      |
+| 10    | Parcours                                                                                                   |      |
+| 11    | Affectation à une promotion, ouverture séquence par séquence                                               |      |
+| 12    | Espace apprenant : parcours et lecture                                                                     |      |
+| 13    | Déploiement : limites d'envoi, sauvegarde des images                                                       |      |
 
 ## Idées pour la suite
 
