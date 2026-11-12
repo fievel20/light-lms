@@ -7,6 +7,7 @@ use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\IconController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\LearnerAccountController;
 use App\Http\Controllers\LearnerAssessmentController;
 use App\Http\Controllers\LearnerInvitationController;
 use App\Http\Controllers\LearningPathController;
@@ -59,6 +60,11 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('promotions/{promotion}/learners/{learner}/assessments/{competency}', [LearnerAssessmentController::class, 'store'])->name('promotions.learners.assessments.store');
 
     Route::post('learners/{learner}/invitation', [LearnerInvitationController::class, 'store'])->name('learners.invitation.resend');
+    Route::get('comptes-apprenants', [LearnerAccountController::class, 'index'])->name('learners.index');
+    Route::get('comptes-apprenants/{learner}', [LearnerAccountController::class, 'edit'])->name('learners.edit');
+    Route::put('learners/{learner}/email', [LearnerAccountController::class, 'updateEmail'])->name('learners.email.update');
+    Route::post('learners/{learner}/password-reset-link', [LearnerAccountController::class, 'sendResetLink'])->middleware('throttle:6,1')->name('learners.password.reset-link');
+    Route::put('learners/{learner}/password', [LearnerAccountController::class, 'updatePassword'])->name('learners.password.update');
 
     Route::post('frameworks/import', [FrameworkImportController::class, 'store'])->name('frameworks.import');
     Route::resource('frameworks', FrameworkController::class);

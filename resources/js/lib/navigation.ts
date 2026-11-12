@@ -6,6 +6,7 @@ import Route from '@lucide/svelte/icons/route';
 import Shapes from '@lucide/svelte/icons/shapes';
 import Library from '@lucide/svelte/icons/library';
 import Target from '@lucide/svelte/icons/target';
+import UserCog from '@lucide/svelte/icons/user-cog';
 import UserRound from '@lucide/svelte/icons/user-round';
 import Users from '@lucide/svelte/icons/users';
 import UsersRound from '@lucide/svelte/icons/users-round';
@@ -13,6 +14,7 @@ import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import * as frameworks from '@/routes/frameworks';
 import * as icons from '@/routes/icons';
+import * as learners from '@/routes/learners';
 import * as learningPaths from '@/routes/learning-paths';
 import * as myCompetencies from '@/routes/my-competencies';
 import * as myLearningPaths from '@/routes/my-learning-paths';
@@ -100,6 +102,11 @@ export function navGroups(
             items: [
                 { title: 'Promotions', href: promotions.index(), icon: Users },
                 {
+                    title: 'Comptes apprenants',
+                    href: learners.index(),
+                    icon: UserCog,
+                },
+                {
                     title: 'Référentiels',
                     href: frameworks.index(),
                     icon: Library,
@@ -151,6 +158,7 @@ export function mobileNavItems(
             (item) =>
                 ![
                     'Séquences ouvertes',
+                    'Comptes apprenants',
                     'Référentiels',
                     'Séquences',
                     'Parcours',

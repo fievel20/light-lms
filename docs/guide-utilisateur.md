@@ -61,6 +61,12 @@ Pour chaque **nouvel** apprenant, un email d'invitation part automatiquement. Il
 
 Sur la fiche promotion, chaque apprenant porte l’étiquette **Activé** ou **Invité le …**. Le bouton **Renvoyer l'invitation** génère un nouveau lien. **Retirer** enlève l'apprenant de la promotion sans supprimer son compte.
 
+**Comptes apprenants.** Menu **Comptes apprenants** (sur mobile : lien sous le titre de la page Promotions) : tous les apprenants, toutes promotions confondues, avec une recherche par nom, email ou promotion. La fiche d'un apprenant permet de :
+
+- **Corriger son email.** S'il n'a pas encore activé son compte, l'invitation est renvoyée à la nouvelle adresse.
+- **Envoyer un lien de réinitialisation** du mot de passe : l'apprenant choisit lui-même son nouveau mot de passe. Pour un compte pas encore activé, c'est l'invitation qu'il faut renvoyer.
+- **Définir un mot de passe provisoire**, à lui donner de vive voix s'il n'a pas accès à sa boîte mail. Le bouton **Générer** propose un mot de passe facile à lire (« Pomme-Tigre-4827! »). L'apprenant est déconnecté de ses autres appareils ; un compte invité est activé du même coup. Il pourra changer ce mot de passe dans son profil.
+
 ### 5. Valider les compétences
 
 Deux points d'entrée, dans le menu de la promotion active :
