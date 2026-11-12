@@ -13,6 +13,7 @@ import { dashboard } from '@/routes';
 import * as frameworks from '@/routes/frameworks';
 import * as learningPaths from '@/routes/learning-paths';
 import * as myCompetencies from '@/routes/my-competencies';
+import * as myLearningPaths from '@/routes/my-learning-paths';
 import { edit as profile } from '@/routes/profile';
 import * as promotions from '@/routes/promotions';
 import * as promotionCompetencies from '@/routes/promotions/competencies';
@@ -46,6 +47,11 @@ export function navGroups(
                         title: 'Compétences',
                         href: myCompetencies.index(),
                         icon: Target,
+                    },
+                    {
+                        title: 'Parcours',
+                        href: myLearningPaths.index(),
+                        icon: Route,
                     },
                 ],
             },

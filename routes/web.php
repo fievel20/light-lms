@@ -11,6 +11,7 @@ use App\Http\Controllers\LearnerInvitationController;
 use App\Http\Controllers\LearningPathController;
 use App\Http\Controllers\LearningPathSequenceController;
 use App\Http\Controllers\MyCompetencyController;
+use App\Http\Controllers\MyLearningPathController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
@@ -26,11 +27,17 @@ Route::get('/', fn () => to_route(auth()->check() ? 'dashboard' : 'login'))->nam
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+    // Trainer, or a learner the sequence is opened to (checked in the controller).
+    Route::get('sequences/{sequence}/images/{image}', [SequenceImageController::class, 'show'])
+        ->scopeBindings()
+        ->name('sequences.images.show');
 });
 
 Route::middleware(['auth', 'verified', 'learner'])->group(function () {
     Route::get('mes-competences', [MyCompetencyController::class, 'index'])->name('my-competencies.index');
     Route::post('mes-competences/{promotion}/{competency}', [MyCompetencyController::class, 'store'])->name('my-competencies.store');
+    Route::get('mes-parcours', [MyLearningPathController::class, 'index'])->name('my-learning-paths.index');
+    Route::get('mes-parcours/{promotion}/{learning_path}/{sequence}', [MyLearningPathController::class, 'show'])->name('my-learning-paths.show');
 });
 
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
@@ -60,9 +67,6 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('sequences/preview', [SequenceController::class, 'preview'])->name('sequences.preview');
     Route::post('sequences/{sequence}/duplicate', [SequenceController::class, 'duplicate'])->name('sequences.duplicate');
     Route::post('sequences/{sequence}/images', [SequenceImageController::class, 'store'])->name('sequences.images.store');
-    Route::get('sequences/{sequence}/images/{image}', [SequenceImageController::class, 'show'])
-        ->scopeBindings()
-        ->name('sequences.images.show');
     Route::resource('sequences', SequenceController::class);
 
     Route::resource('learning-paths', LearningPathController::class);

@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\CarbonImmutable;
 use Database\Factories\SequenceFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -49,6 +50,24 @@ class Sequence extends Model
     public function learningPaths(): BelongsToMany
     {
         return $this->belongsToMany(LearningPath::class)->orderBy('name');
+    }
+
+    /**
+     * The trainer reads everything; a learner reads a sequence opened to one
+     * of their promotions through a path assigned to it.
+     */
+    public function isReadableBy(User $user): bool
+    {
+        if ($user->isTrainer()) {
+            return true;
+        }
+
+        return SequenceRelease::query()
+            ->where('sequence_id', $this->id)
+            ->whereHas('promotion', fn (Builder $promotion) => $promotion
+                ->whereHas('learners', fn (Builder $learner) => $learner->whereKey($user->id))
+                ->whereHas('learningPaths.sequences', fn (Builder $sequence) => $sequence->whereKey($this->id)))
+            ->exists();
     }
 
     /**

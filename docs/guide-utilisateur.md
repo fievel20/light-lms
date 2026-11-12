@@ -150,3 +150,11 @@ Une compétence n'est **acquise** que lorsque le formateur l'a validée au nivea
 ### 4. Activité récente
 
 Sur l'accueil, **Activité récente** liste les dernières validations du formateur (niveau, commentaire), de la plus récente à la plus ancienne.
+
+### 5. Mes parcours
+
+Onglet **Parcours** (choix de la promotion s'il y en a plusieurs).
+
+- Chaque parcours de la promotion liste ses **séquences ouvertes**, dans l'ordre ; celles ouvertes depuis moins de 7 jours portent la mention **Nouveau**.
+- Une séquence masquée par le formateur n'apparaît pas, même avec son adresse.
+- La page d'une séquence se lit sur téléphone : toucher une image l'agrandit, les liens s'ouvrent dans un nouvel onglet, et les boutons **Précédente / Suivante** passent d'une séquence ouverte à l'autre.
