@@ -32,7 +32,8 @@ Voir le [guide de déploiement](deploiement.md). En ligne depuis novembre 2026, 
 - [x] Préparer le serveur : `deploy/server-setup.sh` (Apache, PHP-FPM 8.4, MariaDB, `.env`, worker, HTTPS).
 - [x] Brancher le déploiement continu (secrets GitHub, `DEPLOY_ENABLED`).
 - [x] Premier déploiement, compte formateur (`php8.4 artisan lms:create-trainer`), test réel d'une invitation.
-- [ ] Mettre en place la sauvegarde quotidienne de la base.
+- [ ] Mettre en place la sauvegarde quotidienne de la base et des images ([guide](deploiement.md#5-exploitation)).
+- [ ] Après la fusion de la phase 2 : relancer `deploy/server-setup.sh` sur le VPS pour relever la limite d'envoi des images.
 
 ## Phase 2 : séquences pédagogiques et parcours
 
@@ -45,7 +46,7 @@ Voir le [brief de la phase 2](brief-phase-2.md) : séquences en Markdown avec im
 | 10    | Parcours                                                                                                   | ✅   |
 | 11    | Affectation à une promotion, ouverture séquence par séquence                                               | ✅   |
 | 12    | Espace apprenant : parcours et lecture                                                                     | ✅   |
-| 13    | Déploiement : limites d'envoi, sauvegarde des images                                                       |      |
+| 13    | Déploiement : limites d'envoi, sauvegarde des images                                                       | ✅   |
 
 ## Idées pour la suite
 

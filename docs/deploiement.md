@@ -130,18 +130,33 @@ Les commandes `artisan` se lancent dans `/var/www/html/light-lms/current`, en ta
 | Emails en échec              | `artisan queue:failed`, puis `artisan queue:retry all`                   |
 | Mode maintenance             | `artisan down` / `artisan up`                                            |
 
-**Sauvegarde quotidienne** de la base (14 jours conservés). Le mot de passe `light_lms` est dans `shared/.env` (`DB_PASSWORD`) :
+**Sauvegarde quotidienne** de la base et des images des séquences (14 jours conservés). Le mot de passe `light_lms` est dans `shared/.env` (`DB_PASSWORD`) :
 
 ```bash
 sudo -u deploy bash -c 'mkdir -p ~/backups && printf "[client]\nuser=light_lms\npassword=%s\n" "$(grep ^DB_PASSWORD= /var/www/html/light-lms/shared/.env | cut -d= -f2-)" > ~/.my.cnf && chmod 600 ~/.my.cnf'
 sudo -u deploy crontab -e
 ```
 
-et ajouter la ligne :
+et ajouter les deux lignes :
 
 ```
 30 2 * * * mariadb-dump --single-transaction light_lms | gzip > ~/backups/light_lms-$(date +\%F).sql.gz && find ~/backups -name '*.sql.gz' -mtime +14 -delete
+45 2 * * * tar -czf ~/backups/images-$(date +\%F).tar.gz -C /var/www/html/light-lms/shared/storage/app private && find ~/backups -name 'images-*.tar.gz' -mtime +14 -delete
 ```
+
+Les images des séquences sont dans `shared/storage/app/private/sequences` : hors du dossier public, elles ne passent que par l'application (personnes connectées) et survivent aux déploiements.
+
+### Mise à jour du serveur pour les images (phase 2)
+
+Les images des séquences pèsent jusqu'à 5 Mo, alors qu'un serveur installé avant la phase 2 refuse les envois de plus de 2 Mo. **Une fois**, sur le VPS, retélécharger le script et le relancer : il relève les limites (Apache et PHP-FPM) et conserve tout le reste (`.env`, base, certificat).
+
+```bash
+cd ~
+curl -fsSL https://raw.githubusercontent.com/fievel20/light-lms/main/deploy/server-setup.sh -o light-lms-setup.sh
+sudo bash light-lms-setup.sh
+```
+
+Vérifier ensuite : `grep LimitRequestBody /etc/apache2/sites-available/light-lms*.conf` doit afficher `8388608`.
 
 ## Annexe : mot de passe root MariaDB
 
