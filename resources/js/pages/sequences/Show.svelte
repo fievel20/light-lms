@@ -7,8 +7,10 @@
 </script>
 
 <script lang="ts">
-    import { Link } from '@inertiajs/svelte';
+    import { Form, Link } from '@inertiajs/svelte';
+    import Copy from '@lucide/svelte/icons/copy';
     import Pencil from '@lucide/svelte/icons/pencil';
+    import SequenceController from '@/actions/App/Http/Controllers/SequenceController';
     import AppHead from '@/components/AppHead.svelte';
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
@@ -38,14 +40,32 @@
             {/if}
         </div>
 
-        <Button variant="outline" asChild class="h-11 w-full sm:h-9 sm:w-auto">
-            {#snippet children(props)}
-                <Link {...props} href={toUrl(edit(sequence.id))}>
-                    <Pencil class="size-4" />
-                    Modifier
-                </Link>
-            {/snippet}
-        </Button>
+        <div class="flex w-full gap-2 sm:w-auto">
+            <Form
+                {...SequenceController.duplicate.form(sequence.id)}
+                class="flex-1"
+            >
+                {#snippet children({ processing })}
+                    <Button
+                        type="submit"
+                        variant="outline"
+                        disabled={processing}
+                        class="h-11 w-full sm:h-9"
+                    >
+                        <Copy class="size-4" />
+                        Dupliquer
+                    </Button>
+                {/snippet}
+            </Form>
+            <Button variant="outline" asChild class="h-11 flex-1 sm:h-9">
+                {#snippet children(props)}
+                    <Link {...props} href={toUrl(edit(sequence.id))}>
+                        <Pencil class="size-4" />
+                        Modifier
+                    </Link>
+                {/snippet}
+            </Button>
+        </div>
     </header>
 
     <!-- Rendered and escaped by the server (MarkdownRenderer). -->

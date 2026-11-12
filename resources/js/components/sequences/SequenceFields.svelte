@@ -46,10 +46,18 @@
 
 <div class="grid gap-2">
     <Label for="content">Contenu</Label>
-    <MarkdownEditor name="content" bind:value={content} maxlength={100000} />
+    <MarkdownEditor
+        name="content"
+        bind:value={content}
+        maxlength={100000}
+        sequenceId={sequence?.id ?? null}
+    />
     <p class="text-xs text-muted-foreground">
         Markdown : <code>1.</code> pour les étapes, <code>**gras**</code>,
-        <code>&gt;</code> pour un encadré. Les emojis 🎯 🔥 se tapent directement.
+        <code>&gt;</code> pour un encadré. Icônes : bouton 🙂 ou emojis tapés
+        directement. Images : bouton, glisser-déposer ou coller une capture{sequence
+            ? ''
+            : ' (après le premier enregistrement)'}.
     </p>
     <InputError message={errors.content} />
 </div>

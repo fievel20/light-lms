@@ -99,6 +99,9 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 - Les **emojis** (🎯 objectif, 🔥 difficulté…) se tapent directement dans le texte.
 - L'**aperçu** montre le rendu final pendant l'écriture : à côté de l'éditeur sur grand écran, dans l'onglet « Aperçu » sur mobile.
 - Les adresses web deviennent des liens, ouverts dans un nouvel onglet.
+- Les **icônes** courantes (🎯 objectif, 🔥 difficulté, 💡 astuce, ⚠️ attention…) s'insèrent avec le bouton 🙂.
+- Les **images** (JPEG, PNG, WebP ou GIF, 5 Mo maximum) s'ajoutent avec le bouton image, par glisser-déposer ou en **collant une capture** (Ctrl+V) dans l'éditeur. Il faut avoir enregistré la séquence une première fois. Elles ne sont visibles que par les personnes connectées.
+- **Dupliquer** (sur la page de la séquence) crée une copie, images comprises, à modifier pour en faire une variante (« Google Lens 2 »…).
 
 ---
 

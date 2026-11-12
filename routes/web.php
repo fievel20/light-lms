@@ -13,6 +13,7 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
 use App\Http\Controllers\SequenceController;
+use App\Http\Controllers\SequenceImageController;
 use App\Http\Controllers\TrainerCompetencyController;
 use App\Http\Controllers\TrainerLearnerController;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,11 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
         ->scoped();
 
     Route::post('sequences/preview', [SequenceController::class, 'preview'])->name('sequences.preview');
+    Route::post('sequences/{sequence}/duplicate', [SequenceController::class, 'duplicate'])->name('sequences.duplicate');
+    Route::post('sequences/{sequence}/images', [SequenceImageController::class, 'store'])->name('sequences.images.store');
+    Route::get('sequences/{sequence}/images/{image}', [SequenceImageController::class, 'show'])
+        ->scopeBindings()
+        ->name('sequences.images.show');
     Route::resource('sequences', SequenceController::class);
 });
 

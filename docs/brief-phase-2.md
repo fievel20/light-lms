@@ -94,7 +94,7 @@ Envoie ton premier mail depuis l'ordinateur, sans aide. 🎯
 2. Ouvre Internet.
 3. Va sur ta boîte mail.
 
-    ![La boîte de réception](image:boite-de-reception.png)
+    ![La boîte de réception](image:12)
 
 4. Envoie le mail suivant à **formateur@example.fr** :
 
@@ -105,7 +105,7 @@ Envoie ton premier mail depuis l'ordinateur, sans aide. 🎯
 💡 Le bouton **Nouveau message** est souvent en haut à gauche.
 ```
 
-`image:` est la référence interne d'une image importée : l'éditeur l'insère, le rendu la remplace par l'adresse protégée.
+`image:12` est la référence interne de l'image importée n°12 : l'éditeur l'insère, le rendu la remplace par l'adresse protégée (seulement si l'image appartient à la séquence).
 
 ## Déploiement
 

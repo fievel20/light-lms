@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Sequences\DuplicateSequence;
 use App\Http\Requests\SequenceRequest;
 use App\Models\Sequence;
 use App\Support\MarkdownRenderer;
@@ -41,7 +42,7 @@ class SequenceController extends Controller
         return Inertia::render('sequences/Show', [
             'sequence' => [
                 ...$sequence->only(['id', 'title', 'summary', 'updated_at']),
-                'html' => $markdown->toHtml($sequence->content),
+                'html' => $markdown->toHtml($sequence->content, $sequence),
             ],
         ]);
     }
@@ -78,8 +79,21 @@ class SequenceController extends Controller
     {
         $validated = $request->validate([
             'content' => ['nullable', 'string', 'max:'.SequenceRequest::MAX_CONTENT],
+            'sequence_id' => ['nullable', 'integer'],
         ]);
 
-        return response()->json(['html' => $markdown->toHtml($validated['content'] ?? '')]);
+        // While editing, the sequence's own images are shown in the preview.
+        $sequence = Sequence::query()->whereKey($validated['sequence_id'] ?? null)->first();
+
+        return response()->json(['html' => $markdown->toHtml($validated['content'] ?? '', $sequence)]);
+    }
+
+    public function duplicate(Sequence $sequence, DuplicateSequence $duplicate): RedirectResponse
+    {
+        $copy = $duplicate->handle($sequence);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Séquence dupliquée : modifie la copie.']);
+
+        return to_route('sequences.edit', $copy);
     }
 }
