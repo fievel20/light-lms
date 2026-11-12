@@ -6,7 +6,9 @@
 #   curl -fsSL https://raw.githubusercontent.com/fievel20/light-lms/main/deploy/server-setup.sh -o light-lms-setup.sh
 #   sudo bash light-lms-setup.sh          # install
 #   sudo bash light-lms-setup.sh reset    # remove what this script installed
-set -euo pipefail
+set -Eeuo pipefail
+# Never stop silently: name the command that failed.
+trap 'fail "Arrêt imprévu ligne $LINENO : $BASH_COMMAND"' ERR
 
 DOMAIN="${DOMAIN:-}"
 APP_DIR="${APP_DIR:-/var/www/html/light-lms}"
@@ -20,7 +22,9 @@ SUDOERS=/etc/sudoers.d/light-lms
 step() { printf '\n\033[1m→ %s\033[0m\n' "$*"; }
 info() { printf '  %s\n' "$*"; }
 fail() { printf '\033[31m✗ %s\033[0m\n' "$*" >&2; exit 1; }
-confirm() { local answer; read -r -p "  $1 [o/N] " answer; [[ $answer =~ ^[oO]$ ]]; }
+# Prompts read the terminal itself (< /dev/tty): text pasted ahead of time is
+# never taken as an answer, nor run as a command once the script ends.
+confirm() { local answer; read -r -p "  $1 [o/N] " answer < /dev/tty; [[ $answer =~ ^[oO]$ ]]; }
 
 # Replaces KEY=… in the .env file (values go through the environment, so no escaping issue).
 set_env() {
@@ -35,7 +39,7 @@ preflight() {
     systemctl is-active --quiet mariadb || fail "MariaDB ne tourne pas."
     mysql -e 'SELECT 1' > /dev/null 2>&1 \
         || fail "« sudo mysql » demande un mot de passe : voir l'annexe « Mot de passe root MariaDB » du guide."
-    [ -n "$DOMAIN" ] || read -r -p "  Domaine du site (ex. lms.example.fr) : " DOMAIN
+    [ -n "$DOMAIN" ] || read -r -p "  Domaine du site (ex. lms.example.fr) : " DOMAIN < /dev/tty
     [[ $DOMAIN =~ ^[a-z0-9.-]+\.[a-z]+$ ]] || fail "Domaine invalide : « $DOMAIN »."
 }
 
@@ -67,11 +71,18 @@ install() {
     if grep -q 'deploy light-lms' /home/deploy/.ssh/authorized_keys; then
         info "Clé de déploiement déjà autorisée."
     else
-        read -r -p "  Colle la clé publique (contenu de deploy_key.pub), ou Entrée pour plus tard : " key
-        if [[ $key == ssh-* ]]; then
-            echo "$key" >> /home/deploy/.ssh/authorized_keys
-            info "Clé ajoutée."
-        fi
+        while true; do
+            read -r -p "  Colle la clé publique (une seule ligne, contenu de deploy_key.pub), ou Entrée pour plus tard : " key < /dev/tty
+            if [ -z "$key" ]; then
+                info "À ajouter plus tard dans /home/deploy/.ssh/authorized_keys (ou relance le script)."
+                break
+            elif [[ $key == ssh-* ]]; then
+                echo "$key" >> /home/deploy/.ssh/authorized_keys
+                info "Clé ajoutée."
+                break
+            fi
+            info "Ce n'est pas une clé publique : elle commence par « ssh-ed25519 ». Réessaie."
+        done
     fi
 
     step "Dossiers $APP_DIR"
@@ -128,8 +139,8 @@ SQL
         set_env APP_URL "https://$DOMAIN"
         set_env DB_PASSWORD "$db_password"
         local mail mail_password
-        read -r -p "  Adresse de la boîte d'envoi Ionos (ex. noreply@example.fr) : " mail
-        read -r -s -p "  Mot de passe de cette boîte (rien ne s'affiche) : " mail_password
+        read -r -p "  Adresse de la boîte d'envoi Ionos (ex. noreply@example.fr) : " mail < /dev/tty
+        read -r -s -p "  Mot de passe de cette boîte (rien ne s'affiche) : " mail_password < /dev/tty
         echo
         [[ $mail_password != *"'"* ]] || fail "Le mot de passe contient une apostrophe : renseigne MAIL_PASSWORD à la main dans $ENV_FILE."
         set_env MAIL_USERNAME "$mail"
