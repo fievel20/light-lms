@@ -2,6 +2,7 @@ import BookOpen from '@lucide/svelte/icons/book-open';
 import ChartColumn from '@lucide/svelte/icons/chart-column';
 import Eye from '@lucide/svelte/icons/eye';
 import LayoutGrid from '@lucide/svelte/icons/layout-grid';
+import ListChecks from '@lucide/svelte/icons/list-checks';
 import Route from '@lucide/svelte/icons/route';
 import Shapes from '@lucide/svelte/icons/shapes';
 import Library from '@lucide/svelte/icons/library';
@@ -23,6 +24,7 @@ import * as promotions from '@/routes/promotions';
 import * as promotionCompetencies from '@/routes/promotions/competencies';
 import * as promotionLearningPaths from '@/routes/promotions/learning-paths';
 import * as promotionLearners from '@/routes/promotions/learners';
+import * as sequenceCompletions from '@/routes/promotions/sequence-completions';
 import * as sequences from '@/routes/sequences';
 import type { NavItem, User } from '@/types';
 
@@ -93,6 +95,13 @@ export function navGroups(
                               ),
                               icon: Eye,
                           },
+                          {
+                              title: 'Séquences réalisées',
+                              href: sequenceCompletions.index(
+                                  currentPromotionId,
+                              ),
+                              icon: ListChecks,
+                          },
                       ]
                     : []),
             ],
@@ -158,6 +167,7 @@ export function mobileNavItems(
             (item) =>
                 ![
                     'Séquences ouvertes',
+                    'Séquences réalisées',
                     'Comptes apprenants',
                     'Référentiels',
                     'Séquences',
