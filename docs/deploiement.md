@@ -70,6 +70,7 @@ Appuyer deux fois sur Entrée (pas de phrase de passe). Deux fichiers sont cré�
 ### Script d'installation (sur le VPS)
 
 ```bash
+cd ~
 curl -fsSL https://raw.githubusercontent.com/fievel20/light-lms/main/deploy/server-setup.sh -o light-lms-setup.sh
 sudo bash light-lms-setup.sh
 ```

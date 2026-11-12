@@ -7,6 +7,7 @@
 #   sudo bash light-lms-setup.sh          # install
 #   sudo bash light-lms-setup.sh reset    # remove what this script installed
 set -Eeuo pipefail
+# Functions are not named "install" or "reset": that would shadow the commands.
 # Never stop silently: name the command that failed.
 trap 'fail "Arrêt imprévu ligne $LINENO : $BASH_COMMAND"' ERR
 
@@ -43,7 +44,7 @@ preflight() {
     [[ $DOMAIN =~ ^[a-z0-9.-]+\.[a-z]+$ ]] || fail "Domaine invalide : « $DOMAIN »."
 }
 
-install() {
+setup_server() {
     preflight
 
     step "Paquets PHP 8.4 et Supervisor (aucun paquet ne sera retiré)"
@@ -184,7 +185,7 @@ SQL
     ssh-keyscan -H "$ip" 2> /dev/null
 }
 
-reset() {
+reset_server() {
     preflight
     case "$APP_DIR" in */light-lms) ;; *) fail "APP_DIR inattendu : $APP_DIR" ;; esac
 
@@ -223,7 +224,7 @@ reset() {
 }
 
 case "${1:-install}" in
-    install) install ;;
-    reset) reset ;;
+    install) setup_server ;;
+    reset) reset_server ;;
     *) fail "Usage : sudo bash $0 [install|reset]" ;;
 esac
