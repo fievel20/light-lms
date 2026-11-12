@@ -13,6 +13,7 @@
     import BookOpen from '@lucide/svelte/icons/book-open';
     import Library from '@lucide/svelte/icons/library';
     import Pencil from '@lucide/svelte/icons/pencil';
+    import Route from '@lucide/svelte/icons/route';
     import Plus from '@lucide/svelte/icons/plus';
     import PromotionController from '@/actions/App/Http/Controllers/PromotionController';
     import AppHead from '@/components/AppHead.svelte';
@@ -21,6 +22,7 @@
     import { formatDate } from '@/lib/dates';
     import { cn, toUrl } from '@/lib/utils';
     import * as frameworks from '@/routes/frameworks';
+    import * as learningPaths from '@/routes/learning-paths';
     import { create, edit, show } from '@/routes/promotions';
     import * as sequences from '@/routes/sequences';
     import type { Promotion } from '@/types/promotion';
@@ -48,7 +50,7 @@
                 title="Promotions"
                 description="Gère tes promotions d'apprenants."
             />
-            <!-- On phones the frameworks and sequences have no tab of their own. -->
+            <!-- On phones these have no tab of their own. -->
             <div class="-mt-4 flex flex-wrap gap-x-4 md:hidden">
                 <Link
                     href={toUrl(frameworks.index())}
@@ -63,6 +65,13 @@
                 >
                     <BookOpen class="size-4" />
                     Séquences
+                </Link>
+                <Link
+                    href={toUrl(learningPaths.index())}
+                    class="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
+                >
+                    <Route class="size-4" />
+                    Parcours
                 </Link>
             </div>
         </div>

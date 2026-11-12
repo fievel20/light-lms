@@ -7,6 +7,7 @@ use Database\Factories\SequenceFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,6 +41,14 @@ class Sequence extends Model
     public function images(): HasMany
     {
         return $this->hasMany(SequenceImage::class);
+    }
+
+    /**
+     * @return BelongsToMany<LearningPath, $this>
+     */
+    public function learningPaths(): BelongsToMany
+    {
+        return $this->belongsToMany(LearningPath::class)->orderBy('name');
     }
 
     /**

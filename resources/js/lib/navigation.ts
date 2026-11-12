@@ -1,6 +1,7 @@
 import BookOpen from '@lucide/svelte/icons/book-open';
 import ChartColumn from '@lucide/svelte/icons/chart-column';
 import LayoutGrid from '@lucide/svelte/icons/layout-grid';
+import Route from '@lucide/svelte/icons/route';
 import Library from '@lucide/svelte/icons/library';
 import Target from '@lucide/svelte/icons/target';
 import UserRound from '@lucide/svelte/icons/user-round';
@@ -9,6 +10,7 @@ import UsersRound from '@lucide/svelte/icons/users-round';
 import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import * as frameworks from '@/routes/frameworks';
+import * as learningPaths from '@/routes/learning-paths';
 import * as myCompetencies from '@/routes/my-competencies';
 import { edit as profile } from '@/routes/profile';
 import * as promotions from '@/routes/promotions';
@@ -90,6 +92,11 @@ export function navGroups(
                     href: sequences.index(),
                     icon: BookOpen,
                 },
+                {
+                    title: 'Parcours',
+                    href: learningPaths.index(),
+                    icon: Route,
+                },
             ],
         },
     ];
@@ -122,7 +129,10 @@ export function mobileNavItems(
     };
 
     return items
-        .filter((item) => !['Référentiels', 'Séquences'].includes(item.title))
+        .filter(
+            (item) =>
+                !['Référentiels', 'Séquences', 'Parcours'].includes(item.title),
+        )
         .map((item) => ({ ...item, title: short[item.title] ?? item.title }));
 }
 
