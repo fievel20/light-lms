@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Icon;
 use App\Support\MarkdownRenderer;
 
 beforeEach(function () {
@@ -42,4 +43,18 @@ it('ouvre les liens externes dans un nouvel onglet, adresses nues comprises', fu
         ->toContain('href="https://flexboxfroggy.com/#fr"')
         ->toContain('target="_blank"')
         ->toContain('noopener');
+});
+
+it('affiche les icônes importées à la taille du texte', function () {
+    $colour = Icon::factory()->create(['name' => 'Fusée', 'monochrome' => false]);
+    $mono = Icon::factory()->create(['name' => 'Souris', 'monochrome' => true]);
+
+    $html = $this->markdown->toHtml("![](icon:{$colour->id}) Départ ![clic](icon:{$mono->id}) ![](icon:999)");
+
+    expect($html)
+        ->toContain('<img class="icon" src="'.route('icons.show', $colour).'" alt="Fusée"')
+        // One colour: drawn in the colour of the text, as a mask.
+        ->toContain('<span class="icon icon-mono" role="img" aria-label="clic" style="--icon: url(&quot;'.route('icons.show', $mono).'&quot;)"></span>')
+        // A deleted icon shows nothing.
+        ->not->toContain('999');
 });

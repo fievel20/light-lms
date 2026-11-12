@@ -99,9 +99,11 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 - Les **emojis** (🎯 objectif, 🔥 difficulté…) se tapent directement dans le texte.
 - L'**aperçu** montre le rendu final pendant l'écriture : à côté de l'éditeur sur grand écran, dans l'onglet « Aperçu » sur mobile.
 - Les adresses web deviennent des liens, ouverts dans un nouvel onglet.
-- Les **icônes** courantes (🎯 objectif, 🔥 difficulté, 💡 astuce, ⚠️ attention…) s'insèrent avec le bouton 🙂.
+- Les **icônes** s'insèrent avec le bouton 🙂 : d'abord les tiennes (menu **Icônes**, voir ci-dessous), puis les emojis courants (🎯 objectif, 🔥 difficulté, 💡 astuce, ⚠️ attention…).
 - Les **images** (JPEG, PNG, WebP ou GIF, 5 Mo maximum) s'ajoutent avec le bouton image, par glisser-déposer ou en **collant une capture** (Ctrl+V) dans l'éditeur. Il faut avoir enregistré la séquence une première fois. Elles ne sont visibles que par les personnes connectées.
 - **Dupliquer** (sur la page de la séquence) crée une copie, images comprises, à modifier pour en faire une variante (« Google Lens 2 »…).
+
+**Bibliothèque d'icônes.** Menu **Icônes** (sur mobile : lien sous le titre de la page Promotions). Importe un ou plusieurs fichiers **SVG** à la fois (512 Ko maximum chacun) : le nom du fichier devient le nom de l'icône. Quelle que soit la taille du dessin, l'icône s'affiche **à la taille du texte**, sur la ligne. Une icône d'une seule couleur prend la couleur du texte (elle reste lisible en mode sombre) ; décoche « Prendre la couleur du texte » pour garder ses couleurs d'origine. Chaque icône indique les séquences qui l'utilisent ; la supprimer la fait disparaître de ces séquences. Les scripts éventuellement contenus dans un SVG sont retirés à l'import.
 
 ### 8. Construire des parcours
 

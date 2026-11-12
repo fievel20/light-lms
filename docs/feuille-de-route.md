@@ -47,6 +47,7 @@ Voir le [brief de la phase 2](brief-phase-2.md) : séquences en Markdown avec im
 | 11    | Affectation à une promotion, ouverture séquence par séquence                                               | ✅   |
 | 12    | Espace apprenant : parcours et lecture                                                                     | ✅   |
 | 13    | Déploiement : limites d'envoi, sauvegarde des images                                                       | ✅   |
+| 14    | Bibliothèque d'icônes SVG (Administration > Icônes), affichées à la taille du texte                        | ✅   |
 
 ## Idées pour la suite
 

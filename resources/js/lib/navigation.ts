@@ -3,6 +3,7 @@ import ChartColumn from '@lucide/svelte/icons/chart-column';
 import Eye from '@lucide/svelte/icons/eye';
 import LayoutGrid from '@lucide/svelte/icons/layout-grid';
 import Route from '@lucide/svelte/icons/route';
+import Shapes from '@lucide/svelte/icons/shapes';
 import Library from '@lucide/svelte/icons/library';
 import Target from '@lucide/svelte/icons/target';
 import UserRound from '@lucide/svelte/icons/user-round';
@@ -11,6 +12,7 @@ import UsersRound from '@lucide/svelte/icons/users-round';
 import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import * as frameworks from '@/routes/frameworks';
+import * as icons from '@/routes/icons';
 import * as learningPaths from '@/routes/learning-paths';
 import * as myCompetencies from '@/routes/my-competencies';
 import * as myLearningPaths from '@/routes/my-learning-paths';
@@ -112,6 +114,7 @@ export function navGroups(
                     href: learningPaths.index(),
                     icon: Route,
                 },
+                { title: 'Icônes', href: icons.index(), icon: Shapes },
             ],
         },
     ];
@@ -151,6 +154,7 @@ export function mobileNavItems(
                     'Référentiels',
                     'Séquences',
                     'Parcours',
+                    'Icônes',
                 ].includes(item.title),
         )
         .map((item) => ({ ...item, title: short[item.title] ?? item.title }));

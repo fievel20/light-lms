@@ -278,6 +278,25 @@
   out, quotes as a lime-ruled box (e.g. "Cadre commun").
 */
 @layer components {
+    /*
+      An icon of the library, whatever its drawing size: as tall as a
+      capital letter and a bit, on the line of the text. A one-colour icon
+      is a mask filled with the colour of the text.
+    */
+    .icon {
+        display: inline-block;
+        width: auto;
+        max-width: 3em;
+        height: 1.25em;
+        vertical-align: -0.25em;
+        object-fit: contain;
+    }
+    .icon-mono {
+        width: 1.25em;
+        background-color: currentColor;
+        mask: var(--icon) center / contain no-repeat;
+    }
+
     .markdown {
         line-height: 1.65;
         overflow-wrap: anywhere;
@@ -358,6 +377,11 @@
             height: auto;
             border: 1px solid var(--border);
             border-radius: var(--radius);
+        }
+        & img.icon {
+            height: 1.25em;
+            border: 0;
+            border-radius: 0;
         }
         & hr {
             border-color: var(--border);
