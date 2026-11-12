@@ -5,6 +5,7 @@ use App\Http\Controllers\CurrentPromotionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkImportController;
+use App\Http\Controllers\IconController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LearnerAssessmentController;
 use App\Http\Controllers\LearnerInvitationController;
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sequences/{sequence}/images/{image}', [SequenceImageController::class, 'show'])
         ->scopeBindings()
         ->name('sequences.images.show');
+    Route::get('icons/{icon}', [IconController::class, 'show'])->name('icons.show');
 });
 
 Route::middleware(['auth', 'verified', 'learner'])->group(function () {
@@ -70,6 +72,7 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('sequences', SequenceController::class);
 
     Route::resource('learning-paths', LearningPathController::class);
+    Route::resource('icons', IconController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::get('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'index'])->name('promotions.learning-paths.index');
     Route::post('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'store'])->name('promotions.learning-paths.store');
     Route::delete('promotions/{promotion}/parcours/{learning_path}', [PromotionLearningPathController::class, 'destroy'])->name('promotions.learning-paths.destroy');

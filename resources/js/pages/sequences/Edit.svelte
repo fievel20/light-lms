@@ -17,12 +17,15 @@
     import { Spinner } from '@/components/ui/spinner';
     import { toUrl } from '@/lib/utils';
     import { show } from '@/routes/sequences';
+    import type { Icon } from '@/types/icon';
     import type { Sequence } from '@/types/sequence';
 
     let {
         sequence,
         learningPaths,
-    }: { sequence: Sequence; learningPaths: string[] } = $props();
+        icons,
+    }: { sequence: Sequence; learningPaths: string[]; icons: Icon[] } =
+        $props();
 
     const pathsNotice = $derived(
         learningPaths.length === 0
@@ -42,7 +45,7 @@
             class="space-y-6"
         >
             {#snippet children({ errors, processing })}
-                <SequenceFields {errors} {sequence} />
+                <SequenceFields {errors} {sequence} {icons} />
 
                 <div
                     class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"

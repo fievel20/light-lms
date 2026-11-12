@@ -11,6 +11,7 @@
     import { tick } from 'svelte';
     import type { Component } from 'svelte';
     import { toast } from 'svelte-sonner';
+    import IconGlyph from '@/components/icons/IconGlyph.svelte';
     import { Spinner } from '@/components/ui/spinner';
     import { nativeFieldClass } from '@/lib/form';
     import {
@@ -23,18 +24,22 @@
     } from '@/lib/markdown';
     import type { TextEdit } from '@/lib/markdown';
     import { cn } from '@/lib/utils';
+    import type { Icon } from '@/types/icon';
 
     let {
         name,
         value = $bindable(''),
         maxlength,
         sequenceId = null,
+        library = [],
     }: {
         name: string;
         value?: string;
         maxlength: number;
         // Images need a saved sequence to belong to.
         sequenceId?: number | null;
+        // Imported icons (Administration > Icônes), shown before the emojis.
+        library?: Icon[];
     } = $props();
 
     let textarea: HTMLTextAreaElement | undefined = $state();
@@ -137,9 +142,9 @@
         textarea.setSelectionRange(result.start, result.end);
     }
 
-    function insertIcon(emoji: string): void {
+    function insertIcon(text: string): void {
         iconsOpen = false;
-        void applyEdit((t, s, e) => insertText(t, s, e, emoji));
+        void applyEdit((t, s, e) => insertText(t, s, e, text));
     }
 
     async function addImages(files: Iterable<File>): Promise<void> {
@@ -282,10 +287,25 @@
 
         {#if iconsOpen}
             <div
-                class="absolute top-full left-1 z-20 mt-1 grid w-[min(20rem,calc(100vw-3rem))] grid-cols-6 gap-1 surface p-2"
+                class="absolute top-full left-1 z-20 mt-1 grid max-h-80 w-[min(20rem,calc(100vw-3rem))] grid-cols-6 gap-1 overflow-y-auto surface p-2"
                 role="menu"
                 aria-label="Icônes"
             >
+                {#each library as icon (icon.id)}
+                    <button
+                        type="button"
+                        role="menuitem"
+                        class="flex aspect-square items-center justify-center rounded-md text-xl hover:bg-muted"
+                        title={icon.name}
+                        aria-label={icon.name}
+                        onclick={() => insertIcon(icon.markdown)}
+                    >
+                        <IconGlyph {icon} />
+                    </button>
+                {/each}
+                {#if library.length > 0}
+                    <hr class="col-span-6 my-1 border-border" />
+                {/if}
                 {#each icons as icon (icon.emoji)}
                     <button
                         type="button"

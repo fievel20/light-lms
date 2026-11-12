@@ -3,14 +3,17 @@
     import MarkdownEditor from '@/components/sequences/MarkdownEditor.svelte';
     import { Input } from '@/components/ui/input';
     import { Label } from '@/components/ui/label';
+    import type { Icon } from '@/types/icon';
     import type { Sequence } from '@/types/sequence';
 
     let {
         errors,
         sequence,
+        icons,
     }: {
         errors: Record<string, string | undefined>;
         sequence?: Sequence;
+        icons: Icon[];
     } = $props();
 
     // svelte-ignore state_referenced_locally
@@ -51,6 +54,7 @@
         bind:value={content}
         maxlength={100000}
         sequenceId={sequence?.id ?? null}
+        library={icons}
     />
     <p class="text-xs text-muted-foreground">
         Markdown : <code>1.</code> pour les étapes, <code>**gras**</code>,

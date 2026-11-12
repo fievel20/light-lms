@@ -14,6 +14,7 @@
     import Library from '@lucide/svelte/icons/library';
     import Pencil from '@lucide/svelte/icons/pencil';
     import Route from '@lucide/svelte/icons/route';
+    import Shapes from '@lucide/svelte/icons/shapes';
     import Plus from '@lucide/svelte/icons/plus';
     import PromotionController from '@/actions/App/Http/Controllers/PromotionController';
     import AppHead from '@/components/AppHead.svelte';
@@ -22,6 +23,7 @@
     import { formatDate } from '@/lib/dates';
     import { cn, toUrl } from '@/lib/utils';
     import * as frameworks from '@/routes/frameworks';
+    import * as icons from '@/routes/icons';
     import * as learningPaths from '@/routes/learning-paths';
     import { create, edit, show } from '@/routes/promotions';
     import * as sequences from '@/routes/sequences';
@@ -72,6 +74,13 @@
                 >
                     <Route class="size-4" />
                     Parcours
+                </Link>
+                <Link
+                    href={toUrl(icons.index())}
+                    class="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
+                >
+                    <Shapes class="size-4" />
+                    Icônes
                 </Link>
             </div>
         </div>

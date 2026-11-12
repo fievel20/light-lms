@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Sequences\DuplicateSequence;
 use App\Http\Requests\SequenceRequest;
+use App\Models\Icon;
 use App\Models\Sequence;
 use App\Support\MarkdownRenderer;
 use Illuminate\Http\JsonResponse;
@@ -30,7 +31,7 @@ class SequenceController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('sequences/Create');
+        return Inertia::render('sequences/Create', ['icons' => $this->icons()]);
     }
 
     public function store(SequenceRequest $request): RedirectResponse
@@ -58,6 +59,7 @@ class SequenceController extends Controller
             'sequence' => $sequence->only(['id', 'title', 'summary', 'content']),
             // Shown before deleting: the sequence leaves these paths.
             'learningPaths' => $sequence->learningPaths()->pluck('name'),
+            'icons' => $this->icons(),
         ]);
     }
 
@@ -102,5 +104,19 @@ class SequenceController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Séquence dupliquée : modifie la copie.']);
 
         return to_route('sequences.edit', $copy);
+    }
+
+    /**
+     * The icon library, for the palette of the editor.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function icons(): array
+    {
+        return Icon::query()->orderBy('name')->get()->map(fn (Icon $icon) => [
+            ...$icon->only(['id', 'name', 'monochrome']),
+            'url' => route('icons.show', $icon),
+            'markdown' => $icon->markdown(),
+        ])->all();
     }
 }

@@ -46,7 +46,10 @@
     function onclick(event: MouseEvent): void {
         const target = event.target;
 
-        if (target instanceof HTMLImageElement) {
+        if (
+            target instanceof HTMLImageElement &&
+            !target.classList.contains('icon')
+        ) {
             zoomed = target.src;
         }
     }
@@ -77,7 +80,7 @@
     <!-- Rendered and escaped by the server (MarkdownRenderer). -->
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
     <article
-        class="markdown surface p-4 text-[1.0625rem] sm:p-6 [&_img]:cursor-zoom-in"
+        class="markdown surface p-4 text-[1.0625rem] sm:p-6 [&_img:not(.icon)]:cursor-zoom-in"
         {onclick}
     >
         {@html sequence.html}

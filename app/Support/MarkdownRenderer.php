@@ -2,7 +2,10 @@
 
 namespace App\Support;
 
+use App\Models\Icon;
 use App\Models\Sequence;
+use App\Support\Markdown\IconInline;
+use App\Support\Markdown\IconRenderer;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -10,12 +13,14 @@ use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\MarkdownConverter;
+use League\CommonMark\Node\Inline\Text;
 
 /**
  * Turns the Markdown of a sequence into HTML that is safe to display:
  * raw HTML is escaped, unsafe links are dropped, and links to other sites
  * open in a new tab (exercises, surveys…). Images written image:{id} point
- * to the protected route of that image, if it belongs to the sequence.
+ * to the protected route of that image, if it belongs to the sequence;
+ * icons written icon:{id} come from the shared library.
  */
 class MarkdownRenderer
 {
@@ -43,6 +48,8 @@ class MarkdownRenderer
         $environment->addExtension(new GithubFlavoredMarkdownExtension);
         $environment->addExtension(new ExternalLinkExtension);
         $environment->addEventListener(DocumentParsedEvent::class, $this->resolveImages(...));
+        $environment->addEventListener(DocumentParsedEvent::class, $this->resolveIcons(...));
+        $environment->addRenderer(IconInline::class, new IconRenderer);
 
         $this->converter = new MarkdownConverter($environment);
     }
@@ -83,6 +90,42 @@ class MarkdownRenderer
                 // Another sequence's image, or a deleted one: show nothing.
                 $image->detach();
             }
+        }
+    }
+
+    private function resolveIcons(DocumentParsedEvent $event): void
+    {
+        $nodes = [];
+
+        foreach ($event->getDocument()->iterator() as $node) {
+            if ($node instanceof Image && str_starts_with($node->getUrl(), 'icon:')) {
+                $nodes[] = $node;
+            }
+        }
+
+        if ($nodes === []) {
+            return;
+        }
+
+        $ids = array_map(fn (Image $node) => (int) substr($node->getUrl(), strlen('icon:')), $nodes);
+        $icons = Icon::query()->whereKey($ids)->get(['id', 'name', 'monochrome'])->keyBy('id');
+
+        foreach ($nodes as $index => $node) {
+            $icon = $icons->get($ids[$index]);
+
+            if ($icon === null) {
+                // A deleted icon: show nothing.
+                $node->detach();
+
+                continue;
+            }
+
+            $label = trim(implode('', array_map(
+                fn ($child) => $child instanceof Text ? $child->getLiteral() : '',
+                iterator_to_array($node->children()),
+            )));
+
+            $node->replaceWith(new IconInline(route('icons.show', $icon), $label !== '' ? $label : $icon->name, $icon->monochrome));
         }
     }
 }

@@ -18,6 +18,9 @@
     import { Button } from '@/components/ui/button';
     import { Spinner } from '@/components/ui/spinner';
     import { toUrl } from '@/lib/utils';
+    import type { Icon } from '@/types/icon';
+
+    let { icons }: { icons: Icon[] } = $props();
 </script>
 
 <AppHead title="Nouvelle séquence" />
@@ -30,7 +33,7 @@
 
     <Form {...SequenceController.store.form()} class="space-y-6">
         {#snippet children({ errors, processing })}
-            <SequenceFields {errors} />
+            <SequenceFields {errors} {icons} />
 
             <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                 <Button variant="outline" asChild class="h-11 sm:h-9">

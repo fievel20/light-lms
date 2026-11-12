@@ -144,7 +144,7 @@ et ajouter les deux lignes :
 45 2 * * * tar -czf ~/backups/images-$(date +\%F).tar.gz -C /var/www/html/light-lms/shared/storage/app private && find ~/backups -name 'images-*.tar.gz' -mtime +14 -delete
 ```
 
-Les images des séquences sont dans `shared/storage/app/private/sequences` : hors du dossier public, elles ne passent que par l'application (personnes connectées) et survivent aux déploiements.
+Les images des séquences sont dans `shared/storage/app/private/sequences` (et les icônes dans `private/icons`, sauvegardées par la même commande) : hors du dossier public, elles ne passent que par l'application (personnes connectées) et survivent aux déploiements.
 
 ### Mise à jour du serveur pour les images (phase 2)
 
