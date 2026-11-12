@@ -12,6 +12,7 @@ use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
+use App\Http\Controllers\SequenceController;
 use App\Http\Controllers\TrainerCompetencyController;
 use App\Http\Controllers\TrainerLearnerController;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,9 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::resource('frameworks.competencies', CompetencyController::class)
         ->except(['index', 'show'])
         ->scoped();
+
+    Route::post('sequences/preview', [SequenceController::class, 'preview'])->name('sequences.preview');
+    Route::resource('sequences', SequenceController::class);
 });
 
 Route::middleware(['guest', 'signed'])->group(function () {

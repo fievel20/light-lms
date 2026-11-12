@@ -272,3 +272,106 @@
         transition-duration: 0.01ms !important;
     }
 }
+
+/*
+  Rendered Markdown of a sequence: readable on a phone, steps that stand
+  out, quotes as a lime-ruled box (e.g. "Cadre commun").
+*/
+@layer components {
+    .markdown {
+        line-height: 1.65;
+        overflow-wrap: anywhere;
+
+        & > * + * {
+            margin-top: 0.9em;
+        }
+        & h1,
+        & h2,
+        & h3 {
+            margin-top: 1.4em;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        & > :first-child {
+            margin-top: 0;
+        }
+        & h1 {
+            font-size: 1.5rem;
+        }
+        & h2 {
+            font-size: 1.25rem;
+        }
+        & h3 {
+            font-size: 1.0625rem;
+        }
+        & ol,
+        & ul {
+            padding-left: 1.5em;
+        }
+        & ol {
+            list-style: decimal;
+        }
+        & ul {
+            list-style: disc;
+        }
+        & li + li {
+            margin-top: 0.4em;
+        }
+        & ol > li::marker {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--primary);
+        }
+        & a {
+            color: var(--accent-foreground);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        & strong {
+            font-weight: 600;
+        }
+        & blockquote {
+            border-left: 4px solid var(--cta);
+            background: var(--muted);
+            border-radius: var(--radius);
+            padding: 0.75em 1em;
+        }
+        & code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            background: var(--muted);
+            border-radius: var(--radius-sm);
+            padding: 0.1em 0.35em;
+        }
+        & pre {
+            overflow-x: auto;
+            background: var(--muted);
+            border-radius: var(--radius);
+            padding: 0.75em 1em;
+        }
+        & pre code {
+            background: none;
+            padding: 0;
+        }
+        & img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        & hr {
+            border-color: var(--border);
+        }
+        & table {
+            display: block;
+            overflow-x: auto;
+            border-collapse: collapse;
+        }
+        & th,
+        & td {
+            border: 1px solid var(--border);
+            padding: 0.4em 0.7em;
+            text-align: left;
+        }
+    }
+}

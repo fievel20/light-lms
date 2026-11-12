@@ -10,6 +10,7 @@
     import { Form, Link } from '@inertiajs/svelte';
     import Archive from '@lucide/svelte/icons/archive';
     import ArchiveRestore from '@lucide/svelte/icons/archive-restore';
+    import BookOpen from '@lucide/svelte/icons/book-open';
     import Library from '@lucide/svelte/icons/library';
     import Pencil from '@lucide/svelte/icons/pencil';
     import Plus from '@lucide/svelte/icons/plus';
@@ -21,6 +22,7 @@
     import { cn, toUrl } from '@/lib/utils';
     import * as frameworks from '@/routes/frameworks';
     import { create, edit, show } from '@/routes/promotions';
+    import * as sequences from '@/routes/sequences';
     import type { Promotion } from '@/types/promotion';
 
     let {
@@ -46,14 +48,23 @@
                 title="Promotions"
                 description="Gère tes promotions d'apprenants."
             />
-            <!-- On phones the frameworks have no tab of their own. -->
-            <Link
-                href={toUrl(frameworks.index())}
-                class="-mt-4 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary md:hidden"
-            >
-                <Library class="size-4" />
-                Référentiels de compétences
-            </Link>
+            <!-- On phones the frameworks and sequences have no tab of their own. -->
+            <div class="-mt-4 flex flex-wrap gap-x-4 md:hidden">
+                <Link
+                    href={toUrl(frameworks.index())}
+                    class="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
+                >
+                    <Library class="size-4" />
+                    Référentiels
+                </Link>
+                <Link
+                    href={toUrl(sequences.index())}
+                    class="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
+                >
+                    <BookOpen class="size-4" />
+                    Séquences
+                </Link>
+            </div>
         </div>
 
         <Button asChild class="w-full sm:w-auto">
