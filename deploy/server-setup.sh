@@ -178,11 +178,19 @@ SQL
     info "Il démarrera après le premier déploiement."
 
     step "Terminé. Pour GitHub (Settings → Environments → production) :"
-    local ip
+    local ip port host key
     ip="$(hostname -I | awk '{ print $1 }')"
+    port="$(sshd -T 2> /dev/null | awk '$1 == "port" { print $2; exit }' || true)"
+    port="${port:-22}"
+    # known_hosts names a non-standard port as [address]:port.
+    if [ "$port" = 22 ]; then host="$ip"; else host="[$ip]:$port"; fi
     info "DEPLOY_HOST        = $ip"
+    [ "$port" = 22 ] || info "DEPLOY_PORT        = $port"
     info "DEPLOY_KNOWN_HOSTS = les lignes ci-dessous"
-    ssh-keyscan -H "$ip" 2> /dev/null
+    # Read from the server's own key files: no network round trip that a firewall could block.
+    for key in /etc/ssh/ssh_host_*_key.pub; do
+        awk -v host="$host" '{ print host, $1, $2 }' "$key"
+    done
 }
 
 reset_server() {
