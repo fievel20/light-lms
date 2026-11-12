@@ -10,6 +10,7 @@
     import { Form, Link, page } from '@inertiajs/svelte';
     import BookCheck from '@lucide/svelte/icons/book-check';
     import ChartColumn from '@lucide/svelte/icons/chart-column';
+    import Eye from '@lucide/svelte/icons/eye';
     import FileUp from '@lucide/svelte/icons/file-up';
     import Mail from '@lucide/svelte/icons/mail';
     import Pencil from '@lucide/svelte/icons/pencil';
@@ -26,6 +27,7 @@
     import { toUrl } from '@/lib/utils';
     import * as frameworks from '@/routes/frameworks';
     import { edit, progress } from '@/routes/promotions';
+    import * as promotionLearningPaths from '@/routes/promotions/learning-paths';
     import { show as learnerPage } from '@/routes/promotions/learners';
     import type { ImportReport, Learner } from '@/types/learner';
     import type { Promotion } from '@/types/promotion';
@@ -83,6 +85,17 @@
                     {/snippet}
                 </Button>
             {/if}
+            <Button variant="outline" size="sm" asChild class="h-11 flex-1 sm:h-9">
+                {#snippet children(props)}
+                    <Link
+                        {...props}
+                        href={toUrl(promotionLearningPaths.index(promotion.id))}
+                    >
+                        <Eye class="size-4" />
+                        Parcours
+                    </Link>
+                {/snippet}
+            </Button>
             <Button variant="outline" size="sm" asChild class="h-11 flex-1 sm:h-9">
                 {#snippet children(props)}
                     <Link {...props} href={toUrl(edit(promotion.id))}>

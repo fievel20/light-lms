@@ -37,6 +37,14 @@ class LearningPath extends Model
     }
 
     /**
+     * @return BelongsToMany<Promotion, $this>
+     */
+    public function promotions(): BelongsToMany
+    {
+        return $this->belongsToMany(Promotion::class)->withTimestamps()->orderBy('name');
+    }
+
+    /**
      * Ids of the sequences, in the path's order.
      *
      * @return list<int>

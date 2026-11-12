@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LearningPathRequest;
 use App\Models\LearningPath;
+use App\Models\Promotion;
 use App\Models\Sequence;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -42,6 +44,8 @@ class LearningPathController extends Controller
         return Inertia::render('learning-paths/Show', [
             'learningPath' => $learningPath->only(['id', 'name', 'description']),
             'sequences' => $sequences->map(fn (Sequence $sequence) => $sequence->only(['id', 'title', 'summary']))->values(),
+            'promotions' => $learningPath->promotions()->get(['promotions.id', 'name'])
+                ->map(fn (Promotion $promotion) => $promotion->only(['id', 'name'])),
             'availableSequences' => Sequence::query()
                 ->whereKeyNot($sequences->modelKeys())
                 ->orderBy('title')
@@ -67,6 +71,18 @@ class LearningPathController extends Controller
 
     public function destroy(LearningPath $learningPath): RedirectResponse
     {
+        $promotions = $learningPath->promotions()->pluck('name');
+
+        if ($promotions->isNotEmpty()) {
+            throw ValidationException::withMessages([
+                'learning_path' => trans_choice(
+                    'Ce parcours est affecté à la promotion :names.|Ce parcours est affecté aux promotions :names.',
+                    $promotions->count(),
+                    ['names' => $promotions->join(', ', ' et ')],
+                ),
+            ]);
+        }
+
         $learningPath->delete();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => "Parcours « {$learningPath->name} » supprimé."]);

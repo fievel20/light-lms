@@ -112,6 +112,17 @@ Menu **Parcours** (sur mobile : lien sous le titre de la page Promotions). Un pa
 - La croix **retire** une séquence du parcours sans la supprimer de la bibliothèque.
 - Supprimer une séquence la retire de tous ses parcours : la page de modification les liste avant confirmation.
 
+### 9. Ouvrir les séquences à une promotion
+
+Menu **Séquences ouvertes** (promotion active), ou bouton **Parcours** sur la fiche d'une promotion.
+
+- **Affecte** un ou plusieurs parcours à la promotion. Leurs séquences arrivent toutes **masquées** : les apprenants ne les voient pas.
+- Rends chaque séquence **visible** (ou masque-la à nouveau) avec son bouton, au rythme des ateliers. La date de première ouverture est conservée.
+- L'ouverture vaut pour la promotion : chaque promotion avance à son rythme, et une séquence présente dans deux parcours affectés est ouverte pour les deux.
+- Une séquence ajoutée plus tard à un parcours affecté arrive masquée.
+- Retirer un parcours de la promotion masque à nouveau ses séquences. Un parcours affecté ne peut pas être supprimé.
+- Promotion archivée : les séquences ouvertes restent lisibles, plus rien ne s'ouvre.
+
 ---
 
 ## Parcours de l'apprenant

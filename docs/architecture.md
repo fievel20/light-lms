@@ -83,6 +83,16 @@ erDiagram
         bigint sequence_id "unique par parcours"
         int position
     }
+    learning_path_promotion {
+        bigint learning_path_id
+        bigint promotion_id "unique par parcours"
+    }
+    sequence_releases {
+        bigint promotion_id
+        bigint sequence_id "unique par promotion"
+        timestamp released_at
+        bigint released_by
+    }
     sequence_images {
         bigint sequence_id
         string path "disque privé local"
@@ -130,6 +140,7 @@ Verrous :
 - promotion archivée → plus d'inscription ni d'évaluation ;
 - compétence évaluée → type et valeurs de niveaux figés, suppression interdite ;
 - promotion évaluée → référentiel figé ;
+- parcours affecté → suppression interdite ; promotion archivée → plus d'affectation ni d'ouverture ;
 - référentiel affecté → suppression interdite.
 
 ## Sécurité et accès
@@ -145,19 +156,19 @@ Verrous :
 
 ## Routes métier
 
-| Accès        | Routes                                                                                                                                                                             |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Tous         | `GET /dashboard` (accueil formateur ou apprenant selon le rôle)                                                                                                                    |
-| Formateur    | `promotions.*` (CRUD sans suppression, `archive`, `unarchive`, `progress` = `/promotions/{id}/suivi`)                                                                              |
-| Formateur    | `current-promotion.update` (`PUT /promotion-active`) : promotion active mémorisée                                                                                                  |
-| Formateur    | `promotions.competencies.index / show` (`/promotions/{id}/competences[/{competence}]`)                                                                                             |
-| Formateur    | `promotions.learners.index / show` (`/promotions/{id}/apprenants[/{apprenant}]`)                                                                                                   |
-| Formateur    | `promotions.learners.store / import / destroy`, `promotions.learners.assessments.store` (`quiet`)                                                                                  |
-| Formateur    | `learners.invitation.resend`                                                                                                                                                       |
-| Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                                                                                             |
-| Formateur    | `sequences.*`, `sequences.preview` (aperçu JSON), `sequences.duplicate`, `sequences.images.store / show`, `learning-paths.*`, `learning-paths.sequences.store / reorder / destroy` |
-| Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                                                                                              |
-| Invité signé | `invitation.show`, `invitation.accept` (`/invitation/{user}`)                                                                                                                      |
+| Accès        | Routes                                                                                                                                                                                                                                                                                                |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tous         | `GET /dashboard` (accueil formateur ou apprenant selon le rôle)                                                                                                                                                                                                                                       |
+| Formateur    | `promotions.*` (CRUD sans suppression, `archive`, `unarchive`, `progress` = `/promotions/{id}/suivi`)                                                                                                                                                                                                 |
+| Formateur    | `current-promotion.update` (`PUT /promotion-active`) : promotion active mémorisée                                                                                                                                                                                                                     |
+| Formateur    | `promotions.competencies.index / show` (`/promotions/{id}/competences[/{competence}]`)                                                                                                                                                                                                                |
+| Formateur    | `promotions.learners.index / show` (`/promotions/{id}/apprenants[/{apprenant}]`)                                                                                                                                                                                                                      |
+| Formateur    | `promotions.learners.store / import / destroy`, `promotions.learners.assessments.store` (`quiet`)                                                                                                                                                                                                     |
+| Formateur    | `learners.invitation.resend`                                                                                                                                                                                                                                                                          |
+| Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                                                                                                                                                                                                                |
+| Formateur    | `sequences.*`, `sequences.preview` (aperçu JSON), `sequences.duplicate`, `sequences.images.store / show`, `learning-paths.*`, `learning-paths.sequences.store / reorder / destroy`, `promotions.learning-paths.index / store / destroy` (`/promotions/{id}/parcours`), `promotions.sequences.release` |
+| Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                                                                                                                                                                                                                 |
+| Invité signé | `invitation.show`, `invitation.accept` (`/invitation/{user}`)                                                                                                                                                                                                                                         |
 
 Liste complète : `php artisan route:list --except-vendor`.
 
@@ -172,7 +183,7 @@ app/
 │   ├── Controllers/  # contrôleurs fins : validation → action → redirection / page
 │   ├── Middleware/   # trainer, learner
 │   └── Requests/     # FormRequest (promotion, référentiel, compétence, apprenant)
-├── Models/           # User, Promotion, Framework, Competency, ScaleLevel, Assessment, Sequence, SequenceImage, LearningPath
+├── Models/           # User, Promotion, Framework, Competency, ScaleLevel, Assessment, Sequence, SequenceImage, LearningPath, SequenceRelease
 ├── Notifications/    # LearnerInvitation (email, en file d'attente)
 ├── Queries/          # lectures complexes (progression, dernières évaluations)
 ├── Support/          # CompetencyCell, MarkdownRenderer

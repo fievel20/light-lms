@@ -64,7 +64,8 @@
     <section class="space-y-3 rounded-xl border border-destructive/40 p-4">
         <h2 class="font-medium">Supprimer le parcours</h2>
         <p class="text-sm text-muted-foreground">
-            Ses séquences sont conservées dans la bibliothèque.
+            Ses séquences sont conservées dans la bibliothèque. Impossible
+            s'il est affecté à une promotion.
         </p>
         {#if deleteError}
             <p class="text-sm text-destructive">{deleteError}</p>
