@@ -125,6 +125,7 @@ Points clés :
 | Enregistrement d'une évaluation                    | `App\Actions\Assessments\RecordAssessment`                                  |
 | Progression                                        | `App\Queries\PromotionProgress`, `LearnerCompetencies`, `LatestAssessments` |
 | Compétences nouvellement acquises à fêter          | `App\Actions\Progress\PullCelebrations`                                     |
+| Séquences lisibles par un apprenant                | `Sequence::isReadableBy()`, `App\Queries\LearnerLearningPaths`              |
 | Rendu Markdown sûr (HTML échappé, liens externes)  | `App\Support\MarkdownRenderer`                                              |
 | Fil d'activité de l'apprenant                      | `App\Queries\LearnerActivity`                                               |
 
@@ -168,6 +169,8 @@ Verrous :
 | Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                                                                                                                                                                                                                |
 | Formateur    | `sequences.*`, `sequences.preview` (aperçu JSON), `sequences.duplicate`, `sequences.images.store / show`, `learning-paths.*`, `learning-paths.sequences.store / reorder / destroy`, `promotions.learning-paths.index / store / destroy` (`/promotions/{id}/parcours`), `promotions.sequences.release` |
 | Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                                                                                                                                                                                                                 |
+| Apprenant    | `my-learning-paths.index` (`/mes-parcours`), `my-learning-paths.show` (`/mes-parcours/{promotion}/{parcours}/{séquence}`)                                                                                                                                                                             |
+| Connecté     | `sequences.images.show` : formateur, ou apprenant à qui la séquence est ouverte (404 sinon)                                                                                                                                                                                                           |
 | Invité signé | `invitation.show`, `invitation.accept` (`/invitation/{user}`)                                                                                                                                                                                                                                         |
 
 Liste complète : `php artisan route:list --except-vendor`.

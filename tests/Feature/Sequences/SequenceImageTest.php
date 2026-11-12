@@ -42,7 +42,7 @@ it('refuse ce qui n’est pas une image, ou une image trop lourde', function (Up
     'trop lourde' => fn () => UploadedFile::fake()->image('capture.png')->size(5121),
 ]);
 
-it('sert les images au formateur seulement, et dans leur séquence', function () {
+it('sert les images au formateur, et dans leur séquence', function () {
     $image = SequenceImage::factory()->for($this->sequence)->create();
     $other = Sequence::factory()->create();
 
@@ -55,9 +55,10 @@ it('sert les images au formateur seulement, et dans leur séquence', function ()
         ->get(route('sequences.images.show', [$other, $image]))
         ->assertNotFound();
 
+    // A learner the sequence is not opened to.
     $this->actingAs(User::factory()->create())
         ->get(route('sequences.images.show', [$this->sequence, $image]))
-        ->assertForbidden();
+        ->assertNotFound();
 
     auth()->logout();
     $this->get(route('sequences.images.show', [$this->sequence, $image]))

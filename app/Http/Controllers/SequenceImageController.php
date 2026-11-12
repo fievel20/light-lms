@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sequence;
 use App\Models\SequenceImage;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -41,8 +42,14 @@ class SequenceImageController extends Controller
         return response()->json(['id' => $image->id, 'markdown' => $image->markdown()], 201);
     }
 
-    public function show(Sequence $sequence, SequenceImage $image): StreamedResponse
+    public function show(Request $request, Sequence $sequence, SequenceImage $image): StreamedResponse
     {
+        /** @var User $user */
+        $user = $request->user();
+
+        // Learners only see the images of the sequences opened to them.
+        abort_unless($sequence->isReadableBy($user), 404);
+
         return Storage::disk(SequenceImage::DISK)->response($image->path, $image->original_name, [
             'Content-Type' => $image->mime_type,
             // Private: only for the signed-in user; images never change once uploaded.
