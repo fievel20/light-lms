@@ -106,6 +106,9 @@ pm = ondemand
 pm.max_children = 5
 pm.process_idle_timeout = 30s
 pm.max_requests = 500
+; Images of the sequences: 5 MB each (the application checks it).
+php_admin_value[upload_max_filesize] = 6M
+php_admin_value[post_max_size] = 8M
 POOL
     # PHP-FPM 8.4 serves Light LMS only: the default pool would just use memory.
     [ -f /etc/php/8.4/fpm/pool.d/www.conf ] && mv /etc/php/8.4/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/www.conf.disabled
@@ -155,6 +158,8 @@ SQL
     step "Apache : site $DOMAIN"
     if [ -f "$SITE" ]; then
         info "Déjà présent, conservé (certbot y a peut-être ajouté la redirection HTTPS)."
+        # Older installs allowed 2 MB per request: raise it for the images, HTTPS site included.
+        sed -i 's/^\(\s*\)LimitRequestBody [0-9]*/\1LimitRequestBody 8388608/' "$SITE" /etc/apache2/sites-available/light-lms-le-ssl.conf 2> /dev/null || true
     else
         curl -fsSL "$RAW/apache.conf" | sed "s#lms\.example\.fr#$DOMAIN#g; s#/var/www/html/light-lms#$APP_DIR#g" > "$SITE"
     fi

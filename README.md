@@ -4,16 +4,17 @@ Un LMS léger pour suivre la validation de compétences par promotion : le forma
 
 Laravel 13 + Inertia / Svelte 5, développé en TDD, pensé mobile first. Interface en français.
 
-## Fonctionnalités (MVP)
+## Fonctionnalités
 
-| Formateur (administrateur unique)                                              | Apprenant                                                 |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------- |
-| Promotion active choisie dans le menu, vue d'ensemble                          | Activation du compte depuis l'email d'invitation          |
-| Promotions : création, modification, archivage                                 | Autoévaluation en un geste (pastilles de niveau, filtres) |
-| Apprenants : ajout manuel ou import CSV, invitation par email                  | Accueil : progression par promotion, activité récente     |
-| Référentiels : compétences binaires ou à échelle, import JSON                  | Célébration des compétences nouvellement acquises         |
-| Validation **par compétence** ou **par apprenant**, enregistrement automatique |                                                           |
-| Suivi : carte de chaleur apprenants × compétences                              |                                                           |
+| Formateur (administrateur unique)                                                 | Apprenant                                                 |
+| --------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Promotion active choisie dans le menu, vue d'ensemble                             | Activation du compte depuis l'email d'invitation          |
+| Promotions : création, modification, archivage                                    | Autoévaluation en un geste (pastilles de niveau, filtres) |
+| Apprenants : ajout manuel ou import CSV, invitation par email                     | Accueil : progression par promotion, activité récente     |
+| Référentiels : compétences binaires ou à échelle, import JSON                     | Célébration des compétences nouvellement acquises         |
+| Validation **par compétence** ou **par apprenant**, enregistrement automatique    |                                                           |
+| Suivi : carte de chaleur apprenants × compétences                                 |                                                           |
+| Séquences en Markdown (images, icônes), parcours, ouverture séquence par séquence | Parcours : lecture des séquences ouvertes                 |
 
 ## Démarrage rapide
 
