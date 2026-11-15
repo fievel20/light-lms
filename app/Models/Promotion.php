@@ -57,7 +57,11 @@ class Promotion extends Model
      */
     public function learningPaths(): BelongsToMany
     {
-        return $this->belongsToMany(LearningPath::class)->withTimestamps()->orderBy('name');
+        return $this->belongsToMany(LearningPath::class)
+            ->withPivot('position')
+            ->withTimestamps()
+            ->orderByPivot('position')
+            ->orderBy('name');
     }
 
     /**

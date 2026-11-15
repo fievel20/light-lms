@@ -87,6 +87,7 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
         ->only(['index', 'store', 'update', 'destroy']);
     Route::get('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'index'])->name('promotions.learning-paths.index');
     Route::post('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'store'])->name('promotions.learning-paths.store');
+    Route::put('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'reorder'])->name('promotions.learning-paths.reorder');
     Route::delete('promotions/{promotion}/parcours/{learning_path}', [PromotionLearningPathController::class, 'destroy'])->name('promotions.learning-paths.destroy');
     Route::get('promotions/{promotion}/sequences-realisees', [PromotionSequenceCompletionController::class, 'index'])->name('promotions.sequence-completions.index');
     Route::put('promotions/{promotion}/sequences/{sequence}/release', [SequenceReleaseController::class, 'update'])->name('promotions.sequences.release');
