@@ -8,6 +8,8 @@
 
 <script lang="ts">
     import { Form, Link, page, router } from '@inertiajs/svelte';
+    import ArrowDown from '@lucide/svelte/icons/arrow-down';
+    import ArrowUp from '@lucide/svelte/icons/arrow-up';
     import Eye from '@lucide/svelte/icons/eye';
     import EyeOff from '@lucide/svelte/icons/eye-off';
     import Plus from '@lucide/svelte/icons/plus';
@@ -55,6 +57,7 @@
 
     const archived = $derived(promotion.archived_at !== null);
     const releaseError = $derived(page.props.errors?.visible);
+    const orderError = $derived(page.props.errors?.learning_paths);
 
     function isVisible(sequence: ReleasedSequence): boolean {
         return pending[sequence.id] ?? sequence.released_at !== null;
@@ -72,6 +75,21 @@
                 preserveState: true,
                 onFinish: () => delete pending[sequence.id],
             },
+        );
+    }
+
+    /** Moves a path up or down; the learners see the paths in this order. */
+    function move(index: number, delta: -1 | 1): void {
+        const order = learningPaths.map((path) => path.id);
+        [order[index], order[index + delta]] = [
+            order[index + delta],
+            order[index],
+        ];
+
+        router.put(
+            PromotionLearningPathController.reorder.url(promotion.id),
+            { learning_paths: order },
+            { preserveScroll: true },
         );
     }
 
@@ -107,10 +125,14 @@
         </p>
     {/if}
 
-    {#each learningPaths as path (path.id)}
+    {#if orderError}
+        <p class="text-sm text-destructive">{orderError}</p>
+    {/if}
+
+    {#each learningPaths as path, index (path.id)}
         <section class="flex flex-col gap-3 surface p-4">
-            <header class="flex items-start justify-between gap-3">
-                <div class="min-w-0">
+            <header class="flex items-start gap-1">
+                <div class="min-w-0 flex-1">
                     <Link
                         href={toUrl(learningPathRoutes.show(path.id))}
                         class="font-display text-lg font-bold hover:underline"
@@ -124,6 +146,32 @@
                             : ''}
                     </p>
                 </div>
+                {#if learningPaths.length > 1}
+                    <div class="flex shrink-0" aria-label="Ordre du parcours">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            class="size-11 text-muted-foreground sm:size-9"
+                            disabled={index === 0}
+                            aria-label={`Monter « ${path.name} »`}
+                            onclick={() => move(index, -1)}
+                        >
+                            <ArrowUp class="size-4" />
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            class="size-11 text-muted-foreground sm:size-9"
+                            disabled={index === learningPaths.length - 1}
+                            aria-label={`Descendre « ${path.name} »`}
+                            onclick={() => move(index, 1)}
+                        >
+                            <ArrowDown class="size-4" />
+                        </Button>
+                    </div>
+                {/if}
                 <Form
                     {...PromotionLearningPathController.destroy.form([
                         promotion.id,

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use App\Support\CurrentPromotion;
+use App\Support\ObserverMode;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -43,6 +44,10 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            // The trainer is looking at this learner's space (read only).
+            'observer' => fn () => app(ObserverMode::class)->active()
+                ? ['learner' => $request->user()?->name]
+                : null,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'promotionSwitcher' => function () use ($request) {
                 $user = $request->user();

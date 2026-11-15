@@ -14,6 +14,7 @@ use App\Http\Controllers\LearningPathController;
 use App\Http\Controllers\LearningPathSequenceController;
 use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\MyLearningPathController;
+use App\Http\Controllers\ObserverController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
@@ -30,6 +31,7 @@ Route::get('/', fn () => to_route(auth()->check() ? 'dashboard' : 'login'))->nam
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::delete('observateur', [ObserverController::class, 'destroy'])->name('observer.stop');
     // Trainer, or a learner the sequence is opened to (checked in the controller).
     Route::get('sequences/{sequence}/images/{image}', [SequenceImageController::class, 'show'])
         ->scopeBindings()
@@ -63,6 +65,7 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('promotions/{promotion}/learners/{learner}/assessments/{competency}', [LearnerAssessmentController::class, 'store'])->name('promotions.learners.assessments.store');
 
     Route::post('learners/{learner}/invitation', [LearnerInvitationController::class, 'store'])->name('learners.invitation.resend');
+    Route::post('observateur/{learner}', [ObserverController::class, 'store'])->name('observer.start');
     Route::get('comptes-apprenants', [LearnerAccountController::class, 'index'])->name('learners.index');
     Route::get('comptes-apprenants/{learner}', [LearnerAccountController::class, 'edit'])->name('learners.edit');
     Route::put('learners/{learner}/email', [LearnerAccountController::class, 'updateEmail'])->name('learners.email.update');
@@ -87,6 +90,7 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
         ->only(['index', 'store', 'update', 'destroy']);
     Route::get('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'index'])->name('promotions.learning-paths.index');
     Route::post('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'store'])->name('promotions.learning-paths.store');
+    Route::put('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'reorder'])->name('promotions.learning-paths.reorder');
     Route::delete('promotions/{promotion}/parcours/{learning_path}', [PromotionLearningPathController::class, 'destroy'])->name('promotions.learning-paths.destroy');
     Route::get('promotions/{promotion}/sequences-realisees', [PromotionSequenceCompletionController::class, 'index'])->name('promotions.sequence-completions.index');
     Route::put('promotions/{promotion}/sequences/{sequence}/release', [SequenceReleaseController::class, 'update'])->name('promotions.sequences.release');

@@ -1,6 +1,7 @@
 <script lang="ts">
     import AppHead from '@/components/AppHead.svelte';
     import AssessmentRow from '@/components/assessments/AssessmentRow.svelte';
+    import ObserveButton from '@/components/observer/ObserveButton.svelte';
     import PagerHeader from '@/components/trainer/PagerHeader.svelte';
     import { toUrl } from '@/lib/utils';
     import { index, show } from '@/routes/promotions/learners';
@@ -49,6 +50,8 @@
             {/if}
         </p>
     </PagerHeader>
+
+    <ObserveButton learnerId={learner.id} class="sm:justify-self-start" />
 
     <ul class="divide-y divide-border/70">
         {#each competencies as competency (competency.id)}

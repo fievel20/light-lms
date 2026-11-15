@@ -5,11 +5,15 @@ namespace App\Actions\Progress;
 use App\Models\Promotion;
 use App\Models\User;
 use App\Queries\LearnerCompetencies;
+use App\Support\ObserverMode;
 use Illuminate\Support\Facades\DB;
 
 class PullCelebrations
 {
-    public function __construct(private LearnerCompetencies $competencies) {}
+    public function __construct(
+        private LearnerCompetencies $competencies,
+        private ObserverMode $observer,
+    ) {}
 
     /**
      * Competencies newly acquired by the learner, marked as celebrated so
@@ -19,6 +23,11 @@ class PullCelebrations
      */
     public function handle(User $learner): array
     {
+        // The trainer observing the learner must not spoil the surprise.
+        if ($this->observer->active()) {
+            return [];
+        }
+
         $celebrations = [];
         $now = now();
 

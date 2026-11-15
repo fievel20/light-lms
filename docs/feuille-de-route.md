@@ -22,6 +22,7 @@
 | Charte « labo »        | Papier, encre indigo, vert acide, filets fins, Space Grotesk / Inter / JetBrains Mono                                                                 |
 | Retraits               | Validation rapide, système de badges, suppression de compte depuis le profil                                                                          |
 | Séquences réalisées    | L'apprenant valide chaque séquence terminée ; le formateur suit la promotion par séquence ou par apprenant                                            |
+| Mode observateur       | Le formateur voit l'espace d'un apprenant tel qu'il le voit, en lecture seule                                                                         |
 | Comptes apprenants     | Le formateur corrige l'email d'un apprenant, lui envoie un lien de réinitialisation ou lui donne un mot de passe provisoire                           |
 | Finitions et nettoyage | Favicon, composants et layouts du kit inutilisés supprimés                                                                                            |
 

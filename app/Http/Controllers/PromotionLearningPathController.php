@@ -14,8 +14,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 /**
- * Learning paths of a promotion: assign, remove, and see which sequences
- * are open to its learners.
+ * Learning paths of a promotion: assign, order, remove, and see which
+ * sequences are open to its learners.
  */
 class PromotionLearningPathController extends Controller
 {
@@ -59,9 +59,41 @@ class PromotionLearningPathController extends Controller
         }
 
         // Nothing is opened: the sequences stay hidden until released one by one.
-        $promotion->learningPaths()->attach($validated['learning_path_id']);
+        $promotion->learningPaths()->attach($validated['learning_path_id'], [
+            'position' => (int) DB::table('learning_path_promotion')->where('promotion_id', $promotion->id)->max('position') + 1,
+        ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Parcours affecté. Ses séquences sont masquées : ouvre-les une par une.']);
+
+        return to_route('promotions.learning-paths.index', $promotion);
+    }
+
+    /**
+     * The new order of the promotion's paths, as the learners will see them.
+     */
+    public function reorder(Request $request, Promotion $promotion): RedirectResponse
+    {
+        $validated = $request->validate([
+            'learning_paths' => ['present', 'array', 'list'],
+            'learning_paths.*' => ['integer'],
+        ]);
+
+        /** @var list<int> $order */
+        $order = array_values(array_map('intval', $validated['learning_paths']));
+        $current = $promotion->learningPaths()->pluck('learning_paths.id')->all();
+
+        // Exactly the assigned paths, each once: otherwise the page is out of date.
+        if (count($order) !== count($current) || count(array_unique($order)) !== count($order) || array_diff($order, $current) !== []) {
+            throw ValidationException::withMessages([
+                'learning_paths' => 'Les parcours de la promotion ont changé entre-temps : recharge la page.',
+            ]);
+        }
+
+        DB::transaction(function () use ($promotion, $order): void {
+            foreach ($order as $index => $learningPathId) {
+                $promotion->learningPaths()->updateExistingPivot($learningPathId, ['position' => $index + 1]);
+            }
+        });
 
         return to_route('promotions.learning-paths.index', $promotion);
     }
