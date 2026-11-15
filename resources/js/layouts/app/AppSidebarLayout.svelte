@@ -5,6 +5,7 @@
     import AppSidebar from '@/components/AppSidebar.svelte';
     import AppSidebarHeader from '@/components/AppSidebarHeader.svelte';
     import BottomNav from '@/components/navigation/BottomNav.svelte';
+    import ObserverBanner from '@/components/observer/ObserverBanner.svelte';
     import { Toaster } from '@/components/ui/sonner';
     import type { BreadcrumbItem } from '@/types';
 
@@ -23,6 +24,7 @@
         variant="sidebar"
         class="min-w-0 overflow-x-clip pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0"
     >
+        <ObserverBanner />
         <AppSidebarHeader {breadcrumbs} />
         {@render children?.()}
     </AppContent>

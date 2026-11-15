@@ -67,6 +67,8 @@ Sur la fiche promotion, chaque apprenant porte l’étiquette **Activé** ou **I
 - **Envoyer un lien de réinitialisation** du mot de passe : l'apprenant choisit lui-même son nouveau mot de passe. Pour un compte pas encore activé, c'est l'invitation qu'il faut renvoyer.
 - **Définir un mot de passe provisoire**, à lui donner de vive voix s'il n'a pas accès à sa boîte mail. Le bouton **Générer** propose un mot de passe facile à lire (« Pomme-Tigre-4827! »). L'apprenant est déconnecté de ses autres appareils ; un compte invité est activé du même coup. Il pourra changer ce mot de passe dans son profil.
 
+**Mode observateur.** Le bouton **Voir comme l’apprenant** (sur la fiche d’un apprenant dans une promotion, ou dans Comptes apprenants) ouvre son espace tel qu’il le voit : accueil, compétences, parcours, séquences. Un bandeau rappelle en permanence qui tu observes. C’est en **lecture seule** : autoévaluer, valider une séquence ou modifier le profil est refusé, et ses félicitations restent à découvrir. **Quitter** te ramène là où tu étais.
+
 ### 5. Valider les compétences
 
 Deux points d'entrée, dans le menu de la promotion active :

@@ -14,6 +14,7 @@
     import LearnerInvitationController from '@/actions/App/Http/Controllers/LearnerInvitationController';
     import AppHead from '@/components/AppHead.svelte';
     import Heading from '@/components/Heading.svelte';
+    import ObserveButton from '@/components/observer/ObserveButton.svelte';
     import InputError from '@/components/InputError.svelte';
     import { Button } from '@/components/ui/button';
     import { Input } from '@/components/ui/input';
@@ -47,6 +48,8 @@
             ? 'Compte activé'
             : 'Invité : le compte n’est pas encore activé'}
     />
+
+    <ObserveButton learnerId={learner.id} class="-mt-2" />
 
     <section class="grid gap-4 surface p-4">
         <h2 class="font-medium">Email</h2>
