@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -42,6 +43,14 @@ class Sequence extends Model
     public function images(): HasMany
     {
         return $this->hasMany(SequenceImage::class);
+    }
+
+    /**
+     * @return HasOne<Quiz, $this>
+     */
+    public function quiz(): HasOne
+    {
+        return $this->hasOne(Quiz::class);
     }
 
     /**

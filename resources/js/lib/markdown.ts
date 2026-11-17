@@ -32,6 +32,16 @@ export async function uploadImage(
     sequenceId: number,
     file: File,
 ): Promise<string> {
+    return (await uploadSequenceImage(sequenceId, file)).markdown;
+}
+
+/**
+ * Same upload, answering the image's id too (quiz questions refer to it).
+ */
+export async function uploadSequenceImage(
+    sequenceId: number,
+    file: File,
+): Promise<{ id: number; markdown: string }> {
     const body = new FormData();
     body.append('image', file);
 
@@ -41,11 +51,12 @@ export async function uploadImage(
         body,
     });
     const data = (await response.json().catch(() => ({}))) as {
+        id?: number;
         markdown?: string;
         message?: string;
     };
 
-    if (!response.ok || !data.markdown) {
+    if (!response.ok || !data.markdown || data.id === undefined) {
         throw new Error(
             data.message ??
                 (response.status === 413
@@ -54,7 +65,7 @@ export async function uploadImage(
         );
     }
 
-    return data.markdown;
+    return { id: data.id, markdown: data.markdown };
 }
 
 function jsonHeaders(): Record<string, string> {

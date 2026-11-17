@@ -8,6 +8,7 @@
 
 <script lang="ts">
     import { Form, Link } from '@inertiajs/svelte';
+    import CircleHelp from '@lucide/svelte/icons/circle-help';
     import Copy from '@lucide/svelte/icons/copy';
     import Pencil from '@lucide/svelte/icons/pencil';
     import SequenceController from '@/actions/App/Http/Controllers/SequenceController';
@@ -16,6 +17,7 @@
     import { formatDate } from '@/lib/dates';
     import { toUrl } from '@/lib/utils';
     import { edit } from '@/routes/sequences';
+    import { edit as quizEdit } from '@/routes/sequences/quiz';
     import type { Sequence } from '@/types/sequence';
 
     let { sequence }: { sequence: Sequence } = $props();
@@ -57,6 +59,14 @@
                     </Button>
                 {/snippet}
             </Form>
+            <Button variant="outline" asChild class="h-11 flex-1 sm:h-9">
+                {#snippet children(props)}
+                    <Link {...props} href={toUrl(quizEdit(sequence.id))}>
+                        <CircleHelp class="size-4" />
+                        Quiz
+                    </Link>
+                {/snippet}
+            </Button>
             <Button variant="outline" asChild class="h-11 flex-1 sm:h-9">
                 {#snippet children(props)}
                     <Link {...props} href={toUrl(edit(sequence.id))}>
