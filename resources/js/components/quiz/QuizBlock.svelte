@@ -30,7 +30,6 @@
     let answers: Record<number, Letter | null> = $state({});
     let chosen: Letter | null = $state(null);
     let remaining = $state(0);
-    let hiddenCorrection: number | null = $state(null);
     let timer: ReturnType<typeof setInterval> | undefined;
     let box: HTMLElement | undefined = $state();
 
@@ -39,11 +38,9 @@
     const limit = $derived(quiz.seconds_per_question);
     const last = $derived(quiz.attempts?.at(-1));
     const submitError = $derived(page.props.errors?.answers);
-    const correction = $derived(
-        quiz.correction && quiz.correction.id !== hiddenCorrection
-            ? quiz.correction
-            : null,
-    );
+    // Once finished, the answers stay shown: the quiz starts again only
+    // when the learner comes back to the sequence.
+    const correction = $derived(quiz.correction ?? null);
 
     // Ring of the countdown: full at the start, empty at zero.
     const RADIUS = 26;
@@ -139,10 +136,7 @@
             {
                 preserveScroll: true,
                 preserveState: 'errors',
-                onSuccess: () => {
-                    step = 'idle';
-                    hiddenCorrection = null;
-                },
+                onSuccess: () => (step = 'idle'),
                 onError: () => (step = 'done'),
             },
         );
@@ -178,6 +172,13 @@
     </button>
 {/snippet}
 
+{#snippet comeBack()}
+    <p class="rounded-md bg-background/70 p-3 text-sm text-muted-foreground">
+        Pour recommencer, quitte la séquence puis reviens-y : le bouton
+        <span class="font-semibold">Recommencer</span> sera de nouveau là.
+    </p>
+{/snippet}
+
 <section
     bind:this={box}
     class="my-6 flex scroll-mt-4 flex-col gap-4 rounded-xl border border-primary/30 bg-primary-soft p-4 sm:p-5"
@@ -203,18 +204,10 @@
                           : 'Relis la séquence et la correction, puis retente ta chance.'}
                 </p>
             </div>
-            <div class="flex w-full flex-col gap-2 sm:w-auto">
-                {#if !closed && quiz.submit_url}
-                    {@render replay('Recommencer')}
-                {/if}
-                <button
-                    type="button"
-                    class="h-11 rounded-md border border-input bg-background px-4 text-sm font-medium"
-                    onclick={() => (hiddenCorrection = correction.id)}
-                    >Masquer la correction</button
-                >
-            </div>
         </div>
+        {#if !closed && quiz.submit_url}
+            {@render comeBack()}
+        {/if}
 
         {#if (quiz.attempts?.length ?? 0) > 1}
             <ol class="grid gap-1" aria-label="Mes tentatives">
@@ -405,15 +398,12 @@
                 <p class="eyebrow">{test ? 'Test · ' : ''}Score</p>
                 <p class="display-title text-4xl">{score} / {total}</p>
             </div>
+            {@render comeBack()}
             <QuizCorrection questions={corrected} />
         {/if}
-        <div class="flex flex-col gap-2 sm:flex-row">
+        {#if submitError && !test}
+            <!-- Nothing was saved: the learner may answer again. -->
             {@render replay('Recommencer')}
-            <button
-                type="button"
-                class="h-12 rounded-md border border-input bg-background px-5 text-sm font-medium"
-                onclick={() => (step = 'idle')}>Fermer</button
-            >
-        </div>
+        {/if}
     {/if}
 </section>

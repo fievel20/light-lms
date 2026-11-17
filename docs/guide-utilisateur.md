@@ -198,6 +198,6 @@ Dans une séquence, **Lancer le quiz** démarre le quiz **à sa place dans la s�
 
 - Les questions arrivent **une par une**, avec la progression (« Question 3 / 8 ») et, si le formateur l'a réglé, un **chronomètre** : à zéro, la question compte sans réponse et la suivante s'affiche.
 - Un appui sur une tuile A, B, C ou D choisit la réponse ; on ne revient pas en arrière.
-- À la fin, le **score** s'affiche avec la **correction** : ta réponse, la bonne réponse, et « Temps écoulé » pour les questions sans réponse.
-- **Recommencer** autant de fois que tu veux : toutes tes tentatives restent consultables, avec leur correction. Près du bouton, la séquence rappelle ton dernier score.
+- À la fin, le **score** s'affiche avec la **correction** : ta réponse, la bonne réponse, et « Temps écoulé » pour les questions sans réponse. La correction **reste affichée** dans la séquence.
+- **Recommencer** autant de fois que tu veux, en quittant la séquence puis en y revenant : le bouton réapparaît. Un quiz quitté avant la fin n'est pas compté. Toutes tes tentatives restent consultables, avec leur correction. Près du bouton, la séquence rappelle ton dernier score.
 - Dans une promotion archivée, les corrections restent lisibles, mais on ne recommence plus.
