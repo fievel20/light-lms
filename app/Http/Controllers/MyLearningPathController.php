@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\LearningPath;
 use App\Models\Promotion;
+use App\Models\QuizAttempt;
 use App\Models\Sequence;
 use App\Models\SequenceCompletion;
 use App\Models\User;
 use App\Queries\LearnerLearningPaths;
 use App\Support\MarkdownRenderer;
-use Carbon\CarbonImmutable;
+use App\Support\QuizPresenter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -50,11 +50,12 @@ class MyLearningPathController extends Controller
         Sequence $sequence,
         LearnerLearningPaths $paths,
         MarkdownRenderer $markdown,
+        QuizPresenter $quizzes,
     ): Response {
         /** @var User $learner */
         $learner = $request->user();
 
-        [$opened, $index] = $this->locate($paths, $promotion, $learningPath, $sequence, $learner);
+        [$opened, $index] = $paths->locate($promotion, $learningPath, $sequence, $learner);
 
         $neighbour = fn (int $i) => $opened->get($i) === null ? null : [
             'id' => $opened[$i]['id'],
@@ -66,13 +67,21 @@ class MyLearningPathController extends Controller
             'learningPath' => ['id' => $learningPath->id, 'name' => $learningPath->name],
             'sequence' => [
                 ...$sequence->only(['id', 'title', 'summary']),
-                'html' => $markdown->toHtml($sequence->content, $sequence),
+                // Cut where [Quizz] puts the quiz button.
+                'html_parts' => MarkdownRenderer::splitAtQuiz($markdown->toHtml($sequence->content, $sequence)),
                 'completed_at' => $opened[$index]['completed_at'],
             ],
             'previous' => $index > 0 ? $neighbour($index - 1) : null,
             'next' => $neighbour($index + 1),
             'position' => $index + 1,
             'count' => $opened->count(),
+            'quiz' => ($summary = $quizzes->summary($sequence)) === null ? null : [
+                ...$summary,
+                'play_url' => route('my-learning-paths.quiz.play', [$promotion, $learningPath, $sequence]),
+                'attempts' => $quizzes->history($sequence->quiz()->firstOrFail(), $promotion, $learner, fn (QuizAttempt $attempt) => route(
+                    'my-learning-paths.quiz.attempt', [$promotion, $learningPath, $sequence, $attempt],
+                )),
+            ],
         ]);
     }
 
@@ -90,7 +99,7 @@ class MyLearningPathController extends Controller
         /** @var User $learner */
         $learner = $request->user();
 
-        $this->locate($paths, $promotion, $learningPath, $sequence, $learner);
+        $paths->locate($promotion, $learningPath, $sequence, $learner);
 
         $completed = $request->validate(['completed' => ['required', 'boolean']])['completed'];
 
@@ -108,25 +117,5 @@ class MyLearningPathController extends Controller
         }
 
         return back();
-    }
-
-    /**
-     * The opened sequences of the path and the position of this one; 404 when
-     * the learner is not in the promotion or cannot read the sequence there.
-     *
-     * @return array{0: Collection<int, array{id: int, title: string, summary: string|null, released_at: string, is_new: bool, completed_at: CarbonImmutable|null}>, 1: int}
-     */
-    private function locate(LearnerLearningPaths $paths, Promotion $promotion, LearningPath $learningPath, Sequence $sequence, User $learner): array
-    {
-        abort_unless($promotion->learners()->whereKey($learner->id)->exists(), 404);
-
-        // Only an opened sequence of a path assigned to this promotion.
-        $path = $paths->get($promotion, $learner)->firstWhere('id', $learningPath->id) ?? abort(404);
-        $opened = $path['sequences']->values();
-        $index = $opened->search(fn (array $item) => $item['id'] === $sequence->id);
-
-        abort_if($index === false, 404);
-
-        return [$opened, $index];
     }
 }

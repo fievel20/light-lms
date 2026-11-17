@@ -6,6 +6,7 @@ use App\Http\Requests\QuizRequest;
 use App\Models\Quiz;
 use App\Models\QuizQuestion;
 use App\Models\Sequence;
+use App\Support\QuizPresenter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -86,6 +87,26 @@ class QuizController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Quiz enregistré.']);
 
         return to_route('sequences.quiz.edit', $sequence);
+    }
+
+    /**
+     * The trainer tries the quiz as a learner would; nothing is saved, the
+     * page scores it with the answers it receives.
+     */
+    public function test(Sequence $sequence, QuizPresenter $presenter): Response
+    {
+        $quiz = $sequence->quiz()->withCount('questions')->first();
+
+        abort_if($quiz === null || $quiz->questions_count === 0, 404);
+
+        return Inertia::render('quiz/Play', [
+            'mode' => 'test',
+            'quiz' => $presenter->forPlay($quiz, withAnswers: true),
+            'sequence' => $sequence->only(['id', 'title']),
+            'backUrl' => route('sequences.show', $sequence),
+            'submitUrl' => null,
+            'closed' => false,
+        ]);
     }
 
     public function destroy(Sequence $sequence): RedirectResponse

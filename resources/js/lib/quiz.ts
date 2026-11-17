@@ -136,3 +136,34 @@ export function parseQuizJson(source: string): ParsedQuiz {
         errors,
     };
 }
+
+/** The quiz as shown next to its button in a sequence. */
+export type QuizSummary = {
+    title: string;
+    questions_count: number;
+    seconds_per_question: number | null;
+    play_url: string;
+    attempts?: AttemptLink[];
+};
+
+export type AttemptLink = {
+    id: number;
+    score: number;
+    total: number;
+    finished_at: string;
+    url: string;
+};
+
+/** A question being answered; `correct` only in the trainer's test. */
+export type PlayQuestion = {
+    id: number;
+    question: string;
+    image_url: string | null;
+    choices: Partial<Record<Letter, string>>;
+    correct?: Letter;
+};
+
+/** A question of a finished attempt, with the answer given. */
+export type CorrectedQuestion = Required<PlayQuestion> & {
+    answer: Letter | null;
+};

@@ -378,6 +378,19 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
         }
+        /* [Quizz] in the editor's preview; the pages put the real button there. */
+        & [data-quiz-launcher]::before {
+            content: '▶ Lancer le quiz';
+            display: inline-flex;
+            border-radius: var(--radius);
+            background: var(--cta);
+            color: var(--cta-foreground);
+            padding: 0.5em 1em;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
         & img.icon {
             height: 1.25em;
             border: 0;
