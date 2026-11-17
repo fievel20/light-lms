@@ -6,6 +6,8 @@ use App\Models\Icon;
 use App\Models\Sequence;
 use App\Support\Markdown\IconInline;
 use App\Support\Markdown\IconRenderer;
+use App\Support\Markdown\QuizLauncher;
+use App\Support\Markdown\QuizLauncherRenderer;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -13,6 +15,7 @@ use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\MarkdownConverter;
+use League\CommonMark\Node\Block\Paragraph;
 use League\CommonMark\Node\Inline\Text;
 
 /**
@@ -20,10 +23,14 @@ use League\CommonMark\Node\Inline\Text;
  * raw HTML is escaped, unsafe links are dropped, and links to other sites
  * open in a new tab (exercises, surveys…). Images written image:{id} point
  * to the protected route of that image, if it belongs to the sequence;
- * icons written icon:{id} come from the shared library.
+ * icons written icon:{id} come from the shared library. A paragraph made of
+ * [Quizz] alone marks where the quiz button goes (see splitAtQuiz).
  */
 class MarkdownRenderer
 {
+    /** Left in the HTML where [Quizz] was; never produced by user input (raw HTML is escaped). */
+    public const string QUIZ_MARKER = '<div data-quiz-launcher></div>';
+
     private MarkdownConverter $converter;
 
     /** The sequence being rendered, whose images may be shown. */
@@ -50,6 +57,8 @@ class MarkdownRenderer
         $environment->addEventListener(DocumentParsedEvent::class, $this->resolveImages(...));
         $environment->addEventListener(DocumentParsedEvent::class, $this->resolveIcons(...));
         $environment->addRenderer(IconInline::class, new IconRenderer);
+        $environment->addEventListener(DocumentParsedEvent::class, $this->resolveQuizShortcode(...));
+        $environment->addRenderer(QuizLauncher::class, new QuizLauncherRenderer);
 
         $this->converter = new MarkdownConverter($environment);
     }
@@ -126,6 +135,34 @@ class MarkdownRenderer
             )));
 
             $node->replaceWith(new IconInline(route('icons.show', $icon), $label !== '' ? $label : $icon->name, $icon->monochrome));
+        }
+    }
+
+    /**
+     * The HTML cut where the quiz button goes: one more part than buttons.
+     *
+     * @return list<string>
+     */
+    public static function splitAtQuiz(string $html): array
+    {
+        return explode(self::QUIZ_MARKER, $html);
+    }
+
+    /**
+     * Only top-level paragraphs, so the HTML can be cut there without
+     * breaking a list or a quote.
+     */
+    private function resolveQuizShortcode(DocumentParsedEvent $event): void
+    {
+        foreach ($event->getDocument()->children() as $node) {
+            $child = $node->firstChild();
+
+            if ($node instanceof Paragraph
+                && $child instanceof Text
+                && $child->next() === null
+                && preg_match('/^\[quizz?\]$/i', trim($child->getLiteral())) === 1) {
+                $node->replaceWith(new QuizLauncher);
+            }
         }
     }
 }

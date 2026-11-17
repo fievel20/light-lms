@@ -7,6 +7,7 @@ use App\Http\Requests\SequenceRequest;
 use App\Models\Icon;
 use App\Models\Sequence;
 use App\Support\MarkdownRenderer;
+use App\Support\QuizPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,12 +44,16 @@ class SequenceController extends Controller
         return to_route('sequences.show', $sequence);
     }
 
-    public function show(Sequence $sequence, MarkdownRenderer $markdown): Response
+    public function show(Sequence $sequence, MarkdownRenderer $markdown, QuizPresenter $quizzes): Response
     {
         return Inertia::render('sequences/Show', [
             'sequence' => [
                 ...$sequence->only(['id', 'title', 'summary', 'updated_at']),
-                'html' => $markdown->toHtml($sequence->content, $sequence),
+                'html_parts' => MarkdownRenderer::splitAtQuiz($markdown->toHtml($sequence->content, $sequence)),
+            ],
+            'quiz' => ($summary = $quizzes->summary($sequence)) === null ? null : [
+                ...$summary,
+                'play_url' => route('sequences.quiz.test', $sequence),
             ],
         ]);
     }

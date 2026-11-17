@@ -84,7 +84,7 @@ it('affiche une séquence ouverte avec les voisines ouvertes du parcours', funct
         ->assertInertia(fn (Assert $page) => $page
             ->component('learner/Sequence')
             ->where('sequence.title', 'Souris')
-            ->where('sequence.html', fn (string $html) => str_contains($html, '🎯 <strong>12/20</strong>'))
+            ->where('sequence.html_parts.0', fn (string $html) => str_contains($html, '🎯 <strong>12/20</strong>'))
             ->where('learningPath.name', 'Numérique du quotidien')
             ->where('previous', null)
             ->where('next.title', 'Mail'));

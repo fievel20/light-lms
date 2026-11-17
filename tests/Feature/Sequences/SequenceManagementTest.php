@@ -77,7 +77,7 @@ it('affiche une séquence rendue en HTML', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('sequences/Show')
             ->where('sequence.title', 'Souris')
-            ->where('sequence.html', fn (string $html) => str_contains($html, '🎯 <strong>12/20</strong>')
+            ->where('sequence.html_parts.0', fn (string $html) => str_contains($html, '🎯 <strong>12/20</strong>')
                 && ! str_contains($html, '<script>')));
 });
 

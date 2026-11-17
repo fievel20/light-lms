@@ -119,6 +119,8 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 - **Ajoute les questions à la main** : énoncé, réponses A et B (C et D facultatives, pour un vrai/faux par exemple), et touche la **lettre de la bonne réponse**. Les flèches réordonnent les questions ; une question peut avoir une **image**.
 - Ou **colle un JSON** (`{"title": …, "questions": [{"question", "choice_a" … "choice_d", "correct": "a"…"d"}]}`) puis **Analyser** : la liste des questions reconnues et les erreurs s'affichent ; choisis **Ajouter à la suite** ou **Remplacer**.
 - Rien n'est enregistré avant **Enregistrer le quiz**, en bas de l'écran.
+- Écris `[Quizz]` (ou `[Quiz]`) **seul sur une ligne** dans le texte de la séquence : le bouton **Lancer le quiz** apparaît à cet endroit. Sans ce code, il apparaît à la fin de la séquence.
+- Sur la page de la séquence, **Tester le quiz** le lance comme un apprenant, avec la correction à la fin ; rien n'est enregistré.
 
 ### 8. Construire des parcours
 
@@ -184,3 +186,13 @@ Onglet **Parcours** (choix de la promotion s'il y en a plusieurs).
 - Une séquence masquée par le formateur n'apparaît pas, même avec son adresse.
 - La page d'une séquence se lit sur téléphone : toucher une image l'agrandit, les liens s'ouvrent dans un nouvel onglet, et les boutons **Précédente / Suivante** passent d'une séquence ouverte à l'autre.
 - À la fin d'une séquence, le bouton **J'ai terminé** la valide : le formateur le voit, et la séquence porte une coche dans la liste (avec le compte « 2 / 5 terminées » par parcours). **Annuler** retire la validation en cas d'erreur. Dans une promotion archivée, on ne valide plus.
+
+### 6. Quiz
+
+Dans une séquence, **Lancer le quiz** ouvre le quiz en plein écran.
+
+- Les questions arrivent **une par une**, avec la progression (« Question 3 / 8 ») et, si le formateur l'a réglé, un **chronomètre** : à zéro, la question compte sans réponse et la suivante s'affiche.
+- Un appui sur une tuile A, B, C ou D choisit la réponse ; on ne revient pas en arrière.
+- À la fin, le **score** s'affiche avec la **correction** : ta réponse, la bonne réponse, et « Temps écoulé » pour les questions sans réponse.
+- **Recommencer** autant de fois que tu veux : toutes tes tentatives restent consultables, avec leur correction. Près du bouton, la séquence rappelle ton dernier score.
+- Dans une promotion archivée, les corrections restent lisibles, mais on ne recommence plus.

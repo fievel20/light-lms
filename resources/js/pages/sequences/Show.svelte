@@ -13,14 +13,22 @@
     import Pencil from '@lucide/svelte/icons/pencil';
     import SequenceController from '@/actions/App/Http/Controllers/SequenceController';
     import AppHead from '@/components/AppHead.svelte';
+    import QuizLaunch from '@/components/quiz/QuizLaunch.svelte';
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
+    import type { QuizSummary } from '@/lib/quiz';
     import { toUrl } from '@/lib/utils';
     import { edit } from '@/routes/sequences';
     import { edit as quizEdit } from '@/routes/sequences/quiz';
     import type { Sequence } from '@/types/sequence';
 
-    let { sequence }: { sequence: Sequence } = $props();
+    let {
+        sequence,
+        quiz,
+    }: {
+        sequence: Sequence & { html_parts: string[] };
+        quiz: QuizSummary | null;
+    } = $props();
 </script>
 
 <AppHead title={sequence.title} />
@@ -80,6 +88,11 @@
 
     <!-- Rendered and escaped by the server (MarkdownRenderer). -->
     <article class="markdown surface p-4 sm:p-6">
-        {@html sequence.html}
+        {#each sequence.html_parts as part, index (index)}
+            {@html part}
+            {#if quiz && (index < sequence.html_parts.length - 1 || sequence.html_parts.length === 1)}
+                <QuizLaunch {quiz} label="Tester le quiz" />
+            {/if}
+        {/each}
     </article>
 </div>

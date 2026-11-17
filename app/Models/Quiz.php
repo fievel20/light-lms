@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Database\Factories\QuizFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['title', 'seconds_per_question'])]
 class Quiz extends Model
 {
+    /** @use HasFactory<QuizFactory> */
+    use HasFactory;
+
     /** Allowed time per question, in seconds. */
     public const int MIN_SECONDS = 10;
 
@@ -42,5 +47,13 @@ class Quiz extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(QuizQuestion::class)->orderBy('position')->orderBy('id');
+    }
+
+    /**
+     * @return HasMany<QuizAttempt, $this>
+     */
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(QuizAttempt::class);
     }
 }

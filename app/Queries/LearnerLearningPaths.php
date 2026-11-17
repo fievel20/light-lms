@@ -53,4 +53,24 @@ class LearnerLearningPaths
             ->filter(fn (array $path) => $path['sequences']->isNotEmpty())
             ->values();
     }
+
+    /**
+     * The opened sequences of the path and the position of this one; 404 when
+     * the learner is not in the promotion or cannot read the sequence there.
+     *
+     * @return array{0: Collection<int, array{id: int, title: string, summary: string|null, released_at: string, is_new: bool, completed_at: CarbonImmutable|null}>, 1: int}
+     */
+    public function locate(Promotion $promotion, LearningPath $learningPath, Sequence $sequence, User $learner): array
+    {
+        abort_unless($promotion->learners()->whereKey($learner->id)->exists(), 404);
+
+        // Only an opened sequence of a path assigned to this promotion.
+        $path = $this->get($promotion, $learner)->firstWhere('id', $learningPath->id) ?? abort(404);
+        $opened = $path['sequences']->values();
+        $index = $opened->search(fn (array $item) => $item['id'] === $sequence->id);
+
+        abort_if($index === false, 404);
+
+        return [$opened, $index];
+    }
 }

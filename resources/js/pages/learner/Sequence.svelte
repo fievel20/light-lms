@@ -14,9 +14,11 @@
     import X from '@lucide/svelte/icons/x';
     import MyLearningPathController from '@/actions/App/Http/Controllers/MyLearningPathController';
     import AppHead from '@/components/AppHead.svelte';
+    import QuizLaunch from '@/components/quiz/QuizLaunch.svelte';
     import { Button } from '@/components/ui/button';
     import { Spinner } from '@/components/ui/spinner';
     import { formatDate } from '@/lib/dates';
+    import type { QuizSummary } from '@/lib/quiz';
     import { cn, toUrl } from '@/lib/utils';
     import { show } from '@/routes/my-learning-paths';
 
@@ -30,6 +32,7 @@
         next,
         position,
         count,
+        quiz,
     }: {
         promotion: { id: number; name: string; archived: boolean };
         learningPath: { id: number; name: string };
@@ -37,13 +40,15 @@
             id: number;
             title: string;
             summary: string | null;
-            html: string;
+            // The text cut where [Quizz] puts the quiz button.
+            html_parts: string[];
             completed_at: string | null;
         };
         previous: Neighbour;
         next: Neighbour;
         position: number;
         count: number;
+        quiz: QuizSummary | null;
     } = $props();
 
     // Tapping an image opens it full screen (screenshots are often small on a phone).
@@ -89,7 +94,12 @@
         class="markdown surface p-4 text-[1.0625rem] sm:p-6 [&_img:not(.icon)]:cursor-zoom-in"
         {onclick}
     >
-        {@html sequence.html}
+        {#each sequence.html_parts as part, index (index)}
+            {@html part}
+            {#if quiz && (index < sequence.html_parts.length - 1 || sequence.html_parts.length === 1)}
+                <QuizLaunch {quiz} closed={promotion.archived} />
+            {/if}
+        {/each}
     </article>
 
     <!-- The learner validates the sequence themself when they finish it. -->

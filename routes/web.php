@@ -14,6 +14,7 @@ use App\Http\Controllers\LearningPathController;
 use App\Http\Controllers\LearningPathSequenceController;
 use App\Http\Controllers\MyCompetencyController;
 use App\Http\Controllers\MyLearningPathController;
+use App\Http\Controllers\MyQuizController;
 use App\Http\Controllers\ObserverController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
@@ -46,6 +47,9 @@ Route::middleware(['auth', 'verified', 'learner'])->group(function () {
     Route::post('mes-competences/{promotion}/{competency}', [MyCompetencyController::class, 'store'])->name('my-competencies.store');
     Route::get('mes-parcours', [MyLearningPathController::class, 'index'])->name('my-learning-paths.index');
     Route::get('mes-parcours/{promotion}/{learning_path}/{sequence}', [MyLearningPathController::class, 'show'])->name('my-learning-paths.show');
+    Route::get('mes-parcours/{promotion}/{learning_path}/{sequence}/quiz', [MyQuizController::class, 'play'])->name('my-learning-paths.quiz.play');
+    Route::post('mes-parcours/{promotion}/{learning_path}/{sequence}/quiz', [MyQuizController::class, 'store'])->name('my-learning-paths.quiz.store');
+    Route::get('mes-parcours/{promotion}/{learning_path}/{sequence}/quiz/tentatives/{attempt}', [MyQuizController::class, 'attempt'])->name('my-learning-paths.quiz.attempt');
     Route::put('mes-parcours/{promotion}/{learning_path}/{sequence}/terminee', [MyLearningPathController::class, 'complete'])->name('my-learning-paths.complete');
 });
 
@@ -84,6 +88,7 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('sequences/{sequence}/images', [SequenceImageController::class, 'store'])->name('sequences.images.store');
     Route::get('sequences/{sequence}/quiz', [QuizController::class, 'edit'])->name('sequences.quiz.edit');
     Route::put('sequences/{sequence}/quiz', [QuizController::class, 'update'])->name('sequences.quiz.update');
+    Route::get('sequences/{sequence}/quiz/tester', [QuizController::class, 'test'])->name('sequences.quiz.test');
     Route::delete('sequences/{sequence}/quiz', [QuizController::class, 'destroy'])->name('sequences.quiz.destroy');
     Route::resource('sequences', SequenceController::class);
 
