@@ -137,13 +137,17 @@ export function parseQuizJson(source: string): ParsedQuiz {
     };
 }
 
-/** The quiz as shown next to its button in a sequence. */
+/** The quiz of a sequence, played in its page. */
 export type QuizSummary = {
     title: string;
     questions_count: number;
     seconds_per_question: number | null;
-    play_url: string;
+    questions: PlayQuestion[];
+    // Null in the trainer's test, or when the promotion is archived.
+    submit_url: string | null;
     attempts?: AttemptLink[];
+    // The attempt whose correction is shown (?tentative=id).
+    correction?: FinishedAttempt | null;
 };
 
 export type AttemptLink = {
@@ -166,4 +170,13 @@ export type PlayQuestion = {
 /** A question of a finished attempt, with the answer given. */
 export type CorrectedQuestion = Required<PlayQuestion> & {
     answer: Letter | null;
+};
+
+/** A finished attempt, with its correction. */
+export type FinishedAttempt = {
+    id: number;
+    score: number;
+    total: number;
+    finished_at: string;
+    questions: CorrectedQuestion[];
 };

@@ -56,13 +56,13 @@ Voir le [brief de la phase 2](brief-phase-2.md) : séquences en Markdown avec im
 
 Voir le [brief des quiz](brief-quiz.md) : un quiz par séquence, lancé par `[Quizz]`, une question à la fois avec chronomètre, tentatives multiples et suivi par le formateur.
 
-| Étape | Contenu                                                                          | État |
-| ----- | -------------------------------------------------------------------------------- | ---- |
-| 14    | Quiz d'une séquence : réglages, questions à la main et par JSON, images          | ✅   |
-| 15    | Code court `[Quizz]`, lecteur plein écran, chronomètre, correction serveur, test | ✅   |
-| 16    | Score, correction, tentatives multiples                                          | ✅   |
-| 17    | Résultats de la promotion pour le formateur                                      | ✅   |
-| 18    | Guide utilisateur, architecture                                                  | ✅   |
+| Étape | Contenu                                                                               | État |
+| ----- | ------------------------------------------------------------------------------------- | ---- |
+| 14    | Quiz d'une séquence : réglages, questions à la main et par JSON, images               | ✅   |
+| 15    | Code court `[Quizz]`, lecteur dans la séquence, chronomètre, correction serveur, test | ✅   |
+| 16    | Score, correction, tentatives multiples                                               | ✅   |
+| 17    | Résultats de la promotion pour le formateur                                           | ✅   |
+| 18    | Guide utilisateur, architecture                                                       | ✅   |
 
 ## Idées pour la suite
 

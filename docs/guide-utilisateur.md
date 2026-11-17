@@ -120,7 +120,7 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 - Ou **colle un JSON** (`{"title": …, "questions": [{"question", "choice_a" … "choice_d", "correct": "a"…"d"}]}`) puis **Analyser** : la liste des questions reconnues et les erreurs s'affichent ; choisis **Ajouter à la suite** ou **Remplacer**.
 - Rien n'est enregistré avant **Enregistrer le quiz**, en bas de l'écran.
 - Écris `[Quizz]` (ou `[Quiz]`) **seul sur une ligne** dans le texte de la séquence : le bouton **Lancer le quiz** apparaît à cet endroit. Sans ce code, il apparaît à la fin de la séquence.
-- Sur la page de la séquence, **Tester le quiz** le lance comme un apprenant, avec la correction à la fin ; rien n'est enregistré.
+- Sur la page de la séquence, **Tester le quiz** le lance sur place comme un apprenant, avec la correction à la fin ; rien n'est enregistré.
 
 **Résultats des quiz.** Menu **Quiz** (promotion active), ou bouton **Quiz** sur la fiche d'une promotion : les quiz des séquences ouvertes, avec le nombre d'apprenants qui l'ont fait, le nombre de tentatives et la moyenne (dernière tentative de chacun). Le détail d'un quiz a deux onglets :
 
@@ -194,7 +194,7 @@ Onglet **Parcours** (choix de la promotion s'il y en a plusieurs).
 
 ### 6. Quiz
 
-Dans une séquence, **Lancer le quiz** ouvre le quiz en plein écran.
+Dans une séquence, **Lancer le quiz** démarre le quiz **à sa place dans la séquence** : le texte reste au-dessus et en dessous, tu peux remonter le relire pendant le quiz.
 
 - Les questions arrivent **une par une**, avec la progression (« Question 3 / 8 ») et, si le formateur l'a réglé, un **chronomètre** : à zéro, la question compte sans réponse et la suivante s'affiche.
 - Un appui sur une tuile A, B, C ou D choisit la réponse ; on ne revient pas en arrière.

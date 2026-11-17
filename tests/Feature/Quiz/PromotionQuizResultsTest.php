@@ -100,7 +100,7 @@ it('montre la correction d’une tentative d’un apprenant', function () {
             ->component('quiz/Result')
             ->where('learner', 'Marie Curie')
             ->where('attempt.score', 1)
-            ->where('playUrl', null));
+            ->where('backUrl', route('promotions.quizzes.show', [$this->promotion, $this->sequence])));
 });
 
 it('ignore les séquences masquées et les tentatives d’une autre promotion', function () {

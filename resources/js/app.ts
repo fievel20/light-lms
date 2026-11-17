@@ -1,7 +1,6 @@
 import { createInertiaApp } from '@inertiajs/svelte';
 import AppLayout from '@/layouts/AppLayout.svelte';
 import AuthLayout from '@/layouts/AuthLayout.svelte';
-import FocusLayout from '@/layouts/FocusLayout.svelte';
 import SettingsLayout from '@/layouts/settings/Layout.svelte';
 import { initializeFlashToast } from '@/lib/flash-toast';
 import { initializeTheme } from '@/lib/theme.svelte';
@@ -14,9 +13,6 @@ void createInertiaApp({
         switch (true) {
             case name.startsWith('auth/'):
                 return AuthLayout;
-            // The quiz takes the whole screen.
-            case name === 'quiz/Play':
-                return FocusLayout;
             case name.startsWith('settings/'):
                 return [AppLayout, SettingsLayout];
             default:

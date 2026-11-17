@@ -75,14 +75,39 @@ class MyLearningPathController extends Controller
             'next' => $neighbour($index + 1),
             'position' => $index + 1,
             'count' => $opened->count(),
-            'quiz' => ($summary = $quizzes->summary($sequence)) === null ? null : [
-                ...$summary,
-                'play_url' => route('my-learning-paths.quiz.play', [$promotion, $learningPath, $sequence]),
-                'attempts' => $quizzes->history($sequence->quiz()->firstOrFail(), $promotion, $learner, fn (QuizAttempt $attempt) => route(
-                    'my-learning-paths.quiz.attempt', [$promotion, $learningPath, $sequence, $attempt],
-                )),
-            ],
+            'quiz' => $this->quiz($request, $promotion, $learningPath, $sequence, $learner, $quizzes),
         ]);
+    }
+
+    /**
+     * The quiz played in the page, without the right answers; the correction
+     * of an attempt shows there too (?tentative=id).
+     *
+     * @return array<string, mixed>|null
+     */
+    private function quiz(Request $request, Promotion $promotion, LearningPath $learningPath, Sequence $sequence, User $learner, QuizPresenter $quizzes): ?array
+    {
+        $summary = $quizzes->summary($sequence);
+        $quiz = $sequence->quiz()->first();
+
+        if ($summary === null || $quiz === null) {
+            return null;
+        }
+
+        $correction = $quiz->attempts()
+            ->where('promotion_id', $promotion->id)
+            ->where('user_id', $learner->id)
+            ->find($request->integer('tentative'));
+
+        return [
+            ...$summary,
+            'questions' => $quizzes->forPlay($quiz, withAnswers: false)['questions'],
+            'submit_url' => $promotion->isArchived() ? null : route('my-learning-paths.quiz.store', [$promotion, $learningPath, $sequence]),
+            'attempts' => $quizzes->history($quiz, $promotion, $learner, fn (QuizAttempt $attempt) => route(
+                'my-learning-paths.show', [$promotion, $learningPath, $sequence, 'tentative' => $attempt->id],
+            )),
+            'correction' => $correction instanceof QuizAttempt ? $quizzes->attempt($correction, $sequence) : null,
+        ];
     }
 
     /**

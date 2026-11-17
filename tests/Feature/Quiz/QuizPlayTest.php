@@ -2,7 +2,6 @@
 
 use App\Models\LearningPath;
 use App\Models\Promotion;
-use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Models\Sequence;
 use App\Models\SequenceImage;
@@ -38,8 +37,14 @@ function quizRoute(string $name, array $extra = []): string
     return route($name, [test()->promotion, test()->path, test()->sequence, ...$extra]);
 }
 
+/** The learner's page of the sequence, where the quiz is played. */
+function sequencePage(array $query = []): string
+{
+    return quizRoute('my-learning-paths.show', $query);
+}
+
 describe('code court [Quizz]', function () {
-    it('remplace un paragraphe [Quizz] ou [Quiz] par l’emplacement du bouton', function (string $code) {
+    it('remplace un paragraphe [Quizz] ou [Quiz] par l’emplacement du quiz', function (string $code) {
         $html = app(MarkdownRenderer::class)->toHtml("Avant\n\n{$code}\n\nAprès");
 
         expect($html)->toContain(MarkdownRenderer::QUIZ_MARKER)
@@ -55,11 +60,11 @@ describe('code court [Quizz]', function () {
 });
 
 describe('séquence', function () {
-    it('découpe le texte autour du bouton et résume mes tentatives', function () {
+    it('découpe le texte autour du quiz et résume mes tentatives', function () {
         QuizAttempt::factory()->for($this->quiz)->create(['promotion_id' => $this->promotion->id, 'user_id' => $this->learner->id, 'score' => 2, 'total' => 3]);
 
         $this->actingAs($this->learner)
-            ->get(route('my-learning-paths.show', [$this->promotion, $this->path, $this->sequence]))
+            ->get(sequencePage())
             ->assertInertia(fn (Assert $page) => $page
                 ->has('sequence.html_parts', 2)
                 ->where('quiz.title', 'Positionnement')
@@ -71,35 +76,38 @@ describe('séquence', function () {
         $this->quiz->questions()->delete();
 
         $this->actingAs($this->learner)
-            ->get(route('my-learning-paths.show', [$this->promotion, $this->path, $this->sequence]))
+            ->get(sequencePage())
             ->assertInertia(fn (Assert $page) => $page->where('quiz', null));
     });
 });
 
 describe('répondre', function () {
-    it('présente les questions sans les bonnes réponses', function () {
+    it('donne les questions dans la page de la séquence, sans les bonnes réponses', function () {
         $this->actingAs($this->learner)
-            ->get(quizRoute('my-learning-paths.quiz.play'))
+            ->get(sequencePage())
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
-                ->component('quiz/Play')
+                ->component('learner/Sequence')
                 ->where('quiz.seconds_per_question', 30)
                 ->has('quiz.questions', 3)
                 ->where('quiz.questions.0.choices', ['a' => 'Sydney', 'b' => 'Canberra'])
                 ->where('quiz.questions.0.image_url', route('sequences.images.show', [$this->sequence, $this->image]))
-                ->missing('quiz.questions.0.correct'));
+                ->missing('quiz.questions.0.correct')
+                ->where('quiz.submit_url', quizRoute('my-learning-paths.quiz.store'))
+                ->where('quiz.correction', null));
     });
 
-    it('corrige côté serveur et garde une copie de la tentative', function () {
-        $this->actingAs($this->learner)
+    it('corrige côté serveur, garde une copie et revient à la séquence', function () {
+        $response = $this->actingAs($this->learner)
             ->post(quizRoute('my-learning-paths.quiz.store'), ['answers' => [
                 $this->q1->id => 'b',
                 $this->q2->id => 'c',
                 $this->q3->id => null,
-            ]])
-            ->assertRedirect(quizRoute('my-learning-paths.quiz.attempt', [QuizAttempt::sole()]));
+            ]]);
 
         $attempt = QuizAttempt::sole();
+        $response->assertRedirect(sequencePage(['tentative' => $attempt->id]));
+
         expect($attempt->score)->toBe(1)
             ->and($attempt->total)->toBe(3)
             ->and($attempt->promotion_id)->toBe($this->promotion->id)
@@ -136,34 +144,38 @@ describe('répondre', function () {
 
     it('ferme le quiz d’une promotion archivée', function () {
         $this->promotion->archive();
+        $this->actingAs($this->learner);
 
-        $this->actingAs($this->learner)
-            ->post(quizRoute('my-learning-paths.quiz.store'), ['answers' => [$this->q1->id => 'a', $this->q2->id => 'a', $this->q3->id => 'a']])
+        $this->get(sequencePage())->assertInertia(fn (Assert $page) => $page->where('quiz.submit_url', null));
+        $this->post(quizRoute('my-learning-paths.quiz.store'), ['answers' => [$this->q1->id => 'a', $this->q2->id => 'a', $this->q3->id => 'a']])
             ->assertSessionHasErrors('answers');
     });
 
-    it('cache le quiz d’une séquence masquée', function () {
+    it('refuse les réponses au quiz d’une séquence masquée', function () {
         $this->promotion->sequenceReleases()->delete();
 
-        $this->actingAs($this->learner)->get(quizRoute('my-learning-paths.quiz.play'))->assertNotFound();
+        $this->actingAs($this->learner)
+            ->post(quizRoute('my-learning-paths.quiz.store'), ['answers' => []])
+            ->assertNotFound();
     });
 });
 
 describe('correction', function () {
-    it('montre ma correction et l’historique de mes tentatives', function () {
+    it('montre la correction dans la séquence, avec l’historique de mes tentatives', function () {
         $first = QuizAttempt::factory()->for($this->quiz)->create(['promotion_id' => $this->promotion->id, 'user_id' => $this->learner->id, 'score' => 1, 'total' => 3]);
         $this->actingAs($this->learner)->post(quizRoute('my-learning-paths.quiz.store'), ['answers' => [$this->q1->id => 'b', $this->q2->id => 'b', $this->q3->id => 'b']]);
         $second = QuizAttempt::query()->latest('id')->first();
 
-        $this->get(quizRoute('my-learning-paths.quiz.attempt', [$second]))
+        $this->get(sequencePage(['tentative' => $second->id]))
             ->assertInertia(fn (Assert $page) => $page
-                ->component('quiz/Result')
-                ->where('attempt.score', 2)
-                ->where('attempt.questions.2.correct', 'a')
-                ->where('attempt.questions.2.answer', 'b')
-                ->where('attempt.questions.0.image_url', route('sequences.images.show', [$this->sequence, $this->image]))
-                ->has('attempts', 2)
-                ->where('attempts.0.id', $first->id));
+                ->component('learner/Sequence')
+                ->where('quiz.correction.score', 2)
+                ->where('quiz.correction.questions.2.correct', 'a')
+                ->where('quiz.correction.questions.2.answer', 'b')
+                ->where('quiz.correction.questions.0.image_url', route('sequences.images.show', [$this->sequence, $this->image]))
+                ->has('quiz.attempts', 2)
+                ->where('quiz.attempts.0.id', $first->id)
+                ->where('quiz.attempts.0.url', sequencePage(['tentative' => $first->id])));
     });
 
     it('ne montre pas la tentative d’un autre apprenant', function () {
@@ -171,23 +183,20 @@ describe('correction', function () {
         $this->promotion->learners()->attach($other);
         $attempt = QuizAttempt::factory()->for($this->quiz)->create(['promotion_id' => $this->promotion->id, 'user_id' => $other->id]);
 
-        $this->actingAs($this->learner)->get(quizRoute('my-learning-paths.quiz.attempt', [$attempt]))->assertNotFound();
+        $this->actingAs($this->learner)
+            ->get(sequencePage(['tentative' => $attempt->id]))
+            ->assertInertia(fn (Assert $page) => $page->where('quiz.correction', null));
     });
 });
 
 describe('test par le formateur', function () {
-    it('donne au formateur le quiz avec les bonnes réponses, sans rien enregistrer', function () {
+    it('donne au formateur le quiz avec les bonnes réponses, sans enregistrement', function () {
         $this->actingAs(User::factory()->trainer()->create())
-            ->get(route('sequences.quiz.test', $this->sequence))
+            ->get(route('sequences.show', $this->sequence))
             ->assertInertia(fn (Assert $page) => $page
-                ->component('quiz/Play')
-                ->where('mode', 'test')
-                ->where('quiz.questions.2.correct', 'a'));
-
-        expect(QuizAttempt::count())->toBe(0);
-    });
-
-    it('est réservé au formateur', function () {
-        $this->actingAs($this->learner)->get(route('sequences.quiz.test', $this->sequence))->assertForbidden();
+                ->component('sequences/Show')
+                ->has('quiz.questions', 3)
+                ->where('quiz.questions.2.correct', 'a')
+                ->where('quiz.submit_url', null));
     });
 });

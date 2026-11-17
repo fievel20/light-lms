@@ -13,7 +13,7 @@
     import Pencil from '@lucide/svelte/icons/pencil';
     import SequenceController from '@/actions/App/Http/Controllers/SequenceController';
     import AppHead from '@/components/AppHead.svelte';
-    import QuizLaunch from '@/components/quiz/QuizLaunch.svelte';
+    import QuizBlock from '@/components/quiz/QuizBlock.svelte';
     import { Button } from '@/components/ui/button';
     import { formatDate } from '@/lib/dates';
     import type { QuizSummary } from '@/lib/quiz';
@@ -87,11 +87,11 @@
     </header>
 
     <!-- Rendered and escaped by the server (MarkdownRenderer). -->
-    <article class="markdown surface p-4 sm:p-6">
+    <article class="surface p-4 sm:p-6">
         {#each sequence.html_parts as part, index (index)}
-            {@html part}
+            <div class="markdown">{@html part}</div>
             {#if quiz && (index < sequence.html_parts.length - 1 || sequence.html_parts.length === 1)}
-                <QuizLaunch {quiz} label="Tester le quiz" />
+                <QuizBlock {quiz} test />
             {/if}
         {/each}
     </article>
