@@ -10,6 +10,7 @@
     import { Form, Link, page } from '@inertiajs/svelte';
     import BookCheck from '@lucide/svelte/icons/book-check';
     import ChartColumn from '@lucide/svelte/icons/chart-column';
+    import CircleHelp from '@lucide/svelte/icons/circle-help';
     import Eye from '@lucide/svelte/icons/eye';
     import FileUp from '@lucide/svelte/icons/file-up';
     import ListChecks from '@lucide/svelte/icons/list-checks';
@@ -30,6 +31,7 @@
     import { edit, progress } from '@/routes/promotions';
     import * as promotionLearningPaths from '@/routes/promotions/learning-paths';
     import { show as learnerPage } from '@/routes/promotions/learners';
+    import * as promotionQuizzes from '@/routes/promotions/quizzes';
     import * as sequenceCompletions from '@/routes/promotions/sequence-completions';
     import type { ImportReport, Learner } from '@/types/learner';
     import type { Promotion } from '@/types/promotion';
@@ -106,6 +108,14 @@
                     >
                         <ListChecks class="size-4" />
                         Réalisées
+                    </Link>
+                {/snippet}
+            </Button>
+            <Button variant="outline" size="sm" asChild class="h-11 flex-1 sm:h-9">
+                {#snippet children(props)}
+                    <Link {...props} href={toUrl(promotionQuizzes.index(promotion.id))}>
+                        <CircleHelp class="size-4" />
+                        Quiz
                     </Link>
                 {/snippet}
             </Button>

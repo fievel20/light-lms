@@ -122,6 +122,11 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 - Écris `[Quizz]` (ou `[Quiz]`) **seul sur une ligne** dans le texte de la séquence : le bouton **Lancer le quiz** apparaît à cet endroit. Sans ce code, il apparaît à la fin de la séquence.
 - Sur la page de la séquence, **Tester le quiz** le lance comme un apprenant, avec la correction à la fin ; rien n'est enregistré.
 
+**Résultats des quiz.** Menu **Quiz** (promotion active), ou bouton **Quiz** sur la fiche d'une promotion : les quiz des séquences ouvertes, avec le nombre d'apprenants qui l'ont fait, le nombre de tentatives et la moyenne (dernière tentative de chacun). Le détail d'un quiz a deux onglets :
+
+- **Par apprenant** : **toutes ses tentatives** dans l'ordre (ex. 3/8 → 5/8 → 7/8), en rouge sous 50 %, en ambre sous 80 %, en vert au-dessus. Touche un score pour voir la correction de cette tentative.
+- **Par question** : combien d'apprenants ont trouvé la bonne réponse à leur dernière tentative, pour repérer les questions mal comprises.
+
 ### 8. Construire des parcours
 
 Menu **Parcours** (sur mobile : lien sous le titre de la page Promotions). Un parcours est une suite ordonnée de séquences ; une même séquence peut servir dans plusieurs parcours.

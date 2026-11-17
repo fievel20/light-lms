@@ -14,6 +14,7 @@
         attempts,
         playUrl,
         backUrl,
+        learner = null,
     }: {
         quiz: { title: string };
         sequence: { id: number; title: string };
@@ -28,6 +29,8 @@
         // Null when the promotion is archived.
         playUrl: string | null;
         backUrl: string;
+        // Set when the trainer reads a learner's attempt.
+        learner?: string | null;
     } = $props();
 
     const percent = (item: { score: number; total: number }) =>
@@ -38,7 +41,9 @@
 
 <div class="mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:p-6">
     <header class="space-y-1">
-        <p class="eyebrow">// {sequence.title}</p>
+        <p class="eyebrow">
+            // {sequence.title}{learner ? ` · ${learner}` : ''}
+        </p>
         <h1 class="display-title text-3xl">{quiz.title}</h1>
     </header>
 
@@ -49,7 +54,7 @@
         <p class="display-title text-5xl">
             {attempt.score} / {attempt.total}
         </p>
-        <p class="text-muted-foreground">
+        <p class="text-muted-foreground" class:hidden={!!learner}>
             {percent(attempt) === 100
                 ? 'Sans faute, bravo !'
                 : percent(attempt) >= 50
@@ -71,13 +76,15 @@
         <Link
             href={backUrl}
             class="inline-flex h-12 items-center justify-center rounded-md border border-input px-5 font-medium"
-            >Retour à la séquence</Link
+            >{learner ? 'Retour aux résultats' : 'Retour à la séquence'}</Link
         >
     </div>
 
     {#if attempts.length > 1}
         <section class="grid gap-2 surface p-4">
-            <h2 class="font-medium">Mes tentatives</h2>
+            <h2 class="font-medium">
+                {learner ? 'Ses tentatives' : 'Mes tentatives'}
+            </h2>
             <ol class="grid gap-1">
                 {#each attempts as item, index (item.id)}
                     <li>
