@@ -113,6 +113,13 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 
 **Bibliothèque d'icônes.** Menu **Icônes** (sur mobile : lien sous le titre de la page Promotions). Importe un ou plusieurs fichiers **SVG** à la fois (512 Ko maximum chacun) : le nom du fichier devient le nom de l'icône. Quelle que soit la taille du dessin, l'icône s'affiche **à la taille du texte**, sur la ligne. Une icône d'une seule couleur prend la couleur du texte (elle reste lisible en mode sombre) ; décoche « Prendre la couleur du texte » pour garder ses couleurs d'origine. Chaque icône indique les séquences qui l'utilisent ; la supprimer la fait disparaître de ces séquences. Les scripts éventuellement contenus dans un SVG sont retirés à l'import.
 
+**Quiz.** Bouton **Quiz** sur la page d'une séquence (un quiz par séquence) :
+
+- Donne un **titre** et un **temps par question** (de 10 s à 5 min, ou sans limite).
+- **Ajoute les questions à la main** : énoncé, réponses A et B (C et D facultatives, pour un vrai/faux par exemple), et touche la **lettre de la bonne réponse**. Les flèches réordonnent les questions ; une question peut avoir une **image**.
+- Ou **colle un JSON** (`{"title": …, "questions": [{"question", "choice_a" … "choice_d", "correct": "a"…"d"}]}`) puis **Analyser** : la liste des questions reconnues et les erreurs s'affichent ; choisis **Ajouter à la suite** ou **Remplacer**.
+- Rien n'est enregistré avant **Enregistrer le quiz**, en bas de l'écran.
+
 ### 8. Construire des parcours
 
 Menu **Parcours** (sur mobile : lien sous le titre de la page Promotions). Un parcours est une suite ordonnée de séquences ; une même séquence peut servir dans plusieurs parcours.
