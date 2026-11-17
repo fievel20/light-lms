@@ -20,6 +20,7 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
 use App\Http\Controllers\PromotionLearningPathController;
+use App\Http\Controllers\PromotionQuizController;
 use App\Http\Controllers\PromotionSequenceCompletionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\SequenceController;
@@ -101,6 +102,9 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'store'])->name('promotions.learning-paths.store');
     Route::put('promotions/{promotion}/parcours', [PromotionLearningPathController::class, 'reorder'])->name('promotions.learning-paths.reorder');
     Route::delete('promotions/{promotion}/parcours/{learning_path}', [PromotionLearningPathController::class, 'destroy'])->name('promotions.learning-paths.destroy');
+    Route::get('promotions/{promotion}/quiz', [PromotionQuizController::class, 'index'])->name('promotions.quizzes.index');
+    Route::get('promotions/{promotion}/quiz/{sequence}', [PromotionQuizController::class, 'show'])->name('promotions.quizzes.show');
+    Route::get('promotions/{promotion}/quiz/{sequence}/tentatives/{attempt}', [PromotionQuizController::class, 'attempt'])->name('promotions.quizzes.attempt');
     Route::get('promotions/{promotion}/sequences-realisees', [PromotionSequenceCompletionController::class, 'index'])->name('promotions.sequence-completions.index');
     Route::put('promotions/{promotion}/sequences/{sequence}/release', [SequenceReleaseController::class, 'update'])->name('promotions.sequences.release');
     Route::post('learning-paths/{learning_path}/sequences', [LearningPathSequenceController::class, 'store'])->name('learning-paths.sequences.store');

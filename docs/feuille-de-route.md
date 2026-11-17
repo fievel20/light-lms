@@ -61,8 +61,8 @@ Voir le [brief des quiz](brief-quiz.md) : un quiz par séquence, lancé par `[Qu
 | 14    | Quiz d'une séquence : réglages, questions à la main et par JSON, images          | ✅   |
 | 15    | Code court `[Quizz]`, lecteur plein écran, chronomètre, correction serveur, test | ✅   |
 | 16    | Score, correction, tentatives multiples                                          | ✅   |
-| 17    | Résultats de la promotion pour le formateur                                      |      |
-| 18    | Guide utilisateur, architecture                                                  |      |
+| 17    | Résultats de la promotion pour le formateur                                      | ✅   |
+| 18    | Guide utilisateur, architecture                                                  | ✅   |
 
 ## Idées pour la suite
 
