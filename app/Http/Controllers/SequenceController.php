@@ -51,9 +51,11 @@ class SequenceController extends Controller
                 ...$sequence->only(['id', 'title', 'summary', 'updated_at']),
                 'html_parts' => MarkdownRenderer::splitAtQuiz($markdown->toHtml($sequence->content, $sequence)),
             ],
+            // The trainer tries the quiz here: scored in the page, nothing saved.
             'quiz' => ($summary = $quizzes->summary($sequence)) === null ? null : [
                 ...$summary,
-                'play_url' => route('sequences.quiz.test', $sequence),
+                'questions' => $quizzes->forPlay($sequence->quiz()->firstOrFail(), withAnswers: true)['questions'],
+                'submit_url' => null,
             ],
         ]);
     }

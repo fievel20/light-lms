@@ -14,7 +14,7 @@
     import X from '@lucide/svelte/icons/x';
     import MyLearningPathController from '@/actions/App/Http/Controllers/MyLearningPathController';
     import AppHead from '@/components/AppHead.svelte';
-    import QuizLaunch from '@/components/quiz/QuizLaunch.svelte';
+    import QuizBlock from '@/components/quiz/QuizBlock.svelte';
     import { Button } from '@/components/ui/button';
     import { Spinner } from '@/components/ui/spinner';
     import { formatDate } from '@/lib/dates';
@@ -40,7 +40,7 @@
             id: number;
             title: string;
             summary: string | null;
-            // The text cut where [Quizz] puts the quiz button.
+            // The text cut where [Quizz] puts the quiz.
             html_parts: string[];
             completed_at: string | null;
         };
@@ -90,14 +90,15 @@
 
     <!-- Rendered and escaped by the server (MarkdownRenderer). -->
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
+    <!-- The quiz is played in the text, where [Quizz] is (at the end otherwise). -->
     <article
-        class="markdown surface p-4 text-[1.0625rem] sm:p-6 [&_img:not(.icon)]:cursor-zoom-in"
+        class="surface p-4 text-[1.0625rem] sm:p-6 [&_img:not(.icon)]:cursor-zoom-in"
         {onclick}
     >
         {#each sequence.html_parts as part, index (index)}
-            {@html part}
+            <div class="markdown">{@html part}</div>
             {#if quiz && (index < sequence.html_parts.length - 1 || sequence.html_parts.length === 1)}
-                <QuizLaunch {quiz} closed={promotion.archived} />
+                <QuizBlock {quiz} closed={promotion.archived} />
             {/if}
         {/each}
     </article>

@@ -37,7 +37,7 @@ Les questions existent souvent déjà sous forme de JSON :
 
 ### Répondre (apprenant)
 
-- **US36** — Dans une séquence ouverte, **Lancer le quiz** ouvre le quiz en plein écran.
+- **US36** — Dans une séquence ouverte, **Lancer le quiz** le lance **dans la page de la séquence**, à l'emplacement de `[Quizz]` : le texte autour reste visible pendant le quiz.
 - **US37** — Les questions s'affichent **une par une** : « Question 1 / 8 », barre de progression, compte à rebours au-dessus de la question, quatre tuiles A à D. Un appui choisit la réponse et passe à la suivante.
 - **US38** — Quand le temps est écoulé, la question compte comme **sans réponse** et la suivante s'affiche.
 - **US39** — À la fin, je vois mon **score** (« 6 / 8 ») puis la **correction** : pour chaque question, ma réponse, la bonne réponse, en vert ou en rouge.
@@ -78,7 +78,7 @@ quiz_attempts    id, quiz_id, promotion_id, user_id, score, total, questions (JS
 | Formateur | Édition d'une séquence → **Quiz**  | Titre, temps par question, questions (ajout, réordonnancement, image), import JSON avec aperçu |
 | Formateur | Séquence → **Tester le quiz**      | Le quiz tel que le voit l'apprenant, sans enregistrement                                       |
 | Apprenant | Séquence                           | Bouton **Lancer le quiz** à l'emplacement de `[Quizz]` ; meilleur score s'il l'a déjà fait     |
-| Apprenant | Quiz (plein écran)                 | Question n / total, progression, chronomètre, tuiles A–D                                       |
+| Apprenant | Quiz (dans la séquence)            | Question n / total, progression, chronomètre, tuiles A–D                                       |
 | Apprenant | Résultat                           | Score, correction question par question, **Recommencer**, tentatives précédentes               |
 | Formateur | Promotion → **Quiz**               | Séquences avec quiz : participants, score moyen                                                |
 | Formateur | Détail d'un quiz pour la promotion | Apprenants et toutes leurs tentatives (évolution des scores), taux de réussite par question    |
@@ -88,7 +88,7 @@ Les tuiles A, B, C, D prennent quatre couleurs de la charte (violet, indigo, ver
 ## Feuille de route
 
 14. US30–US33 — Quiz d'une séquence : réglages, questions à la main et par JSON, images
-15. US34–US38 — Code court `[Quizz]`, lecteur plein écran, chronomètre, correction serveur, test par le formateur
+15. US34–US38 — Code court `[Quizz]`, lecteur dans la séquence, chronomètre, correction serveur, test par le formateur
 16. US39–US40 — Score, correction, tentatives multiples
 17. US41–US43 — Résultats de la promotion pour le formateur
 18. Guide utilisateur, architecture

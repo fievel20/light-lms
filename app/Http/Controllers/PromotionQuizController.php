@@ -95,7 +95,6 @@ class PromotionQuizController extends Controller
             'attempts' => $presenter->history($quiz, $promotion, $learner, fn (QuizAttempt $item) => route(
                 'promotions.quizzes.attempt', [$promotion, $sequence, $item],
             )),
-            'playUrl' => null,
             'backUrl' => route('promotions.quizzes.show', [$promotion, $sequence]),
         ]);
     }
