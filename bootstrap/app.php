@@ -5,6 +5,7 @@ use App\Http\Middleware\EnsureUserIsTrainer;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\ObserveLearner;
+use App\Http\Middleware\ProtectDemoAccount;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -29,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleAppearance::class,
             // Before Inertia: the shared props describe the observed learner.
             ObserveLearner::class,
+            ProtectDemoAccount::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);

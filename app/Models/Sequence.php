@@ -74,7 +74,7 @@ class Sequence extends Model
         return SequenceRelease::query()
             ->where('sequence_id', $this->id)
             ->whereHas('promotion', fn (Builder $promotion) => $promotion
-                ->whereHas('learners', fn (Builder $learner) => $learner->whereKey($user->id))
+                ->whereHas('members', fn (Builder $learner) => $learner->whereKey($user->id))
                 ->whereHas('learningPaths.sequences', fn (Builder $sequence) => $sequence->whereKey($this->id)))
             ->exists();
     }

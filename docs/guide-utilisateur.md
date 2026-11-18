@@ -69,6 +69,16 @@ Sur la fiche promotion, chaque apprenant porte l’étiquette **Activé** ou **I
 
 **Mode observateur.** Le bouton **Voir comme l’apprenant** (sur la fiche d’un apprenant dans une promotion, ou dans Comptes apprenants) ouvre son espace tel qu’il le voit : accueil, compétences, parcours, séquences. Un bandeau rappelle en permanence qui tu observes. C’est en **lecture seule** : autoévaluer, valider une séquence ou modifier le profil est refusé, et ses félicitations restent à découvrir. **Quitter** te ramène là où tu étais.
 
+**Compte démo.** Sur la fiche d'une promotion, la carte **Compte démo** crée un faux apprenant pour montrer l'espace apprenant (à un visiteur, en réunion, à un financeur) :
+
+- Choisis une adresse email **inventée** (par exemple `demo@formation.test`) et un mot de passe simple, de **4 caractères au moins** (par exemple `demo`). Aucun email n'est envoyé.
+- L'email et le mot de passe restent affichés sur la carte, pour les donner facilement. **Modifier** les change.
+- Le compte démo voit les parcours et séquences ouverts de la promotion, fait les quiz, valide les séquences et s'autoévalue, comme un apprenant.
+- **À chaque déconnexion, tout est remis à zéro** : tentatives de quiz, séquences terminées, autoévaluations et félicitations. Si la personne ferme simplement l'onglet, la remise à zéro se fait à la connexion suivante. **Remettre à zéro** la fait tout de suite.
+- Il n'apparaît ni dans la liste des apprenants, ni dans le suivi, ni dans les résultats des quiz, ni dans Comptes apprenants.
+- Il ne peut changer ni son profil ni son mot de passe. Un bandeau lui rappelle que rien n'est gardé.
+- Une seule connexion à la fois est conseillée : la déconnexion de l'un efface aussi ce que fait l'autre.
+
 ### 5. Valider les compétences
 
 Deux points d'entrée, dans le menu de la promotion active :

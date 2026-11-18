@@ -17,6 +17,7 @@ use App\Http\Controllers\MyLearningPathController;
 use App\Http\Controllers\MyQuizController;
 use App\Http\Controllers\ObserverController;
 use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\PromotionDemoAccountController;
 use App\Http\Controllers\PromotionLearnerController;
 use App\Http\Controllers\PromotionLearnerImportController;
 use App\Http\Controllers\PromotionLearningPathController;
@@ -65,6 +66,9 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('promotions/{promotion}/learners', [PromotionLearnerController::class, 'store'])->name('promotions.learners.store');
     Route::post('promotions/{promotion}/learners/import', [PromotionLearnerImportController::class, 'store'])->name('promotions.learners.import');
     Route::delete('promotions/{promotion}/learners/{learner}', [PromotionLearnerController::class, 'destroy'])->name('promotions.learners.destroy');
+    Route::put('promotions/{promotion}/compte-demo', [PromotionDemoAccountController::class, 'update'])->name('promotions.demo-account.update');
+    Route::post('promotions/{promotion}/compte-demo/remise-a-zero', [PromotionDemoAccountController::class, 'reset'])->name('promotions.demo-account.reset');
+    Route::delete('promotions/{promotion}/compte-demo', [PromotionDemoAccountController::class, 'destroy'])->name('promotions.demo-account.destroy');
     Route::get('promotions/{promotion}/apprenants/{learner}', [LearnerAssessmentController::class, 'show'])->name('promotions.learners.show');
     Route::post('promotions/{promotion}/learners/{learner}/assessments/{competency}', [LearnerAssessmentController::class, 'store'])->name('promotions.learners.assessments.store');
 

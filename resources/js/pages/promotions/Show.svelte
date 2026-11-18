@@ -22,6 +22,7 @@
     import PromotionLearnerController from '@/actions/App/Http/Controllers/PromotionLearnerController';
     import AppHead from '@/components/AppHead.svelte';
     import AddLearnerForm from '@/components/learners/AddLearnerForm.svelte';
+    import DemoAccountCard from '@/components/learners/DemoAccountCard.svelte';
     import ImportLearnersForm from '@/components/learners/ImportLearnersForm.svelte';
     import { Badge } from '@/components/ui/badge';
     import { Button } from '@/components/ui/button';
@@ -40,6 +41,7 @@
         promotion,
         framework,
         learners,
+        demoAccount,
     }: {
         promotion: Promotion;
         framework: {
@@ -48,6 +50,7 @@
             competencies_count: number;
         } | null;
         learners: Learner[];
+        demoAccount: { email: string; password: string } | null;
     } = $props();
 
     const report = $derived(
@@ -195,6 +198,8 @@
             </details>
         </section>
     {/if}
+
+    <DemoAccountCard promotionId={promotion.id} account={demoAccount} />
 
     {#if report}
         <section

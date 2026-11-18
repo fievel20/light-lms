@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -37,11 +38,31 @@ class Promotion extends Model
     }
 
     /**
+     * The real learners: the demo account is left out of lists and results.
+     *
      * @return BelongsToMany<User, $this>
      */
     public function learners(): BelongsToMany
     {
+        return $this->members()->whereNull('users.demo_promotion_id');
+    }
+
+    /**
+     * Everyone who reads the promotion as a learner, the demo account included.
+     *
+     * @return BelongsToMany<User, $this>
+     */
+    public function members(): BelongsToMany
+    {
         return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    /**
+     * @return HasOne<User, $this>
+     */
+    public function demoAccount(): HasOne
+    {
+        return $this->hasOne(User::class, 'demo_promotion_id');
     }
 
     /**

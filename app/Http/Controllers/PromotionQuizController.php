@@ -9,6 +9,7 @@ use App\Models\Sequence;
 use App\Models\User;
 use App\Queries\LearnerLearningPaths;
 use App\Support\QuizPresenter;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,7 +27,7 @@ class PromotionQuizController extends Controller
         $learners = $promotion->learners()->count();
 
         $quizzes = $this->openedQuizzes($promotion)->map(function (Quiz $quiz) use ($promotion, $learners) {
-            $attempts = $quiz->attempts()->where('promotion_id', $promotion->id)->orderBy('finished_at')->orderBy('id')->get();
+            $attempts = $this->attempts($quiz, $promotion)->get();
             // Each participant's last score, in percent.
             $lastPercents = $attempts->groupBy('user_id')->map(function (Collection $mine): float {
                 $last = $mine->last();
@@ -55,7 +56,7 @@ class PromotionQuizController extends Controller
     public function show(Promotion $promotion, Sequence $sequence): Response
     {
         $quiz = $this->quizOf($promotion, $sequence);
-        $attempts = $quiz->attempts()->where('promotion_id', $promotion->id)->orderBy('finished_at')->orderBy('id')->get()->groupBy('user_id');
+        $attempts = $this->attempts($quiz, $promotion)->get()->groupBy('user_id');
 
         $learners = $promotion->learners()->orderByName()->get()->map(fn (User $learner) => [
             'id' => $learner->id,
@@ -121,6 +122,21 @@ class PromotionQuizController extends Controller
             ->keyBy('sequence_id');
 
         return $order->map(fn (int $id) => $quizzes->get($id))->filter()->values();
+    }
+
+    /**
+     * The attempts of the promotion's real learners (not its demo account),
+     * oldest first.
+     *
+     * @return HasMany<QuizAttempt, Quiz>
+     */
+    private function attempts(Quiz $quiz, Promotion $promotion): HasMany
+    {
+        return $quiz->attempts()
+            ->where('promotion_id', $promotion->id)
+            ->whereIn('user_id', $promotion->learners()->select('users.id'))
+            ->orderBy('finished_at')
+            ->orderBy('id');
     }
 
     private function quizOf(Promotion $promotion, Sequence $sequence): Quiz

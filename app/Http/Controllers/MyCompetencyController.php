@@ -49,7 +49,7 @@ class MyCompetencyController extends Controller
         /** @var User $learner */
         $learner = $request->user();
 
-        abort_unless($promotion->learners()->whereKey($learner->id)->exists(), 404);
+        abort_unless($promotion->members()->whereKey($learner->id)->exists(), 404);
         abort_unless($competency->framework_id === $promotion->framework_id, 404);
 
         $validated = $request->validate(['value' => ['required', 'integer']], attributes: ['value' => 'niveau']);

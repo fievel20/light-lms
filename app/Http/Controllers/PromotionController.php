@@ -61,6 +61,11 @@ class PromotionController extends Controller
                 ->orderByName()
                 ->get(['users.id', 'first_name', 'last_name', 'email', 'invited_at', 'activated_at'])
                 ->map->only(['id', 'first_name', 'last_name', 'name', 'email', 'invited_at', 'activated_at']),
+            // Handed out to visitors: the trainer reads its password again.
+            'demoAccount' => ($demo = $promotion->demoAccount()->first()) === null ? null : [
+                'email' => $demo->email,
+                'password' => $demo->demo_password,
+            ],
         ]);
     }
 

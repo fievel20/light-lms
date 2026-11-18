@@ -24,6 +24,7 @@
 | Séquences réalisées    | L'apprenant valide chaque séquence terminée ; le formateur suit la promotion par séquence ou par apprenant                                            |
 | Mode observateur       | Le formateur voit l'espace d'un apprenant tel qu'il le voit, en lecture seule                                                                         |
 | Comptes apprenants     | Le formateur corrige l'email d'un apprenant, lui envoie un lien de réinitialisation ou lui donne un mot de passe provisoire                           |
+| Compte démo            | Un faux apprenant par promotion, email inventé et mot de passe simple, remis à zéro à chaque déconnexion, absent des résultats                        |
 | Finitions et nettoyage | Favicon, composants et layouts du kit inutilisés supprimés                                                                                            |
 
 Environ 260 tests Pest, Larastan niveau 7, CI GitHub Actions.

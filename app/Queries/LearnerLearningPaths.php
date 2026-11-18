@@ -62,7 +62,7 @@ class LearnerLearningPaths
      */
     public function locate(Promotion $promotion, LearningPath $learningPath, Sequence $sequence, User $learner): array
     {
-        abort_unless($promotion->learners()->whereKey($learner->id)->exists(), 404);
+        abort_unless($promotion->members()->whereKey($learner->id)->exists(), 404);
 
         // Only an opened sequence of a path assigned to this promotion.
         $path = $this->get($promotion, $learner)->firstWhere('id', $learningPath->id) ?? abort(404);

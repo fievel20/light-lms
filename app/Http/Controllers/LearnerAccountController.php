@@ -27,6 +27,7 @@ class LearnerAccountController extends Controller
         return Inertia::render('learners/Index', [
             'learners' => User::query()
                 ->where('role', Role::Learner)
+                ->whereNull('demo_promotion_id')
                 ->with('promotions:id,name')
                 ->orderByName()
                 ->get()
