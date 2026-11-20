@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Link, router } from '@inertiajs/svelte';
+    import { Link, page, router } from '@inertiajs/svelte';
     import LogOut from '@lucide/svelte/icons/log-out';
     import type { Snippet } from 'svelte';
     import Heading from '@/components/Heading.svelte';
@@ -19,7 +19,7 @@
         children?: Snippet;
     } = $props();
 
-    const sidebarNavItems: NavItem[] = [
+    const allNavItems: NavItem[] = [
         {
             title: 'Profil',
             href: editProfile(),
@@ -33,6 +33,13 @@
             href: editAppearance(),
         },
     ];
+
+    // The demo account is shared: its profile and security stay locked.
+    const sidebarNavItems = $derived(
+        page.props.demo
+            ? allNavItems.filter((item) => item.title === 'Apparence')
+            : allNavItems,
+    );
 
     const url = currentUrlState();
 </script>

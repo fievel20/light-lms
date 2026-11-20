@@ -48,6 +48,8 @@ class HandleInertiaRequests extends Middleware
             'observer' => fn () => app(ObserverMode::class)->active()
                 ? ['learner' => $request->user()?->name]
                 : null,
+            // A promotion's demo account: everything is emptied at logout.
+            'demo' => fn () => $request->user() instanceof User && $request->user()->isDemo(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'promotionSwitcher' => function () use ($request) {
                 $user = $request->user();

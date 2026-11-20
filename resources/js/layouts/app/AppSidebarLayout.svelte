@@ -4,6 +4,7 @@
     import AppShell from '@/components/AppShell.svelte';
     import AppSidebar from '@/components/AppSidebar.svelte';
     import AppSidebarHeader from '@/components/AppSidebarHeader.svelte';
+    import DemoBanner from '@/components/DemoBanner.svelte';
     import BottomNav from '@/components/navigation/BottomNav.svelte';
     import ObserverBanner from '@/components/observer/ObserverBanner.svelte';
     import { Toaster } from '@/components/ui/sonner';
@@ -25,6 +26,7 @@
         class="min-w-0 overflow-x-clip pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0"
     >
         <ObserverBanner />
+        <DemoBanner />
         <AppSidebarHeader {breadcrumbs} />
         {@render children?.()}
     </AppContent>

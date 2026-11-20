@@ -30,6 +30,10 @@ class EnrollLearner
             throw new EnrollmentException('Cette adresse appartient au compte formateur.');
         }
 
+        if ($learner?->isDemo()) {
+            throw new EnrollmentException('Cette adresse est celle d\'un compte démo.');
+        }
+
         if ($learner && $promotion->learners()->whereKey($learner->id)->exists()) {
             throw new EnrollmentException('Cet apprenant fait déjà partie de la promotion.');
         }

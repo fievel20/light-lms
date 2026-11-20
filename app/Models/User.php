@@ -26,6 +26,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string $email
  * @property Role $role
  * @property int|null $current_promotion_id
+ * @property int|null $demo_promotion_id
+ * @property string|null $demo_password
  * @property CarbonImmutable|null $email_verified_at
  * @property CarbonImmutable|null $invited_at
  * @property CarbonImmutable|null $activated_at
@@ -38,7 +40,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property CarbonImmutable|null $updated_at
  */
 #[Fillable(['first_name', 'last_name', 'email', 'password'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
+#[Hidden(['password', 'demo_password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
@@ -104,6 +106,14 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     }
 
     /**
+     * The demo account of a promotion (a learner emptied at each logout).
+     */
+    public function isDemo(): bool
+    {
+        return $this->demo_promotion_id !== null;
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -115,6 +125,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
             'invited_at' => 'datetime',
             'activated_at' => 'datetime',
             'password' => 'hashed',
+            'demo_password' => 'encrypted',
             'role' => Role::class,
             'two_factor_confirmed_at' => 'datetime',
         ];
