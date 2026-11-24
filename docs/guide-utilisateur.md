@@ -167,6 +167,22 @@ Une séquence présente dans deux parcours ne compte qu'une fois. Une séquence 
 
 ---
 
+### 10. Quiz express
+
+Menu **Quiz express** (Administration). Un quiz express se joue **en salle, tous ensemble** : tu projettes un QR code, les participants répondent sur leur téléphone **sans compte**, et tu fais défiler les questions.
+
+**Préparer.** **Nouveau quiz express** ouvre l'éditeur, le même que pour le quiz d'une séquence : titre, questions à la main ou en collant un JSON, images, flèches pour réordonner, puis **Enregistrer le quiz**. Le **temps par question** est obligatoire (20 s par défaut) : plus un participant répond vite, plus il gagne de points. **Dupliquer** copie un quiz avec ses questions et ses images.
+
+**Lancer.** **Lancer** ouvre l'écran à projeter (le bouton en haut à droite le passe en plein écran) :
+
+- **Salle d'attente** : un grand QR code et le **code** de la session (ex. `K7P2QX`), à taper sur l'adresse affichée par ceux qui ne scannent pas. Les noms des participants arrivent à mesure ; la croix retire un nom inapproprié. **Démarrer** lance la première question pour tout le monde.
+- **Questions** : la question, l'image, les tuiles, le compte à rebours et « Réponses : 12 / 18 ». Le QR code et le code restent sur le côté pour les retardataires. **Question suivante** passe à la suivante, même avant la fin du temps ; à la dernière, le bouton devient **Voir le classement**.
+- **Points** : bonne réponse = 500 points + jusqu'à 500 selon la rapidité (1 000 pour une réponse immédiate) ; mauvaise réponse ou pas de réponse = 0. La bonne réponse n'est pas montrée pendant les questions.
+- **Classement** : le podium puis la liste. **Correction** fait défiler les questions avec la bonne réponse et le nombre de réponses sur chaque tuile (**Précédente** / **Suivante**). **Terminer la session** la ferme : on ne peut plus la rejoindre.
+- La flèche en haut à gauche ramène à la liste **sans arrêter** la session : **Lancer** y revient. Une session oubliée se ferme d'elle-même au bout de 12 heures.
+
+**Résultats.** Sous chaque quiz, le lien **sessions · résultats** liste les sessions passées ; chacune garde son classement et sa correction, et peut être supprimée.
+
 ## Parcours de l'apprenant
 
 ### 1. Activer son compte
@@ -211,3 +227,12 @@ Dans une séquence, **Lancer le quiz** démarre le quiz **à sa place dans la s�
 - À la fin, le **score** s'affiche avec la **correction** : ta réponse, la bonne réponse, et « Temps écoulé » pour les questions sans réponse. La correction **reste affichée** dans la séquence.
 - **Recommencer** autant de fois que tu veux, en quittant la séquence puis en y revenant : le bouton réapparaît. Un quiz quitté avant la fin n'est pas compté. Toutes tes tentatives restent consultables, avec leur correction. Près du bouton, la séquence rappelle ton dernier score.
 - Dans une promotion archivée, les corrections restent lisibles, mais on ne recommence plus.
+
+### 7. Quiz express (sans compte)
+
+En salle, le formateur projette un QR code : **scanne-le** (ou va sur l'adresse affichée et tape le code), puis entre **ton nom**. Pas besoin de compte.
+
+- « **Patiente, le quiz va commencer** » : la page passe toute seule à la première question. Garde-la ouverte ; si tu la recharges, tu retrouves ta place.
+- Chaque question s'affiche sur ton téléphone avec ses réponses (en images : la traduction du navigateur ne les change pas). Touche ta réponse : elle est définitive.
+- Plus tu réponds vite et juste, plus tu marques de points.
+- À la fin : ton **rang** et tes **points**, puis ta **correction** question par question.

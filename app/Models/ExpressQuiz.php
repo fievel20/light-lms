@@ -33,6 +33,10 @@ class ExpressQuiz extends Model
         // The rows go with the foreign key; the files have to be removed here.
         static::deleting(function (ExpressQuiz $quiz): void {
             Storage::disk(ExpressImage::DISK)->delete($quiz->images()->pluck('path')->all());
+
+            foreach ($quiz->sessions()->pluck('id') as $id) {
+                Storage::disk(ExpressImage::DISK)->deleteDirectory(ExpressSession::directory($id));
+            }
         });
     }
 
@@ -42,6 +46,14 @@ class ExpressQuiz extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(ExpressQuestion::class)->orderBy('position')->orderBy('id');
+    }
+
+    /**
+     * @return HasMany<ExpressSession, $this>
+     */
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(ExpressSession::class);
     }
 
     /**

@@ -30,7 +30,7 @@
 
 ### Jouer (tous)
 
-- **US53** — Pendant une question, l'écran projeté montre « Question 3 / 10 », la question, l'image, les tuiles A–D, le **compte à rebours** et le nombre de participants qui ont répondu (« 12 / 18 »). Sur un **côté de l'écran**, un petit **QR code** et le **code** de la session restent affichés jusqu'au classement, pour les retardataires.
+- **US53** — Pendant une question, l'écran projeté montre « Question 3 / 10 », la question, l'image, les tuiles A–D, le **compte à rebours** et le nombre de participants qui ont répondu (« Réponses : 12 / 18 »). Sur un **côté de l'écran**, un petit **QR code** et le **code** de la session restent affichés jusqu'au classement, pour les retardataires.
 - **US54** — Mon téléphone montre la **même question**, l'image, les tuiles et le compte à rebours. Un appui choisit ma réponse, **sans retour possible** ; l'écran affiche alors « Réponse enregistrée ».
 - **US63** — Sur mon téléphone, la question et chaque réponse sont des **images** du texte, et non du texte : la **traduction automatique** du navigateur (ou d'une extension) ne peut pas les traduire. Seuls la lettre A–D et la couleur de chaque tuile restent du texte. Ma correction, à la fin, est affichée de la même façon.
 - **US55** — Une bonne réponse rapporte **500 points + un bonus de rapidité jusqu'à 500** : 1000 points pour une réponse immédiate, 500 pour une réponse à la dernière seconde. Une mauvaise réponse ou pas de réponse : **0**.

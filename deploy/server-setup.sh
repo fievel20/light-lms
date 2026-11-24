@@ -55,7 +55,8 @@ setup_server() {
     # --no-remove: apt stops instead of removing anything (MariaDB, mod_php…).
     apt-get install -y -q --no-remove --no-install-recommends \
         php8.4-fpm php8.4-cli php8.4-mysql php8.4-mbstring php8.4-xml php8.4-curl \
-        php8.4-zip php8.4-bcmath php8.4-intl php8.4-gd php8.4-opcache supervisor python3-certbot-apache
+        php8.4-zip php8.4-bcmath php8.4-intl php8.4-gd php8.4-opcache supervisor python3-certbot-apache \
+        fonts-dejavu-core
 
     if [ -x /usr/bin/php8.3 ] && [ "$(readlink -f /etc/alternatives/php)" != /usr/bin/php8.3 ]; then
         update-alternatives --set php /usr/bin/php8.3

@@ -23,12 +23,13 @@ class ExpressQuizController extends Controller
     {
         return Inertia::render('express/Index', [
             'quizzes' => ExpressQuiz::query()
-                ->withCount('questions')
+                ->withCount(['questions', 'sessions'])
                 ->orderBy('title')
                 ->get()
                 ->map(fn (ExpressQuiz $quiz) => [
                     ...$quiz->only(['id', 'title', 'seconds_per_question', 'updated_at']),
                     'questions_count' => (int) $quiz->questions_count,
+                    'sessions_count' => (int) $quiz->sessions_count,
                 ]),
         ]);
     }

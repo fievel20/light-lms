@@ -4,7 +4,9 @@ use App\Http\Controllers\CompetencyController;
 use App\Http\Controllers\CurrentPromotionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpressImageController;
+use App\Http\Controllers\ExpressPlayController;
 use App\Http\Controllers\ExpressQuizController;
+use App\Http\Controllers\ExpressSessionController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\IconController;
@@ -34,6 +36,20 @@ use App\Http\Controllers\TrainerLearnerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => to_route(auth()->check() ? 'dashboard' : 'login'))->name('home');
+
+// Quiz express: participants join without an account (QR code or code typed).
+Route::get('q', [ExpressPlayController::class, 'find'])->name('express.play.find');
+Route::prefix('q/{code}')->name('express.play.')->group(function () {
+    Route::get('/', [ExpressPlayController::class, 'show'])->name('show');
+    Route::post('/', [ExpressPlayController::class, 'join'])->middleware('throttle:express-join')->name('join');
+    Route::get('etat', [ExpressPlayController::class, 'state'])->name('state');
+    Route::post('reponse', [ExpressPlayController::class, 'answer'])->name('answer');
+    Route::get('texte/{position}/{part}', [ExpressPlayController::class, 'text'])
+        ->whereNumber('position')
+        ->whereIn('part', ['q', 'a', 'b', 'c', 'd'])
+        ->name('text');
+    Route::get('image/{position}', [ExpressPlayController::class, 'picture'])->whereNumber('position')->name('picture');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -96,6 +112,18 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::delete('sequences/{sequence}/quiz', [QuizController::class, 'destroy'])->name('sequences.quiz.destroy');
     Route::resource('sequences', SequenceController::class);
 
+    Route::get('quiz-express/{express_quiz}/sessions', [ExpressSessionController::class, 'index'])->name('express-quizzes.sessions.index');
+    Route::post('quiz-express/{express_quiz}/sessions', [ExpressSessionController::class, 'store'])->name('express-quizzes.sessions.store');
+    Route::prefix('quiz-express/sessions/{session}')->name('express-sessions.')->group(function () {
+        Route::get('/', [ExpressSessionController::class, 'show'])->name('show');
+        Route::delete('/', [ExpressSessionController::class, 'destroy'])->name('destroy');
+        Route::get('resultats', [ExpressSessionController::class, 'results'])->name('results');
+        Route::get('etat', [ExpressSessionController::class, 'state'])->name('state');
+        Route::post('suivante', [ExpressSessionController::class, 'next'])->name('next');
+        Route::post('correction', [ExpressSessionController::class, 'correct'])->name('correct');
+        Route::post('terminer', [ExpressSessionController::class, 'close'])->name('close');
+        Route::delete('participants/{participant}', [ExpressSessionController::class, 'removeParticipant'])->name('participants.destroy');
+    });
     Route::post('quiz-express/{express_quiz}/dupliquer', [ExpressQuizController::class, 'duplicate'])->name('express-quizzes.duplicate');
     Route::post('quiz-express/{express_quiz}/images', [ExpressImageController::class, 'store'])->name('express-quizzes.images.store');
     Route::get('quiz-express/{express_quiz}/images/{image}', [ExpressImageController::class, 'show'])->name('express-quizzes.images.show');

@@ -10,14 +10,17 @@
     import { Form, Link } from '@inertiajs/svelte';
     import Copy from '@lucide/svelte/icons/copy';
     import Pencil from '@lucide/svelte/icons/pencil';
+    import Play from '@lucide/svelte/icons/play';
     import Plus from '@lucide/svelte/icons/plus';
     import ExpressQuizController from '@/actions/App/Http/Controllers/ExpressQuizController';
+    import ExpressSessionController from '@/actions/App/Http/Controllers/ExpressSessionController';
     import AppHead from '@/components/AppHead.svelte';
     import Heading from '@/components/Heading.svelte';
     import { Button } from '@/components/ui/button';
     import { Spinner } from '@/components/ui/spinner';
     import { toUrl } from '@/lib/utils';
     import { edit } from '@/routes/express-quizzes';
+    import { index as sessions } from '@/routes/express-quizzes/sessions';
 
     let {
         quizzes,
@@ -27,6 +30,7 @@
             title: string;
             seconds_per_question: number;
             questions_count: number;
+            sessions_count: number;
         }[];
     } = $props();
 </script>
@@ -80,8 +84,35 @@
                                 ? 's'
                                 : ''} · {quiz.seconds_per_question} s par question
                         </p>
+                        {#if quiz.sessions_count > 0}
+                            <Link
+                                href={toUrl(sessions(quiz.id))}
+                                class="mono-link text-sm text-muted-foreground"
+                                >{quiz.sessions_count} session{quiz.sessions_count >
+                                1
+                                    ? 's'
+                                    : ''} · résultats</Link
+                            >
+                        {/if}
                     </div>
-                    <div class="flex w-full gap-2 sm:w-auto">
+                    <div class="flex w-full flex-wrap gap-2 sm:w-auto sm:flex-nowrap">
+                        <Form
+                            {...ExpressSessionController.store.form(quiz.id)}
+                            class="w-full sm:w-auto"
+                        >
+                            {#snippet children({ processing })}
+                                <Button
+                                    type="submit"
+                                    disabled={processing || quiz.questions_count === 0}
+                                    class="h-11 w-full bg-cta text-cta-foreground hover:bg-cta/90 sm:h-9"
+                                >
+                                    {#if processing}<Spinner />{:else}<Play
+                                            class="size-4"
+                                        />{/if}
+                                    Lancer
+                                </Button>
+                            {/snippet}
+                        </Form>
                         <Button
                             asChild
                             variant="outline"
