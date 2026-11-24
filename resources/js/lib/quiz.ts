@@ -180,3 +180,35 @@ export type FinishedAttempt = {
     finished_at: string;
     questions: CorrectedQuestion[];
 };
+
+/** A question as the server sends it to the editor. */
+export type SavedQuestion = Omit<
+    QuestionDraft,
+    'key' | `choice_${'c' | 'd'}`
+> & {
+    choice_c: string | null;
+    choice_d: string | null;
+};
+
+export function draftsFrom(questions: SavedQuestion[]): QuestionDraft[] {
+    return questions.map((question) => ({
+        ...question,
+        key: newKey(),
+        choice_c: question.choice_c ?? '',
+        choice_d: question.choice_d ?? '',
+    }));
+}
+
+/** The questions as the editor saves them (empty C and D become null). */
+export function questionsPayload(questions: QuestionDraft[]) {
+    return questions.map((question) => ({
+        id: question.id,
+        question: question.question,
+        image_id: question.image_id,
+        choice_a: question.choice_a,
+        choice_b: question.choice_b,
+        choice_c: question.choice_c || null,
+        choice_d: question.choice_d || null,
+        correct: question.correct,
+    }));
+}
