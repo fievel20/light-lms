@@ -2,6 +2,7 @@ import BookOpen from '@lucide/svelte/icons/book-open';
 import ChartColumn from '@lucide/svelte/icons/chart-column';
 import CircleHelp from '@lucide/svelte/icons/circle-help';
 import Eye from '@lucide/svelte/icons/eye';
+import Gamepad2 from '@lucide/svelte/icons/gamepad-2';
 import LayoutGrid from '@lucide/svelte/icons/layout-grid';
 import ListChecks from '@lucide/svelte/icons/list-checks';
 import Route from '@lucide/svelte/icons/route';
@@ -14,6 +15,7 @@ import Users from '@lucide/svelte/icons/users';
 import UsersRound from '@lucide/svelte/icons/users-round';
 import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
+import * as expressQuizzes from '@/routes/express-quizzes';
 import * as frameworks from '@/routes/frameworks';
 import * as icons from '@/routes/icons';
 import * as learners from '@/routes/learners';
@@ -137,6 +139,11 @@ export function navGroups(
                     href: learningPaths.index(),
                     icon: Route,
                 },
+                {
+                    title: 'Quiz express',
+                    href: expressQuizzes.index(),
+                    icon: Gamepad2,
+                },
                 { title: 'Icônes', href: icons.index(), icon: Shapes },
             ],
         },
@@ -180,6 +187,7 @@ export function mobileNavItems(
                     'Référentiels',
                     'Séquences',
                     'Parcours',
+                    'Quiz express',
                     'Icônes',
                 ].includes(item.title),
         )

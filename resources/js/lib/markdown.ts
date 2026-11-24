@@ -42,10 +42,27 @@ export async function uploadSequenceImage(
     sequenceId: number,
     file: File,
 ): Promise<{ id: number; markdown: string }> {
+    const data = await postImage(storeImage(sequenceId).url, file);
+
+    if (!data.markdown) {
+        throw new Error('Envoi impossible.');
+    }
+
+    return { id: data.id, markdown: data.markdown };
+}
+
+/**
+ * Sends an image to an upload route; resolves with what it answers (at
+ * least the image's id), or rejects with the validation message.
+ */
+export async function postImage(
+    url: string,
+    file: File,
+): Promise<{ id: number; markdown?: string }> {
     const body = new FormData();
     body.append('image', file);
 
-    const response = await fetch(storeImage(sequenceId).url, {
+    const response = await fetch(url, {
         method: 'POST',
         headers: jsonHeaders(),
         body,
@@ -56,7 +73,7 @@ export async function uploadSequenceImage(
         message?: string;
     };
 
-    if (!response.ok || !data.markdown || data.id === undefined) {
+    if (!response.ok || data.id === undefined) {
         throw new Error(
             data.message ??
                 (response.status === 413

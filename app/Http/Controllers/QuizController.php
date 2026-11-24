@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Quiz\SyncQuestions;
 use App\Http\Requests\QuizRequest;
 use App\Models\Quiz;
 use App\Models\QuizQuestion;
@@ -40,47 +41,18 @@ class QuizController extends Controller
         ]);
     }
 
-    /**
-     * Saves the quiz: kept questions are updated (by id), new ones created,
-     * missing ones deleted, and all are numbered in the order received.
-     */
-    public function update(QuizRequest $request, Sequence $sequence): RedirectResponse
+    public function update(QuizRequest $request, Sequence $sequence, SyncQuestions $sync): RedirectResponse
     {
         /** @var array{title: string, seconds_per_question: int|null, questions: list<array<string, mixed>>} $validated */
         $validated = $request->validated();
 
-        DB::transaction(function () use ($sequence, $validated): void {
+        DB::transaction(function () use ($sequence, $validated, $sync): void {
             $quiz = $sequence->quiz()->updateOrCreate([], [
                 'title' => $validated['title'],
                 'seconds_per_question' => $validated['seconds_per_question'] ?? null,
             ]);
 
-            $existing = $quiz->questions()->get()->keyBy('id');
-            $kept = [];
-
-            foreach ($validated['questions'] as $index => $data) {
-                $attributes = [
-                    'position' => $index + 1,
-                    'question' => $data['question'],
-                    'sequence_image_id' => $data['image_id'] ?? null,
-                    'choice_a' => $data['choice_a'],
-                    'choice_b' => $data['choice_b'],
-                    'choice_c' => $data['choice_c'] ?? null,
-                    'choice_d' => $data['choice_d'] ?? null,
-                    'correct' => $data['correct'],
-                ];
-
-                $question = $existing->get($data['id'] ?? null);
-
-                if ($question instanceof QuizQuestion) {
-                    $question->update($attributes);
-                    $kept[] = $question->id;
-                } else {
-                    $quiz->questions()->create($attributes);
-                }
-            }
-
-            $quiz->questions()->whereKeyNot($kept)->whereIn('id', $existing->keys())->delete();
+            $sync->handle($quiz->questions(), $validated['questions'], 'sequence_image_id');
         });
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Quiz enregistré.']);

@@ -3,6 +3,8 @@
 use App\Http\Controllers\CompetencyController;
 use App\Http\Controllers\CurrentPromotionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpressImageController;
+use App\Http\Controllers\ExpressQuizController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkImportController;
 use App\Http\Controllers\IconController;
@@ -93,6 +95,14 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::put('sequences/{sequence}/quiz', [QuizController::class, 'update'])->name('sequences.quiz.update');
     Route::delete('sequences/{sequence}/quiz', [QuizController::class, 'destroy'])->name('sequences.quiz.destroy');
     Route::resource('sequences', SequenceController::class);
+
+    Route::post('quiz-express/{express_quiz}/dupliquer', [ExpressQuizController::class, 'duplicate'])->name('express-quizzes.duplicate');
+    Route::post('quiz-express/{express_quiz}/images', [ExpressImageController::class, 'store'])->name('express-quizzes.images.store');
+    Route::get('quiz-express/{express_quiz}/images/{image}', [ExpressImageController::class, 'show'])->name('express-quizzes.images.show');
+    Route::resource('quiz-express', ExpressQuizController::class)
+        ->parameters(['quiz-express' => 'express_quiz'])
+        ->names('express-quizzes')
+        ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
     Route::resource('learning-paths', LearningPathController::class);
     Route::resource('icones', IconController::class)

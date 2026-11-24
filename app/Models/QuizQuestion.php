@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasChoices;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['position', 'question', 'sequence_image_id', 'choice_a', 'choice_b', 'choice_c', 'choice_d', 'correct'])]
 class QuizQuestion extends Model
 {
+    use HasChoices;
+
     public const array LETTERS = ['a', 'b', 'c', 'd'];
 
     /**
@@ -43,25 +46,5 @@ class QuizQuestion extends Model
     public function image(): BelongsTo
     {
         return $this->belongsTo(SequenceImage::class, 'sequence_image_id');
-    }
-
-    /**
-     * The choices that are filled in, by letter: ['a' => 'Sydney', …].
-     *
-     * @return array<string, string>
-     */
-    public function choices(): array
-    {
-        $choices = [];
-
-        foreach (self::LETTERS as $letter) {
-            $text = $this->{"choice_{$letter}"};
-
-            if (is_string($text) && $text !== '') {
-                $choices[$letter] = $text;
-            }
-        }
-
-        return $choices;
     }
 }
