@@ -65,6 +65,18 @@ Voir le [brief des quiz](brief-quiz.md) : un quiz par séquence, lancé par `[Qu
 | 17    | Résultats de la promotion pour le formateur                                           | ✅   |
 | 18    | Guide utilisateur, architecture                                                       | ✅   |
 
+## Quiz express
+
+Voir le [brief du quiz express](brief-quiz-express.md) : un quiz joué en salle, sans compte, par QR code ; le formateur fait défiler les questions, points et bonus de rapidité, classement puis correction.
+
+| Étape | Contenu                                                                                                              | État |
+| ----- | -------------------------------------------------------------------------------------------------------------------- | ---- |
+| 19    | Quiz express : liste, éditeur partagé avec le quiz des séquences, import JSON, images                                | ✅   |
+| 20    | Session : lancement, QR code, salle d'attente, nom du participant, retour après rechargement                         | ✅   |
+| 21    | Déroulé en direct : questions, chronomètre, points et bonus, question suivante, texte en images, QR code sur le côté | ✅   |
+| 22    | Classement, correction projetée et sur le téléphone, fin de session                                                  | ✅   |
+| 23    | Sessions passées ; guide utilisateur, architecture                                                                   | ✅   |
+
 ## Idées pour la suite
 
 - Historique complet des évaluations d'une compétence (déjà stocké, pas encore affiché).

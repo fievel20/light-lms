@@ -85,7 +85,7 @@ export async function postImage(
     return { id: data.id, markdown: data.markdown };
 }
 
-function jsonHeaders(): Record<string, string> {
+export function jsonHeaders(): Record<string, string> {
     const xsrf = document.cookie
         .split('; ')
         .find((cookie) => cookie.startsWith('XSRF-TOKEN='))

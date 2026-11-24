@@ -1,6 +1,7 @@
 import { createInertiaApp } from '@inertiajs/svelte';
 import AppLayout from '@/layouts/AppLayout.svelte';
 import AuthLayout from '@/layouts/AuthLayout.svelte';
+import ExpressLayout from '@/layouts/ExpressLayout.svelte';
 import SettingsLayout from '@/layouts/settings/Layout.svelte';
 import { initializeFlashToast } from '@/lib/flash-toast';
 import { initializeTheme } from '@/lib/theme.svelte';
@@ -13,6 +14,11 @@ void createInertiaApp({
         switch (true) {
             case name.startsWith('auth/'):
                 return AuthLayout;
+            // Quiz express: the projected screen and the participants' pages.
+            case ['express/Host', 'express/Play', 'express/Find'].includes(
+                name,
+            ):
+                return ExpressLayout;
             case name.startsWith('settings/'):
                 return [AppLayout, SettingsLayout];
             default:

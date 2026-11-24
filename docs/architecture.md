@@ -134,6 +134,39 @@ erDiagram
         json questions "copie des questions et réponses données"
         timestamp finished_at
     }
+    express_quizzes {
+        string title
+        smallint seconds_per_question "10 à 300, 20 par défaut"
+    }
+    express_questions {
+        bigint express_quiz_id
+        int position
+        text question
+        bigint express_image_id "nullable"
+        string choice_a "à choice_d (C et D facultatives)"
+        char correct "a à d"
+    }
+    express_sessions {
+        bigint express_quiz_id
+        string code UK "6 caractères"
+        string status "lobby, question, ranking, correction, closed"
+        json questions "copie au lancement"
+        smallint current_position
+        timestamp question_started_at "millisecondes"
+    }
+    express_participants {
+        bigint express_session_id
+        string name "unique dans la session (sans casse)"
+        string token_hash "jeton du cookie, haché"
+        int score
+    }
+    express_answers {
+        bigint express_participant_id
+        smallint position
+        char choice
+        smallint points
+        timestamp answered_at "millisecondes"
+    }
     icons {
         string name UK
         string path "disque privé local, SVG nettoyé"
@@ -171,6 +204,9 @@ Points clés :
 | Rendu Markdown sûr (HTML échappé, liens externes)  | `App\Support\MarkdownRenderer`                                              |
 | Fil d'activité de l'apprenant                      | `App\Queries\LearnerActivity`                                               |
 | Compte démo : création, remise à zéro              | `App\Actions\Demo\SaveDemoAccount`, `ResetDemoAccount`                      |
+| Quiz express : déroulé, arrivée, points            | `App\Actions\Express\ExpressGame`, `ExpressSession::pointsNow()`            |
+| Quiz express : ce que lisent les écrans            | `App\Support\ExpressState` (projeté, téléphone)                             |
+| Texte des questions en images                      | `App\Support\TextImage` (GD + FreeType, `config/express.php`)               |
 
 Détail des définitions :
 
@@ -178,6 +214,7 @@ Détail des définitions :
 - **À examiner** : une autoévaluation existe et elle est plus récente que la dernière validation (ou il n'y a pas de validation).
 - **Écart** : autoévaluation et validation existent et diffèrent.
 - **Compte démo** : un apprenant (`users.demo_promotion_id`) inscrit à sa promotion. `Promotion::learners()` l'exclut (listes, suivi, résultats, comptes) ; `Promotion::members()` l'inclut pour les droits de lecture. Le listener `ResetDemoAccountOnSession` efface ses tentatives, séquences terminées, évaluations et célébrations à chaque `Logout` et `Login`.
+- **Quiz express** : une session garde une copie des questions ; bonne réponse = 500 + jusqu'à 500 de bonus selon le temps écoulé (une seconde de grâce : les téléphones interrogent le serveur chaque seconde) ; réponse refusée après le temps + la grâce ; une seule réponse par question ; arrivée possible jusqu'au classement ; session fermée d'office après 12 h. Les bonnes réponses n'atteignent les téléphones qu'au classement.
 - **Progression** : compétences acquises / compétences du référentiel, arrondi à l'entier ; moyenne simple des apprenants pour une promotion.
 
 Verrous :
@@ -190,16 +227,17 @@ Verrous :
 
 ## Sécurité et accès
 
-| Mécanisme            | Rôle                                                                                                                                                                                                                                                                                                 |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Inscription publique | Désactivée (`Features::registration()` commenté dans `config/fortify.php`)                                                                                                                                                                                                                           |
-| Middleware `trainer` | `EnsureUserIsTrainer` : 403 pour tout autre utilisateur                                                                                                                                                                                                                                              |
-| Middleware `learner` | `EnsureUserIsLearner` : 403 pour tout autre utilisateur                                                                                                                                                                                                                                              |
-| Liens d'invitation   | URL signée temporaire (7 jours), routes `guest` + `signed`, usage unique (refus si activé), limitée à 6 essais/min                                                                                                                                                                                   |
-| Appartenance         | Les contrôleurs vérifient qu'un apprenant appartient à la promotion (404 sinon) et qu'une compétence appartient à son référentiel                                                                                                                                                                    |
-| Compte démo          | `ProtectDemoAccount` (groupe `web`) : profil, mot de passe, double authentification et clés d'accès verrouillés ; mot de passe de 4 caractères minimum, sans règle de complexité                                                                                                                     |
-| Compte non activé    | Mot de passe `null` : connexion impossible                                                                                                                                                                                                                                                           |
-| Mode observateur     | `ObserveLearner` (groupe `web`) : la session reste celle du formateur, seul l'utilisateur de chaque requête GET devient l'apprenant observé ; toute autre méthode est refusée (sauf `observer.stop` et `logout`), les pages formateur renvoient à l'accueil, les célébrations ne sont pas consommées |
+| Mécanisme            | Rôle                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Inscription publique | Désactivée (`Features::registration()` commenté dans `config/fortify.php`)                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Middleware `trainer` | `EnsureUserIsTrainer` : 403 pour tout autre utilisateur                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Middleware `learner` | `EnsureUserIsLearner` : 403 pour tout autre utilisateur                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Liens d'invitation   | URL signée temporaire (7 jours), routes `guest` + `signed`, usage unique (refus si activé), limitée à 6 essais/min                                                                                                                                                                                                                                                                                                                                                              |
+| Appartenance         | Les contrôleurs vérifient qu'un apprenant appartient à la promotion (404 sinon) et qu'une compétence appartient à son référentiel                                                                                                                                                                                                                                                                                                                                               |
+| Compte démo          | `ProtectDemoAccount` (groupe `web`) : profil, mot de passe, double authentification et clés d'accès verrouillés ; mot de passe de 4 caractères minimum, sans règle de complexité                                                                                                                                                                                                                                                                                                |
+| Quiz express         | Routes publiques `/q/{code}` : le participant est reconnu par un jeton aléatoire (cookie chiffré `express_{session}`, haché en base) ; arrivée limitée à 120/min par IP (une classe entière derrière une seule IP) ; textes des questions servis en PNG (`TextImage`) aux seuls participants, et pas avant que la question soit posée. Police : `EXPRESS_FONT`, sinon DejaVu Sans (`fonts-dejavu-core`) ou Arial ; sans GD ni police, le texte est envoyé avec `translate="no"` |
+| Compte non activé    | Mot de passe `null` : connexion impossible                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Mode observateur     | `ObserveLearner` (groupe `web`) : la session reste celle du formateur, seul l'utilisateur de chaque requête GET devient l'apprenant observé ; toute autre méthode est refusée (sauf `observer.stop` et `logout`), les pages formateur renvoient à l'accueil, les célébrations ne sont pas consommées                                                                                                                                                                            |
 
 ## Routes métier
 
@@ -215,6 +253,8 @@ Verrous :
 | Formateur    | `learners.invitation.resend`, `observer.start` (POST `/observateur/{apprenant}`), `learners.index / edit` (`/comptes-apprenants`), `learners.email.update`, `learners.password.reset-link` (6 par minute), `learners.password.update`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | Formateur    | `frameworks.*`, `frameworks.import`, `frameworks.competencies.*` (liaisons imbriquées)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Formateur    | `sequences.*`, `sequences.preview` (aperçu JSON), `sequences.duplicate`, `sequences.images.store / show`, `sequences.quiz.edit / update / destroy` (`/sequences/{id}/quiz`, le quiz entier enregistré d'un bloc ; le test se fait dans `sequences.show`, sans enregistrement), `learning-paths.*`, `learning-paths.sequences.store / reorder / destroy`, `promotions.learning-paths.index / store / reorder / destroy` (`/promotions/{id}/parcours`), `promotions.sequences.release`, `promotions.sequence-completions.index` (`/promotions/{id}/sequences-realisees`), `promotions.quizzes.index / show / attempt` (`/promotions/{id}/quiz[/{séquence}[/tentatives/{id}]]`), `icons.index / store / update / destroy` |
+| Formateur    | `express-quizzes.index / store / edit / update / destroy / duplicate` (`/quiz-express`), `express-quizzes.images.store / show`, `express-quizzes.sessions.index / store`, `express-sessions.show / state / next / correct / close / results / destroy / participants.destroy` (`/quiz-express/sessions/{id}[/etat\|suivante\|correction\|terminer\|resultats]`)                                                                                                                                                                                                                                                                                                                                                        |
+| Public       | `express.play.find` (`/q`, code tapé), `express.play.show / join / state / answer / text / picture` (`/q/{code}[/etat\|reponse\|texte/{n}/{q\|a…d}\|image/{n}]`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | Apprenant    | `my-competencies.index` (`/mes-competences`), `my-competencies.store`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | Apprenant    | `my-learning-paths.index` (`/mes-parcours`), `my-learning-paths.show` (`/mes-parcours/{promotion}/{parcours}/{séquence}`), `my-learning-paths.complete` (PUT `…/terminee`), `my-learning-paths.quiz.store` (POST `…/quiz`, puis retour à la séquence avec `?tentative={id}` pour la correction)                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Connecté     | `sequences.images.show` : formateur, ou apprenant à qui la séquence est ouverte (404 sinon) ; `icons.show` (SVG servi avec une CSP `default-src 'none'`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -228,7 +268,7 @@ Liste complète : `php artisan route:list --except-vendor`.
 app/
 ├── Actions/          # opérations métier (Learners, Frameworks, Assessments)
 ├── Console/Commands/ # lms:create-trainer
-├── Enums/            # Role, CompetencyType, AssessmentSource
+├── Enums/            # Role, CompetencyType, AssessmentSource, ExpressStatus
 ├── Http/
 │   ├── Controllers/  # contrôleurs fins : validation → action → redirection / page
 │   ├── Middleware/   # trainer, learner
