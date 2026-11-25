@@ -4,6 +4,7 @@
     import ImagePlus from '@lucide/svelte/icons/image-plus';
     import Italic from '@lucide/svelte/icons/italic';
     import Link2 from '@lucide/svelte/icons/link-2';
+    import Paperclip from '@lucide/svelte/icons/paperclip';
     import List from '@lucide/svelte/icons/list';
     import ListOrdered from '@lucide/svelte/icons/list-ordered';
     import Quote from '@lucide/svelte/icons/quote';
@@ -19,6 +20,7 @@
         insertText,
         prefixLines,
         renderMarkdown,
+        uploadAttachment,
         uploadImage,
         wrapSelection,
     } from '@/lib/markdown';
@@ -36,7 +38,7 @@
         name: string;
         value?: string;
         maxlength: number;
-        // Images need a saved sequence to belong to.
+        // Images and attachments need a saved sequence to belong to.
         sequenceId?: number | null;
         // Imported icons (Administration > Icônes), shown before the emojis.
         library?: Icon[];
@@ -44,6 +46,7 @@
 
     let textarea: HTMLTextAreaElement | undefined = $state();
     let fileInput: HTMLInputElement | undefined = $state();
+    let attachmentInput: HTMLInputElement | undefined = $state();
     // On phones, one pane at a time; side by side from lg.
     let tab: 'write' | 'preview' = $state('write');
     let html = $state('');
@@ -147,24 +150,23 @@
         void applyEdit((t, s, e) => insertText(t, s, e, text));
     }
 
-    async function addImages(files: Iterable<File>): Promise<void> {
+    // Images are shown in the text; other files become a link to download.
+    async function addFiles(files: Iterable<File>): Promise<void> {
         if (sequenceId === null) {
             toast.error(
-                'Enregistre la séquence une première fois pour ajouter des images.',
+                'Enregistre la séquence une première fois pour ajouter des images ou des pièces jointes.',
             );
 
             return;
         }
 
         for (const file of files) {
-            if (!file.type.startsWith('image/')) {
-                continue;
-            }
-
             uploading++;
 
             try {
-                const markdown = await uploadImage(sequenceId, file);
+                const markdown = file.type.startsWith('image/')
+                    ? await uploadImage(sequenceId, file)
+                    : await uploadAttachment(sequenceId, file);
                 // On its own line, so it shows as a block under the step.
                 await applyEdit((t, s, e) =>
                     insertText(
@@ -177,8 +179,8 @@
             } catch (error) {
                 toast.error(
                     error instanceof Error
-                        ? error.message
-                        : "L'image n'a pas pu être envoyée.",
+                        ? `${file.name} : ${error.message}`
+                        : `${file.name} n'a pas pu être envoyé.`,
                 );
             } finally {
                 uploading--;
@@ -191,7 +193,7 @@
 
         if (files.some((file) => file.type.startsWith('image/'))) {
             event.preventDefault();
-            void addImages(files);
+            void addFiles(files.filter((file) => file.type.startsWith('image/')));
         }
     }
 
@@ -201,7 +203,7 @@
 
         if (files.length > 0) {
             event.preventDefault();
-            void addImages(files);
+            void addFiles(files);
         }
     }
 
@@ -246,9 +248,7 @@
                 : 'Image (ou colle / glisse une capture)'}
             aria-label="Image"
             onclick={() =>
-                sequenceId === null
-                    ? addImages([])
-                    : fileInput?.click()}
+                sequenceId === null ? addFiles([]) : fileInput?.click()}
         >
             {#if uploading > 0}<Spinner />{:else}<ImagePlus
                     class="size-4"
@@ -261,7 +261,31 @@
             multiple
             class="hidden"
             onchange={(event) => {
-                void addImages(event.currentTarget.files ?? []);
+                void addFiles(event.currentTarget.files ?? []);
+                event.currentTarget.value = '';
+            }}
+        />
+
+        <button
+            type="button"
+            class={toolClass}
+            title={sequenceId === null
+                ? 'Pièce jointe (après le premier enregistrement)'
+                : 'Pièce jointe : PDF, document… (ou glisse le fichier)'}
+            aria-label="Pièce jointe"
+            onclick={() =>
+                sequenceId === null ? addFiles([]) : attachmentInput?.click()}
+        >
+            <Paperclip class="size-4" />
+        </button>
+        <input
+            bind:this={attachmentInput}
+            type="file"
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.odp,.txt,.csv,.zip,.mp3,.mp4"
+            multiple
+            class="hidden"
+            onchange={(event) => {
+                void addFiles(event.currentTarget.files ?? []);
                 event.currentTarget.value = '';
             }}
         />

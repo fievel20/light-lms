@@ -119,7 +119,15 @@ Menu **Séquences** (sur mobile : lien sous le titre de la page Promotions). Une
 - Les adresses web deviennent des liens, ouverts dans un nouvel onglet.
 - Les **icônes** s'insèrent avec le bouton 🙂 : d'abord les tiennes (menu **Icônes**, voir ci-dessous), puis les emojis courants (🎯 objectif, 🔥 difficulté, 💡 astuce, ⚠️ attention…).
 - Les **images** (JPEG, PNG, WebP ou GIF, 5 Mo maximum) s'ajoutent avec le bouton image, par glisser-déposer ou en **collant une capture** (Ctrl+V) dans l'éditeur. Il faut avoir enregistré la séquence une première fois. Elles ne sont visibles que par les personnes connectées.
-- **Dupliquer** (sur la page de la séquence) crée une copie, images comprises, à modifier pour en faire une variante (« Google Lens 2 »…).
+- Les **pièces jointes** (PDF, Word, Excel, PowerPoint, LibreOffice, texte, CSV, ZIP, MP3, MP4 ; 5 Mo maximum) s'ajoutent avec le bouton trombone ou en glissant le fichier dans l'éditeur : un lien de téléchargement est inséré. Les apprenants les ouvrent depuis la séquence (les PDF dans un nouvel onglet) ; comme les images, elles ne sont visibles que dans les séquences qui leur sont ouvertes.
+- **Dupliquer** (sur la page de la séquence) crée une copie, images et pièces jointes comprises, à modifier pour en faire une variante (« Google Lens 2 »…).
+
+**Importer un dossier.** En haut de la liste des séquences, **glisse un dossier** de cours depuis ton ordinateur (ou **Choisir un dossier**) :
+
+- Chaque fichier **Markdown** (`.md`), sous-dossiers compris, devient une **nouvelle séquence**, dans l'ordre des noms de fichiers. Un import ne remplace jamais une séquence existante.
+- Le **titre** est le premier titre `# …` du fichier (retiré du texte), sinon le nom du fichier.
+- Les **images** (`![Légende](images/capture.png)`) et les **pièces jointes** (`[Fiche](pieces-jointes/fiche.pdf)`) des liens sont importées avec leur séquence ; les chemins sont relatifs au fichier `.md`. Les autres fichiers du dossier (scripts, brouillons…) sont ignorés.
+- Avant l'import, la liste des séquences à créer indique pour chacune le nombre d'images et de pièces jointes, et signale les fichiers introuvables, refusés ou de plus de 5 Mo. **Importer** crée les séquences une à une ; chacune s'ouvre d'un clic à la fin.
 
 **Bibliothèque d'icônes.** Menu **Icônes** (sur mobile : lien sous le titre de la page Promotions). Importe un ou plusieurs fichiers **SVG** à la fois (512 Ko maximum chacun) : le nom du fichier devient le nom de l'icône. Quelle que soit la taille du dessin, l'icône s'affiche **à la taille du texte**, sur la ligne. Une icône d'une seule couleur prend la couleur du texte (elle reste lisible en mode sombre) ; décoche « Prendre la couleur du texte » pour garder ses couleurs d'origine. Chaque icône indique les séquences qui l'utilisent ; la supprimer la fait disparaître de ces séquences. Les scripts éventuellement contenus dans un SVG sont retirés à l'import.
 

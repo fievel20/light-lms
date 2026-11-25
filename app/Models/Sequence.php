@@ -33,7 +33,10 @@ class Sequence extends Model
     {
         // The rows go with the foreign key; the files have to be removed here.
         static::deleting(function (Sequence $sequence): void {
-            Storage::disk(SequenceImage::DISK)->delete($sequence->images()->pluck('path')->all());
+            Storage::disk(SequenceImage::DISK)->delete([
+                ...$sequence->images()->pluck('path')->all(),
+                ...$sequence->attachments()->pluck('path')->all(),
+            ]);
         });
     }
 
@@ -43,6 +46,14 @@ class Sequence extends Model
     public function images(): HasMany
     {
         return $this->hasMany(SequenceImage::class);
+    }
+
+    /**
+     * @return HasMany<SequenceAttachment, $this>
+     */
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(SequenceAttachment::class);
     }
 
     /**
