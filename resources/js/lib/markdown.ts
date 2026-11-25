@@ -1,4 +1,5 @@
 import { preview } from '@/routes/sequences';
+import { store as storeAttachment } from '@/routes/sequences/attachments';
 import { store as storeImage } from '@/routes/sequences/images';
 
 /**
@@ -36,6 +37,19 @@ export async function uploadImage(
 }
 
 /**
+ * Uploads a file to download (PDF, document…) to a sequence; resolves with
+ * the Markdown link to insert.
+ */
+export async function uploadAttachment(
+    sequenceId: number,
+    file: File,
+): Promise<string> {
+    const data = await postImage(storeAttachment(sequenceId).url, file, 'file');
+
+    return data.markdown ?? `[${file.name}](fichier:${data.id})`;
+}
+
+/**
  * Same upload, answering the image's id too (quiz questions refer to it).
  */
 export async function uploadSequenceImage(
@@ -52,15 +66,17 @@ export async function uploadSequenceImage(
 }
 
 /**
- * Sends an image to an upload route; resolves with what it answers (at
- * least the image's id), or rejects with the validation message.
+ * Sends a file to an upload route (field "image", or "file" for an
+ * attachment); resolves with what it answers (at least the file's id), or
+ * rejects with the validation message.
  */
 export async function postImage(
     url: string,
     file: File,
+    field: 'image' | 'file' = 'image',
 ): Promise<{ id: number; markdown?: string }> {
     const body = new FormData();
-    body.append('image', file);
+    body.append(field, file);
 
     const response = await fetch(url, {
         method: 'POST',
@@ -77,7 +93,7 @@ export async function postImage(
         throw new Error(
             data.message ??
                 (response.status === 413
-                    ? 'Image trop lourde.'
+                    ? 'Fichier trop lourd (5 Mo maximum).'
                     : `Envoi impossible (${response.status}).`),
         );
     }

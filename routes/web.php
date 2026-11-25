@@ -28,8 +28,10 @@ use App\Http\Controllers\PromotionLearningPathController;
 use App\Http\Controllers\PromotionQuizController;
 use App\Http\Controllers\PromotionSequenceCompletionController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\SequenceAttachmentController;
 use App\Http\Controllers\SequenceController;
 use App\Http\Controllers\SequenceImageController;
+use App\Http\Controllers\SequenceImportController;
 use App\Http\Controllers\SequenceReleaseController;
 use App\Http\Controllers\TrainerCompetencyController;
 use App\Http\Controllers\TrainerLearnerController;
@@ -58,6 +60,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sequences/{sequence}/images/{image}', [SequenceImageController::class, 'show'])
         ->scopeBindings()
         ->name('sequences.images.show');
+    Route::get('sequences/{sequence}/fichiers/{attachment}', [SequenceAttachmentController::class, 'show'])
+        ->scopeBindings()
+        ->name('sequences.attachments.show');
     // Not /icons/: Apache serves its own images there (Alias /icons/ in mods-enabled/alias.conf).
     Route::get('icones/{icon}', [IconController::class, 'show'])->name('icons.show');
 });
@@ -107,6 +112,9 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::post('sequences/preview', [SequenceController::class, 'preview'])->name('sequences.preview');
     Route::post('sequences/{sequence}/duplicate', [SequenceController::class, 'duplicate'])->name('sequences.duplicate');
     Route::post('sequences/{sequence}/images', [SequenceImageController::class, 'store'])->name('sequences.images.store');
+    Route::post('sequences/{sequence}/fichiers', [SequenceAttachmentController::class, 'store'])->name('sequences.attachments.store');
+    Route::post('sequences/import', [SequenceImportController::class, 'store'])->name('sequences.import.store');
+    Route::put('sequences/{sequence}/import', [SequenceImportController::class, 'update'])->name('sequences.import.update');
     Route::get('sequences/{sequence}/quiz', [QuizController::class, 'edit'])->name('sequences.quiz.edit');
     Route::put('sequences/{sequence}/quiz', [QuizController::class, 'update'])->name('sequences.quiz.update');
     Route::delete('sequences/{sequence}/quiz', [QuizController::class, 'destroy'])->name('sequences.quiz.destroy');

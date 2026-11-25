@@ -11,8 +11,8 @@ use Illuminate\Support\Str;
 class DuplicateSequence
 {
     /**
-     * Copy a sequence and its images; the copy's Markdown points to its own
-     * images, so deleting one sequence never breaks the other.
+     * Copy a sequence, its images and attachments; the copy's Markdown points
+     * to its own files, so deleting one sequence never breaks the other.
      */
     public function handle(Sequence $source): Sequence
     {
@@ -39,6 +39,15 @@ class DuplicateSequence
                 ]);
 
                 $references["(image:{$image->id})"] = "(image:{$copied->id})";
+            }
+
+            foreach ($source->attachments as $attachment) {
+                $path = $copy->imageDirectory().'/'.Str::uuid().'.'.pathinfo($attachment->path, PATHINFO_EXTENSION);
+                $disk->copy($attachment->path, $path);
+
+                $copied = $copy->attachments()->create($attachment->only(['original_name', 'mime_type', 'size']) + ['path' => $path]);
+
+                $references["(fichier:{$attachment->id})"] = "(fichier:{$copied->id})";
             }
 
             $copy->update(['content' => strtr($source->content, $references)]);

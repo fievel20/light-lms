@@ -12,6 +12,7 @@
     import Search from '@lucide/svelte/icons/search';
     import AppHead from '@/components/AppHead.svelte';
     import Heading from '@/components/Heading.svelte';
+    import FolderImport from '@/components/sequences/FolderImport.svelte';
     import { Button } from '@/components/ui/button';
     import { Input } from '@/components/ui/input';
     import { formatDate } from '@/lib/dates';
@@ -56,6 +57,8 @@
             {/snippet}
         </Button>
     </div>
+
+    <FolderImport />
 
     {#if sequences.length === 0}
         <p

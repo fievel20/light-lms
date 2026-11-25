@@ -14,18 +14,19 @@
 
 ## Évolutions depuis le MVP
 
-| Évolution              | Contenu                                                                                                                                               |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Interface mobile first | Navigation par onglets sur mobile, tutoiement, écrans du kit traduits                                                                                 |
-| Expérience apprenant   | Accueil avec anneau de progression, pastilles de niveau, filtres, célébration des acquisitions                                                        |
-| Espace formateur       | Promotion active dans le menu, vues **par compétence** et **par apprenant**, validation en un geste avec enregistrement automatique, carte de chaleur |
-| Charte « labo »        | Papier, encre indigo, vert acide, filets fins, Space Grotesk / Inter / JetBrains Mono                                                                 |
-| Retraits               | Validation rapide, système de badges, suppression de compte depuis le profil                                                                          |
-| Séquences réalisées    | L'apprenant valide chaque séquence terminée ; le formateur suit la promotion par séquence ou par apprenant                                            |
-| Mode observateur       | Le formateur voit l'espace d'un apprenant tel qu'il le voit, en lecture seule                                                                         |
-| Comptes apprenants     | Le formateur corrige l'email d'un apprenant, lui envoie un lien de réinitialisation ou lui donne un mot de passe provisoire                           |
-| Compte démo            | Un faux apprenant par promotion, email inventé et mot de passe simple, remis à zéro à chaque déconnexion, absent des résultats                        |
-| Finitions et nettoyage | Favicon, composants et layouts du kit inutilisés supprimés                                                                                            |
+| Évolution              | Contenu                                                                                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Interface mobile first | Navigation par onglets sur mobile, tutoiement, écrans du kit traduits                                                                                                      |
+| Expérience apprenant   | Accueil avec anneau de progression, pastilles de niveau, filtres, célébration des acquisitions                                                                             |
+| Espace formateur       | Promotion active dans le menu, vues **par compétence** et **par apprenant**, validation en un geste avec enregistrement automatique, carte de chaleur                      |
+| Charte « labo »        | Papier, encre indigo, vert acide, filets fins, Space Grotesk / Inter / JetBrains Mono                                                                                      |
+| Retraits               | Validation rapide, système de badges, suppression de compte depuis le profil                                                                                               |
+| Séquences réalisées    | L'apprenant valide chaque séquence terminée ; le formateur suit la promotion par séquence ou par apprenant                                                                 |
+| Mode observateur       | Le formateur voit l'espace d'un apprenant tel qu'il le voit, en lecture seule                                                                                              |
+| Comptes apprenants     | Le formateur corrige l'email d'un apprenant, lui envoie un lien de réinitialisation ou lui donne un mot de passe provisoire                                                |
+| Import de dossiers     | Un dossier de cours glissé depuis l'ordinateur : une séquence par fichier Markdown, avec ses images et ses pièces jointes ; pièces jointes ajoutées aussi depuis l'éditeur |
+| Compte démo            | Un faux apprenant par promotion, email inventé et mot de passe simple, remis à zéro à chaque déconnexion, absent des résultats                                             |
+| Finitions et nettoyage | Favicon, composants et layouts du kit inutilisés supprimés                                                                                                                 |
 
 Environ 260 tests Pest, Larastan niveau 7, CI GitHub Actions.
 
