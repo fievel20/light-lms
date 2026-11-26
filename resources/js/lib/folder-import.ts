@@ -195,8 +195,24 @@ function findRefs(
     files: Map<string, File>,
 ): FileRef[] {
     const refs = new Map<string, FileRef>();
+    collectRefs(content, mdPath, files, refs);
 
+    return [...refs.values()];
+}
+
+/**
+ * The links of a text, and those inside their text: a clickable image is
+ * written [![Photo](a.jpg)](a.jpg).
+ */
+function collectRefs(
+    content: string,
+    mdPath: string,
+    files: Map<string, File>,
+    refs: Map<string, FileRef>,
+): void {
     for (const match of content.matchAll(LINK)) {
+        collectRefs(match[2], mdPath, files, refs);
+
         const target = match[3];
         const clean = cleanTarget(target);
 
@@ -206,16 +222,18 @@ function findRefs(
 
         const path = resolvePath(mdPath, clean);
         const extension = path.split('.').pop()?.toLowerCase() ?? '';
-        const isImage = match[1] === '!';
+        // A link to a picture ([Photo](a.jpg)) is sent as an image too: the
+        // page then links to it.
+        const kind = IMAGES.includes(extension) ? 'image' : 'attachment';
         const file = files.get(path) ?? null;
         let problem: string | null = null;
 
         if (
-            isImage
-                ? !IMAGES.includes(extension)
-                : !ATTACHMENTS.includes(extension)
+            match[1] === '!'
+                ? kind !== 'image'
+                : kind === 'attachment' && !ATTACHMENTS.includes(extension)
         ) {
-            if (!isImage && /^(md|markdown)$/.test(extension)) {
+            if (match[1] !== '!' && /^(md|markdown)$/.test(extension)) {
                 // A link to another lesson: left as it is.
                 continue;
             }
@@ -227,16 +245,26 @@ function findRefs(
             problem = 'plus de 5 Mo';
         }
 
-        refs.set(target, {
-            target,
-            path,
-            kind: isImage ? 'image' : 'attachment',
-            file,
-            problem,
-        });
+        refs.set(target, { target, path, kind, file, problem });
     }
+}
 
-    return [...refs.values()];
+/** The text with its links pointing to the uploaded files, inner links included. */
+function rewriteLinks(
+    content: string,
+    replacements: Map<string, string>,
+): string {
+    return content.replace(
+        LINK,
+        (whole, bang: string, text: string, target: string, title: string) => {
+            const inner = rewriteLinks(text, replacements);
+            const replaced = replacements.get(target);
+
+            return replaced === undefined && inner === text
+                ? whole
+                : `${bang}[${inner}](${replaced ?? target}${title})`;
+        },
+    );
 }
 
 /** A link to a local file, decoded; null for web links and anchors. */
@@ -316,21 +344,9 @@ export async function importSequence(
     }
 
     if (replacements.size > 0) {
-        const content = planned.content.replace(
-            LINK,
-            (
-                whole,
-                bang: string,
-                text: string,
-                target: string,
-                title: string,
-            ) =>
-                replacements.has(target)
-                    ? `${bang}[${text}](${replacements.get(target)}${title})`
-                    : whole,
-        );
-
-        await sendJson(updateImport(created.id).url, 'PUT', { content });
+        await sendJson(updateImport(created.id).url, 'PUT', {
+            content: rewriteLinks(planned.content, replacements),
+        });
     }
 
     return {

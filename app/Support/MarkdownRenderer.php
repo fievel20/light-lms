@@ -82,7 +82,8 @@ class MarkdownRenderer
         $images = [];
 
         foreach ($event->getDocument()->iterator() as $node) {
-            if ($node instanceof Image && str_starts_with($node->getUrl(), 'image:')) {
+            // ![Photo](image:12) shows it; [Photo](image:12) links to it.
+            if (($node instanceof Image || $node instanceof Link) && str_starts_with($node->getUrl(), 'image:')) {
                 $images[] = $node;
             }
         }
@@ -98,6 +99,14 @@ class MarkdownRenderer
 
             if ($this->sequence !== null && in_array($id, $ids, true)) {
                 $image->setUrl(route('sequences.images.show', [$this->sequence, $id]));
+
+                if ($image instanceof Link) {
+                    $image->data->set('attributes/target', '_blank');
+                    $image->data->set('attributes/rel', 'noopener');
+                }
+            } elseif ($image instanceof Link) {
+                // A link to another sequence's image: its text only.
+                $this->unlink($image);
             } else {
                 // Another sequence's image, or a deleted one: show nothing.
                 $image->detach();
@@ -131,13 +140,21 @@ class MarkdownRenderer
                 $link->data->set('attributes/rel', 'noopener');
             } else {
                 // Another sequence's file, or a deleted one: its text only.
-                foreach (iterator_to_array($link->children()) as $child) {
-                    $link->insertBefore($child);
-                }
-
-                $link->detach();
+                $this->unlink($link);
             }
         }
+    }
+
+    /**
+     * Keeps the text of a link, without the link.
+     */
+    private function unlink(Link $link): void
+    {
+        foreach (iterator_to_array($link->children()) as $child) {
+            $link->insertBefore($child);
+        }
+
+        $link->detach();
     }
 
     private function resolveIcons(DocumentParsedEvent $event): void
