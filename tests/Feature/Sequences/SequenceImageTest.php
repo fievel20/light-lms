@@ -133,3 +133,19 @@ it('réserve l’import, l’affichage et la duplication au formateur', function
     ])->assertForbidden();
     $this->post(route('sequences.duplicate', $this->sequence))->assertForbidden();
 });
+
+it('fait d’un lien vers une image de la séquence un lien vers cette image, cliquable ou non', function () {
+    $image = SequenceImage::factory()->for($this->sequence)->create();
+    $foreign = SequenceImage::factory()->create();
+    $url = route('sequences.images.show', [$this->sequence, $image]);
+
+    $html = app(MarkdownRenderer::class)->toHtml(
+        "[Ma photo](image:{$image->id})\n\n[![Avatar](image:{$image->id})](image:{$image->id})\n\n[L’autre](image:{$foreign->id})",
+        $this->sequence,
+    );
+
+    expect($html)->toContain('<a target="_blank" rel="noopener" href="'.$url.'">Ma photo</a>')
+        ->toContain('<a target="_blank" rel="noopener" href="'.$url.'"><img src="'.$url.'" alt="Avatar" /></a>')
+        ->toContain('L’autre')
+        ->not->toContain("image:{$foreign->id}");
+});
